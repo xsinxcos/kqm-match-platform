@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="hotel-test" />
+        <module name="chaos-match-platform-common-database" />
+        <module name="chaos-match-platform-gateway" />
+        <module name="chaos-match-platform-user" />
+        <module name="chaos-match-platform-auth" />
+        <module name="chaos-match-platform-common-cache" />
+        <module name="chaos-match-platform-common-core" />
+        <module name="chaos-match-platform-weixin" />
+        <module name="match-platform-api-weixin" />
+        <module name="chaos-match-platform-common-security" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="chaos-match-platform-cache" target="1.8" />
+      <module name="chaos-match-platform-database" target="1.8" />
+      <module name="chaos-match-platform-login" target="1.8" />
+      <module name="chaos-match-platform-model" target="1.8" />
+      <module name="chaos-match-platform-oauth" target="1.8" />
+      <module name="chaos-match-platform-service" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="chaos-match-platform" options="-parameters" />
+      <module name="chaos-match-platform-auth" options="-parameters" />
+      <module name="chaos-match-platform-cache" options="-parameters" />
+      <module name="chaos-match-platform-common" options="-parameters" />
+      <module name="chaos-match-platform-common-cache" options="-parameters" />
+      <module name="chaos-match-platform-common-core" options="-parameters" />
+      <module name="chaos-match-platform-common-database" options="-parameters" />
+      <module name="chaos-match-platform-common-security" options="-parameters" />
+      <module name="chaos-match-platform-database" options="-parameters" />
+      <module name="chaos-match-platform-feign-api" options="-parameters" />
+      <module name="chaos-match-platform-gateway" options="-parameters" />
+      <module name="chaos-match-platform-login" options="-parameters" />
+      <module name="chaos-match-platform-model" options="-parameters" />
+      <module name="chaos-match-platform-oauth" options="-parameters" />
+      <module name="chaos-match-platform-service" options="-parameters" />
+      <module name="chaos-match-platform-user" options="-parameters" />
+      <module name="chaos-match-platform-weixin" options="-parameters" />
+      <module name="hotel-test" options="-parameters" />
+      <module name="match-platform-api-weixin" options="-parameters" />
+    </option>
+  </component>
+</project>
