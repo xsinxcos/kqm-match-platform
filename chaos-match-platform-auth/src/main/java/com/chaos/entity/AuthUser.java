@@ -31,6 +31,8 @@ public class AuthUser implements Serializable {
     private String openid;
     //手机号码
     private String phoneNumber;
+    //地址
+    private String address;
     //用户头像
     private String avatar;
     //0为普通用户 1为管理员

@@ -5,13 +5,11 @@ import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.util.WxMaConfigHolder;
 import com.alibaba.nacos.api.utils.StringUtils;
 import com.chaos.constant.DefaultWxConfig;
-import com.chaos.match_platform.api.weixin.bo.WxLoginUserDetailBo;
-import com.chaos.config.WxMaProperties;
+import com.chaos.bo.WxLoginUserDetailBo;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.WeiXinService;
 import com.chaos.util.BeanCopyUtils;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,7 @@ public class WeiXinServiceImpl implements WeiXinService {
     public ResponseResult wxLoginUserDetail(String code) {
         String appid = DefaultWxConfig.WX_APPID;
         if (StringUtils.isBlank(code)) {
-            return ResponseResult.errorResult(500,"empty jscode");
+            return ResponseResult.errorResult(AppHttpCodeEnum.EMPTY_JSCODE);
         }
 
         if (!wxMaService.switchover(appid)) {

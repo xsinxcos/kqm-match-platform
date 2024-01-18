@@ -1,4 +1,4 @@
-package com.chaos.match_platform.api.weixin.bo;
+package com.chaos.bo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
