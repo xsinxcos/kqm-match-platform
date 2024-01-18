@@ -1,13 +1,11 @@
 package com.chaos.controller;
 
 import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.match_platform.api.weixin.bo.WxLoginUserDetailBo;
-import com.chaos.match_platform.api.weixin.feign.WeiXinFeignClient;
+import com.chaos.bo.WxLoginUserDetailBo;
+import com.chaos.feign.WeiXinFeignClient;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -5,30 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.chaos</groupId>
-        <artifactId>chaos-match-platform</artifactId>
+        <artifactId>chaos-match-platform-feign-api</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>chaos-match-platform-feign-api</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>match-platform-api-weixin</module>
-        <module>match-platform-api-user</module>
-    </modules>
+    <artifactId>match-platform-api-useer</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
-
-
-        <dependency>
-            <groupId>com.chaos</groupId>
-            <artifactId>chaos-match-platform-common-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 
 </project>
