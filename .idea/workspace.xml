@@ -4,7 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ee7f1ec-6385-4523-97d2-c53c0db87610" name="变更" comment="" />
+    <list default="true" id="9ee7f1ec-6385-4523-97d2-c53c0db87610" name="变更" comment="feat: add user of feign">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6a1a7c4e-37b3-4b69-b58e-e226289447fc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6a1a7c4e-37b3-4b69-b58e-e226289447fc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/easyCodeTableSetting.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/easyCodeTableSetting.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/AuthUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/AuthUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/AuthUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/AuthUserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/controller/LoginController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/entity/AuthUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/entity/AuthUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/AuthUserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/AuthUserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/impl/AuthUserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/impl/AuthUserServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/filter/JwtAuthenticationTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/filter/JwtAuthenticationTokenFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/util/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/util/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/util/SecurityUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/util/SecurityUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/filter/JwtAuthenticationTokenFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/filter/JwtAuthenticationTokenFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/util/JwtUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/util/SecurityUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/src/main/java/com/chaos/feign/UserFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/src/main/java/com/chaos/feign/UserFeignClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-weixin/src/main/java/com/chaos/feign/WeiXinFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-weixin/src/main/java/com/chaos/feign/WeiXinFeignClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-weixin/target/classes/com/chaos/match_platform/api/weixin/bo/WxLoginUserDetailBo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-weixin/target/classes/com/chaos/match_platform/api/weixin/feign/WeiXinFeignClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/feign/UserFeignController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/feign/UserFeignController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-weixin/target/classes/com/chaos/feign/WeiXinFeignController.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-weixin/target/classes/com/chaos/feign/WeiXinFeignController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-weixin/target/classes/com/chaos/service/impl/WeiXinServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-weixin/target/classes/com/chaos/service/impl/WeiXinServiceImpl.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +50,17 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="8d9c478db26538eb16cce8933eff75c76c9a844b" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -38,12 +81,14 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2Yvj5UujqbpFCF64UtGl613jVY0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "JUnit.HotelDemoApplicationTests (1).executor": "Run",
     "JUnit.HotelDemoApplicationTests (2).executor": "Debug",
     "JUnit.HotelDemoApplicationTests (3).executor": "Run",
@@ -66,7 +111,8 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.AuthApplication.executor": "Run",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.AuthApplication.executor": "Debug",
     "Spring Boot.GatewayApplication.executor": "Run",
     "Spring Boot.HotelDemoApplication.executor": "Run",
     "Spring Boot.LoginApplication (1).executor": "Run",
@@ -78,7 +124,7 @@
     "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
     "jdk.selected.JAVA_MODULE": "1.8",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/Java/chaos-match-platform/chaos-match-platform-feign-api/match-platform-api-weixin/src/main/java",
+    "last_opened_file_path": "E:/Java/chaos-match-platform",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -119,11 +165,11 @@
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.chaos.entity" />
+      <recent name="com.chaos.feign.bo" />
       <recent name="com.chaos.config.util" />
       <recent name="com.chaos.constant" />
       <recent name="com.chaos.response" />
-      <recent name="" />
-      <recent name="com.chaos.common.enums" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -212,8 +258,8 @@
         <item itemvalue="Spring Boot.AuthApplication" />
         <item itemvalue="Spring Boot.WeiXinApplication" />
         <item itemvalue="Spring Boot.GatewayApplication" />
-        <item itemvalue="Spring Boot.HotelDemoApplication" />
         <item itemvalue="应用程序.WeiXinApplication" />
+        <item itemvalue="Spring Boot.HotelDemoApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -270,11 +316,67 @@
       <workItem from="1705149414910" duration="3808000" />
       <workItem from="1705161881883" duration="631000" />
       <workItem from="1705239962548" duration="912000" />
+      <workItem from="1705299989236" duration="459000" />
+      <workItem from="1705302331601" duration="3300000" />
+      <workItem from="1705468169417" duration="2652000" />
+      <workItem from="1705570684988" duration="3050000" />
+      <workItem from="1705587685082" duration="2788000" />
+      <workItem from="1705591926810" duration="3174000" />
     </task>
+    <task id="LOCAL-00001" summary="feat:登录功能">
+      <option name="closed" value="true" />
+      <created>1705300150413</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1705300150413</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat: modify some entity and pom.xml">
+      <option name="closed" value="true" />
+      <created>1705591645197</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1705591645197</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat: modify some entity and pom.xml">
+      <option name="closed" value="true" />
+      <created>1705591721649</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1705591721649</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat: add user of feign">
+      <option name="closed" value="true" />
+      <created>1705591760257</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1705591760257</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat:登录功能" />
+    <MESSAGE value="feat: modify some entity and pom.xml" />
+    <MESSAGE value="feat: add user of feign" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add user of feign" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -284,12 +386,17 @@
           <line>5</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/AuthUserServiceImpl.java</url>
+          <line>55</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/filter/JwtAuthenticationTokenFilter.java</url>
+          <line>33</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="SpringBootApplicationConfigurationType">
-        <watch expression="new WxMaProperties.Config()" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

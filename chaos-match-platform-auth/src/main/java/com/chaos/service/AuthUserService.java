@@ -14,5 +14,7 @@ import com.chaos.response.ResponseResult;
 public interface AuthUserService extends IService<AuthUser> {
 
     ResponseResult wxlogin(String openid);
+
+    ResponseResult logout();
 }
 

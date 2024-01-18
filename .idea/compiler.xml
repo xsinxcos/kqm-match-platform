@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="hotel-test" />
         <module name="chaos-match-platform-common-database" />
+        <module name="match-platform-api-user" />
         <module name="chaos-match-platform-gateway" />
         <module name="chaos-match-platform-user" />
         <module name="chaos-match-platform-auth" />
@@ -48,6 +49,7 @@
       <module name="chaos-match-platform-user" options="-parameters" />
       <module name="chaos-match-platform-weixin" options="-parameters" />
       <module name="hotel-test" options="-parameters" />
+      <module name="match-platform-api-user" options="-parameters" />
       <module name="match-platform-api-weixin" options="-parameters" />
     </option>
   </component>

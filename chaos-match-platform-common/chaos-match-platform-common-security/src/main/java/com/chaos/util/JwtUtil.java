@@ -1,4 +1,4 @@
-package com.chaos.config.util;
+package com.chaos.util;
 
 
 import io.jsonwebtoken.Claims;

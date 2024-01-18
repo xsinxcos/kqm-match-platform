@@ -7,6 +7,7 @@ import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,12 @@ public class LoginController {
     private final WeiXinFeignClient weiXinFeignClient;
 
     private final AuthUserService authUserService;
+
+    /**
+     * 用户微信登录
+     * @param code 微信登录code
+     * @return token
+     */
     @GetMapping("/wxLogin")
     public ResponseResult wxlogin(String code){
         WxLoginUserDetailBo detailBo = weiXinFeignClient.wxLoginUserDetail(code).getData();
@@ -27,5 +34,14 @@ public class LoginController {
             ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR);
         }
         return authUserService.wxlogin(detailBo.getOpenid());
+    }
+
+    /**
+     * 退出登录
+     * @return void
+     */
+    @PostMapping("/logout")
+    public ResponseResult logout(){
+        return authUserService.logout();
     }
 }

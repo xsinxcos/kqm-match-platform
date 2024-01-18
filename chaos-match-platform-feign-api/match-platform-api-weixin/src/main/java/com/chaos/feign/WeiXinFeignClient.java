@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value = "WeiXinService")
 public interface WeiXinFeignClient {
-    @GetMapping("/api/feign/getWxLoginUserDetail")
+    @GetMapping("/feign/getWxLoginUserDetail")
     ResponseResult<WxLoginUserDetailBo> wxLoginUserDetail(@RequestParam("code") String code);
 }

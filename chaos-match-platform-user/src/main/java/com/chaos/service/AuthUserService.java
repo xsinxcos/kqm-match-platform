@@ -2,6 +2,7 @@ package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.chaos.entity.AuthUser;
+import com.chaos.response.ResponseResult;
 
 
 /**
@@ -12,5 +13,6 @@ import com.chaos.entity.AuthUser;
  */
 public interface AuthUserService extends IService<AuthUser> {
 
+    ResponseResult getUserInfo();
 }
 

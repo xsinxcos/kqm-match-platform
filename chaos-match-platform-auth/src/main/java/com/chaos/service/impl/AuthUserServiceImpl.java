@@ -2,19 +2,17 @@ package com.chaos.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.chaos.config.util.JwtUtil;
-import com.chaos.constant.AppHttpCodeEnum;
+import com.chaos.util.JwtUtil;
+import com.chaos.constant.LoginRedisPrefix;
 import com.chaos.entity.AuthUser;
 import com.chaos.entity.LoginUser;
-import com.chaos.exception.SystemException;
 import com.chaos.mapper.AuthUserMapper;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -34,7 +32,6 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
 
     @Override
     public ResponseResult wxlogin(String openid) {
-
         //判断OPENID未存在则存入数据库(第一次登录)
         AuthUser authUser = checkOpenIDExist(openid);
         if(Objects.isNull(authUser)){
@@ -44,12 +41,25 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         }
         //根据openID 生成token
         LoginUser loginUser = new LoginUser(authUser);
-        String jwt = JwtUtil.createJWT(openid);
+        long userid = loginUser.getUser().getId();
+        String jwt = JwtUtil.createJWT(String.valueOf(userid));
         //将用户信息存入redis
-        redisCache.setCacheObject("login:" + openid, loginUser);
+        redisCache.setCacheObject(LoginRedisPrefix.USER_REDIS_PREFIX + userid, loginUser);
         Map<String ,String> map = new TreeMap<>();
         map.put("token" ,jwt);
         return ResponseResult.okResult(map);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        //获取token 解析获取userId
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        //获取userId
+        long userid = loginUser.getUser().getId();
+        //删除redis中的用户信息
+        redisCache.deleteObject(LoginRedisPrefix.USER_REDIS_PREFIX + userid);
+        return ResponseResult.okResult();
     }
 
     private AuthUser checkOpenIDExist(String openID){

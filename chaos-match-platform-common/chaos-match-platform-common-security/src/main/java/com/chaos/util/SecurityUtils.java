@@ -1,17 +1,21 @@
-package com.chaos.config.util;
+package com.chaos.util;
+
+import com.chaos.entity.LoginUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+/**
+ * @Author 三更  B站： https://space.bilibili.com/663528522
+ */
 public class SecurityUtils
 {
-
 
     /**
      * 获取用户
      **/
-    public static <V> V getLoginUser(Class<V> clazz)
+    public static LoginUser getLoginUser()
     {
-        return (V) getAuthentication().getPrincipal();
+        return (LoginUser) getAuthentication().getPrincipal();
     }
 
     /**
@@ -21,4 +25,8 @@ public class SecurityUtils
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
+
+    public static Long getUserId() {
+        return getLoginUser().getUser().getId();
+    }
 }
