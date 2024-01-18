@@ -1,10 +1,10 @@
 package com.chaos.controller;
 
-import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.bo.WxLoginUserDetailBo;
+import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.feign.WeiXinFeignClient;
 import com.chaos.response.ResponseResult;
-import com.chaos.service.AuthUserService;
+import com.chaos.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class LoginController {
 
     private final WeiXinFeignClient weiXinFeignClient;
 
-    private final AuthUserService authUserService;
+    private final AuthService authService;
 
     /**
      * 用户微信登录
@@ -33,7 +33,7 @@ public class LoginController {
         if(Objects.isNull(detailBo.getOpenid())){
             ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR);
         }
-        return authUserService.wxlogin(detailBo.getOpenid());
+        return authService.wxlogin(detailBo.getOpenid());
     }
 
     /**
@@ -42,6 +42,6 @@ public class LoginController {
      */
     @PostMapping("/logout")
     public ResponseResult logout(){
-        return authUserService.logout();
+        return authService.logout();
     }
 }

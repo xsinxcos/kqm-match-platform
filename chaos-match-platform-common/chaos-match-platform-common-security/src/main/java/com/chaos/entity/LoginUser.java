@@ -12,7 +12,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginUser implements UserDetails {
-    AuthUser user;
+    User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

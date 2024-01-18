@@ -1,7 +1,7 @@
 package com.chaos.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.chaos.entity.AuthUser;
+import com.chaos.model.entity.AuthUser;
 
 
 /**

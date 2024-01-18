@@ -1,0 +1,67 @@
+package com.chaos.service.impl;
+
+import com.chaos.constant.LoginRedisPrefix;
+import com.chaos.entity.LoginUser;
+import com.chaos.entity.User;
+import com.chaos.feign.UserFeignClient;
+import com.chaos.feign.bo.AuthUserBo;
+import com.chaos.response.ResponseResult;
+import com.chaos.service.AuthService;
+import com.chaos.util.BeanCopyUtils;
+import com.chaos.util.JwtUtil;
+import com.chaos.util.RedisCache;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+
+/**
+ * 用户表(AuthUser)表服务实现类
+ *
+ * @author makejava
+ * @since 2024-01-10 21:58:52
+ */
+@Service
+@RequiredArgsConstructor
+public class AuthServiceImpl implements AuthService {
+    private final RedisCache redisCache;
+
+    private final UserFeignClient userFeignClient;
+
+    @Override
+    public ResponseResult wxlogin(String openid) {
+        //判断OPENID未存在则存入数据库(第一次登录)
+        AuthUserBo authUserBo = userFeignClient.getUserByOpenId(openid).getData();
+        if(Objects.isNull(authUserBo)){
+            authUserBo = new AuthUserBo();
+            authUserBo.setOpenid(openid);
+            userFeignClient.addUserByOpenId(openid);
+        }
+        //根据openID 生成token
+        LoginUser loginUser = new LoginUser(BeanCopyUtils.copyBean(authUserBo, User.class));
+        long userid = loginUser.getUser().getId();
+        String jwt = JwtUtil.createJWT(String.valueOf(userid));
+        //将用户信息存入redis
+        redisCache.setCacheObject(LoginRedisPrefix.USER_REDIS_PREFIX + userid, loginUser);
+        Map<String ,String> map = new TreeMap<>();
+        map.put("token" ,jwt);
+        return ResponseResult.okResult(map);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        //获取token 解析获取userId
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        //获取userId
+        long userid = loginUser.getUser().getId();
+        //删除redis中的用户信息
+        redisCache.deleteObject(LoginRedisPrefix.USER_REDIS_PREFIX + userid);
+        return ResponseResult.okResult();
+    }
+}
+

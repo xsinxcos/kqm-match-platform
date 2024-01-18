@@ -1,7 +1,6 @@
 package com.chaos.config.security;
 
 import com.alibaba.fastjson.JSON;
-
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.response.ResponseResult;
 import com.chaos.util.WebUtils;

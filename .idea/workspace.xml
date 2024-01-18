@@ -4,38 +4,62 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ee7f1ec-6385-4523-97d2-c53c0db87610" name="变更" comment="feat: add user of feign">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="9ee7f1ec-6385-4523-97d2-c53c0db87610" name="变更" comment="feat: add getUserInfo">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/6a1a7c4e-37b3-4b69-b58e-e226289447fc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/6a1a7c4e-37b3-4b69-b58e-e226289447fc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/easyCodeTableSetting.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/easyCodeTableSetting.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/AuthApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/AuthApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/config/mybatisplus/MyMetaObjectHandler.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/controller/LoginController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/AuthUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/AuthUserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/AuthUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/AuthUserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/entity/AuthUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/entity/LoginUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/listener/RabbitMQListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/listener/RabbitMQListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/mapper/AuthUserMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/AuthUserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/AuthUserServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/UserDetailServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/AuthApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/AuthApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/config/mybatisplus/MyMetaObjectHandler.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/controller/LoginController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/entity/AuthUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/entity/AuthUser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/AuthUserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/AuthUserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/impl/AuthUserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/impl/AuthUserServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/entity/AuthUser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/entity/LoginUser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/listener/RabbitMQListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/listener/RabbitMQListener.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/mapper/AuthUserMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/AuthUserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/impl/AuthUserServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/impl/UserDetailServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/impl/UserDetailServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-core/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/filter/JwtAuthenticationTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/filter/JwtAuthenticationTokenFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/util/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/util/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/util/SecurityUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/util/SecurityUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/security/AccessDeniedHandlerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/security/AccessDeniedHandlerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/security/AuthenticationEntryPointImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/security/AuthenticationEntryPointImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/entity/AuthUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/entity/LoginUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/entity/LoginUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/util/SecurityUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/util/SecurityUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/SecurityConfig.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/filter/JwtAuthenticationTokenFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/filter/JwtAuthenticationTokenFilter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/util/JwtUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/util/SecurityUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/security/AccessDeniedHandlerImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/security/AccessDeniedHandlerImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/security/AuthenticationEntryPointImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/security/AuthenticationEntryPointImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/entity/AuthUser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/entity/LoginUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/entity/LoginUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/util/SecurityUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/util/SecurityUtils.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/src/main/java/com/chaos/feign/UserFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/src/main/java/com/chaos/feign/UserFeignClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-weixin/src/main/java/com/chaos/feign/WeiXinFeignClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-weixin/src/main/java/com/chaos/feign/WeiXinFeignClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-weixin/target/classes/com/chaos/match_platform/api/weixin/bo/WxLoginUserDetailBo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-weixin/target/classes/com/chaos/match_platform/api/weixin/feign/WeiXinFeignClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/target/classes/com/chaos/feign/UserFeignClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-feign-api/match-platform-api-user/target/classes/com/chaos/feign/UserFeignClient.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/UserApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/entity/AuthUser.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/feign/UserFeignController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/feign/UserFeignController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-weixin/target/classes/com/chaos/feign/WeiXinFeignController.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-weixin/target/classes/com/chaos/feign/WeiXinFeignController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-weixin/target/classes/com/chaos/service/impl/WeiXinServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-weixin/target/classes/com/chaos/service/impl/WeiXinServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/mapper/AuthUserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/mapper/AuthUserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/service/AuthUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/service/AuthUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/service/impl/AuthUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/service/impl/AuthUserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/vo/UserInfoVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/vo/UserInfoVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-weixin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-weixin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-weixin/src/main/java/com/chaos/service/WeiXinService.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-weixin/src/main/java/com/chaos/service/WeiXinService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chaos-match-platform-weixin/src/main/java/com/chaos/service/impl/WeiXinServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-weixin/src/main/java/com/chaos/service/impl/WeiXinServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-test/src/main/java/com/chaos/HotelDemoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-test/src/main/java/com/chaos/HotelDemoApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hotel-test/src/main/java/com/chaos/controller/hotelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/hotel-test/src/main/java/com/chaos/controller/hotelController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,19 +136,20 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.AuthApplication.executor": "Debug",
+    "Spring Boot.AuthApplication.executor": "Run",
     "Spring Boot.GatewayApplication.executor": "Run",
     "Spring Boot.HotelDemoApplication.executor": "Run",
     "Spring Boot.LoginApplication (1).executor": "Run",
     "Spring Boot.LoginApplication.executor": "Run",
     "Spring Boot.OAuthApplication.executor": "Run",
+    "Spring Boot.UserApplication.executor": "Run",
     "Spring Boot.WeiXinApplication.executor": "Run",
     "Spring Boot.WinXinApplication.executor": "Run",
     "WebServerToolWindowFactoryState": "false",
     "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
     "jdk.selected.JAVA_MODULE": "1.8",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/Java/chaos-match-platform",
+    "last_opened_file_path": "E:/Java/chaos-match-platform/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -150,11 +175,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Java\chaos-match-platform\chaos-match-platform-common\chaos-match-platform-common-security\src\main\java\com\chaos" />
+      <recent name="E:\Java\chaos-match-platform\chaos-match-platform-common\chaos-match-platform-common-security\src\main\java\com\chaos\util" />
+      <recent name="E:\Java\chaos-match-platform\chaos-match-platform-common\chaos-match-platform-common-core\src\main\java\com\chaos\constant" />
       <recent name="E:\Java\chaos-match-platform\chaos-match-platform-feign-api\match-platform-api-weixin\src\main\java" />
       <recent name="E:\Java\chaos-match-platform\chaos-match-platform-weixin\src\test\java" />
-      <recent name="E:\Java\chaos-match-platform\chaos-match-platform-common\chaos-match-platform-common-core\src\main\java\com\chaos" />
-      <recent name="E:\Java\chaos-match-platform\chaos-match-platform-common\chaos-match-platform-common-security\src\main\java\com\chaos\config" />
-      <recent name="E:\Java\chaos-match-platform\chaos-match-platform-auth\src\main" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\Java\chaos-match-platform\chaos-match-platform-auth\src\main\java\com\chaos\config" />
@@ -180,7 +205,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.GatewayApplication">
+  <component name="RunManager" selected="Spring Boot.UserApplication">
     <configuration name="WeiXinApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.chaos.WeiXinApplication" />
       <module name="chaos-match-platform-weixin" />
@@ -220,9 +245,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="HotelDemoApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="hotel-test" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.chaos.HotelDemoApplication" />
+    <configuration name="UserApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="chaos-match-platform-user" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.chaos.UserApplication" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.chaos.*" />
@@ -247,19 +272,19 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Spring Boot.UserApplication" />
       <item itemvalue="Spring Boot.GatewayApplication" />
-      <item itemvalue="Spring Boot.HotelDemoApplication" />
       <item itemvalue="Spring Boot.WeiXinApplication" />
       <item itemvalue="Spring Boot.AuthApplication" />
       <item itemvalue="应用程序.WeiXinApplication" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.UserApplication" />
         <item itemvalue="Spring Boot.AuthApplication" />
         <item itemvalue="Spring Boot.WeiXinApplication" />
         <item itemvalue="Spring Boot.GatewayApplication" />
         <item itemvalue="应用程序.WeiXinApplication" />
-        <item itemvalue="Spring Boot.HotelDemoApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -321,7 +346,7 @@
       <workItem from="1705468169417" duration="2652000" />
       <workItem from="1705570684988" duration="3050000" />
       <workItem from="1705587685082" duration="2788000" />
-      <workItem from="1705591926810" duration="3174000" />
+      <workItem from="1705591926810" duration="14194000" />
     </task>
     <task id="LOCAL-00001" summary="feat:登录功能">
       <option name="closed" value="true" />
@@ -355,7 +380,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705591760257</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="feat: add getUserInfo">
+      <option name="closed" value="true" />
+      <created>1705596247075</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1705596247075</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -376,25 +409,26 @@
     <MESSAGE value="feat:登录功能" />
     <MESSAGE value="feat: modify some entity and pom.xml" />
     <MESSAGE value="feat: add user of feign" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add user of feign" />
+    <MESSAGE value="feat: add getUserInfo" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add getUserInfo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/listener/RabbitMQListener.java</url>
-          <line>5</line>
+          <line>4</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/AuthUserServiceImpl.java</url>
-          <line>55</line>
-          <option name="timeStamp" value="11" />
+          <url>file://$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/controller/LoginController.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/filter/JwtAuthenticationTokenFilter.java</url>
-          <line>33</line>
-          <option name="timeStamp" value="12" />
+          <url>file://$PROJECT_DIR$/chaos-match-platform-user/src/main/java/com/chaos/feign/UserFeignController.java</url>
+          <line>20</line>
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

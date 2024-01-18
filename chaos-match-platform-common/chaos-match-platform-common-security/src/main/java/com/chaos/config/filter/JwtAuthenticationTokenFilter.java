@@ -9,14 +9,12 @@ import com.chaos.util.JwtUtil;
 import com.chaos.util.RedisCache;
 import com.chaos.util.WebUtils;
 import io.jsonwebtoken.Claims;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
