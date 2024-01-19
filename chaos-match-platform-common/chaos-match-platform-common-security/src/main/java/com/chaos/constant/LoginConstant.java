@@ -1,6 +1,6 @@
 package com.chaos.constant;
 
-public class LoginRedisConstant {
+public class LoginConstant {
     public final static String USER_REDIS_PREFIX = "appLogin:";
     public final static String ADMIN_REDIS_PREFIX = "adminLogin:";
 

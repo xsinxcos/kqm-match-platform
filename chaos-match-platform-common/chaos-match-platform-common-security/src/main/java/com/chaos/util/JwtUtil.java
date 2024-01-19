@@ -18,11 +18,13 @@ import java.util.UUID;
 public class JwtUtil {
 
     //有效期为
-    public static final Long JWT_TTL = 24 * 60 * 60 *1000L;// 60 * 60 *1000  一个小时
-    //设置秘钥明文
-    public static final String JWT_KEY = "kuangquanmiao";
+    public static final Long JWT_TTL = 24 * 60 * 60 * 1000L;// 60 * 60 *1000  一个小时
+    //设置长token密钥明文
+    public static final String JWT_LONG_KEY = "LOONGKEY";
+    //设置短token秘钥明文
+    public static final String JWT_SHORT_KEY = "SHORTKEY";
     //长token有效期
-    public static final Long LONG_JWT_TTL =  3 * 24 * 60 * 60 *1000L;
+    public static final Long LONG_JWT_TTL =3 * 24 * 60 * 60 *1000L;
     //短token有效期
     public static final Long SHORT_JWT_TTL = 15 * 60 * 1000L;
 
@@ -30,31 +32,21 @@ public class JwtUtil {
         String token = UUID.randomUUID().toString().replaceAll("-", "");
         return token;
     }
-    
-    /**
-     * 生成jtw
-     * @param subject token中要存放的数据（json格式）
-     * @return
-     */
-    public static String createJWT(String subject) {
-        JwtBuilder builder = getJwtBuilder(subject, null, getUUID());// 设置过期时间
-        return builder.compact();
-    }
 
     /**
-     * 生成jtw
+     * 生成jwt
      * @param subject token中要存放的数据（json格式）
      * @param ttlMillis token超时时间
+     * @param secretKey 密钥
      * @return
      */
-    public static String createJWT(String subject, Long ttlMillis) {
-        JwtBuilder builder = getJwtBuilder(subject, ttlMillis, getUUID());// 设置过期时间
+    public static String createJWT(String subject, Long ttlMillis ,SecretKey secretKey) {
+        JwtBuilder builder = getJwtBuilder(subject, ttlMillis, getUUID(), secretKey);// 设置过期时间
         return builder.compact();
     }
 
-    private static JwtBuilder getJwtBuilder(String subject, Long ttlMillis, String uuid) {
+    private static JwtBuilder getJwtBuilder(String subject, Long ttlMillis, String uuid ,SecretKey secretKey) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        SecretKey secretKey = generalKey();
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         if(ttlMillis==null){
@@ -72,47 +64,68 @@ public class JwtUtil {
     }
 
     /**
-     * 创建token
-     * @param id
-     * @param subject
-     * @param ttlMillis
+     * 生成加密后的秘钥 secretKey（短token）
      * @return
      */
-    public static String createJWT(String id, String subject, Long ttlMillis) {
-        JwtBuilder builder = getJwtBuilder(subject, ttlMillis, id);// 设置过期时间
-        return builder.compact();
+    public static SecretKey generalShortTokenKey() {
+        byte[] encodedKey = Base64.getDecoder().decode(JWT_SHORT_KEY);
+        SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
+        return key;
     }
 
     /**
-     * 生成加密后的秘钥 secretKey
+     * 生成加密后的秘钥 secretKey（长token）
      * @return
      */
-    public static SecretKey generalKey() {
-        byte[] encodedKey = Base64.getDecoder().decode(JwtUtil.JWT_KEY);
+    public static SecretKey generalLongTokenKey() {
+        byte[] encodedKey = Base64.getDecoder().decode(JWT_LONG_KEY);
         SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
         return key;
     }
     
     /**
-     * 解析
+     * 解析短token
      *
      * @param jwt
      * @return
-     * @throws Exception
      */
-    public static Claims parseJWT(String jwt) throws Exception {
-        SecretKey secretKey = generalKey();
+    public static Claims parseShortToken(String jwt){
+        SecretKey secretKey = generalShortTokenKey();
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(jwt)
                 .getBody();
     }
 
-    public static String createLongToken(String subject){
-        return createJWT(subject ,LONG_JWT_TTL);
+    /**
+     * 解析短token
+     *
+     * @param jwt
+     * @return
+     */
+    public static Claims parseLongToken(String jwt){
+        SecretKey secretKey = generalLongTokenKey();
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(jwt)
+                .getBody();
     }
 
+
+    /**
+     * 生成长Token
+     * @param subject
+     * @return
+     */
+    public static String createLongToken(String subject){
+        return createJWT(subject ,LONG_JWT_TTL ,generalLongTokenKey());
+    }
+
+    /**
+     * 生成短Token
+     * @return
+     */
     public static String createShortToken(String subject){
-        return createJWT(subject, SHORT_JWT_TTL);
+        return createJWT(subject, SHORT_JWT_TTL, generalShortTokenKey());
     }
 }

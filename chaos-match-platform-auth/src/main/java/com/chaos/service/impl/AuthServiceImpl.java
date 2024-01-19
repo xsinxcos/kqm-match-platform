@@ -2,7 +2,7 @@ package com.chaos.service.impl;
 
 import com.chaos.bo.TokenInfoVo;
 import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.constant.LoginRedisConstant;
+import com.chaos.constant.LoginConstant;
 import com.chaos.entity.LoginUser;
 import com.chaos.entity.User;
 import com.chaos.feign.UserFeignClient;
@@ -18,9 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -53,8 +51,8 @@ public class AuthServiceImpl implements AuthService {
         vo.setRefresh_token(JwtUtil.createLongToken(String.valueOf(userid)));
 
         //将用户信息存入redis
-        redisCache.setCacheObject(LoginRedisConstant.USER_REDIS_PREFIX + userid, loginUser ,
-                LoginRedisConstant.REFRESH_TOKEN_TTL , TimeUnit.SECONDS);
+        redisCache.setCacheObject(LoginConstant.USER_REDIS_PREFIX + userid, loginUser ,
+                LoginConstant.REFRESH_TOKEN_TTL , TimeUnit.SECONDS);
 
         return ResponseResult.okResult(vo);
     }
@@ -67,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         //获取userId
         long userid = loginUser.getUser().getId();
         //删除redis中的用户信息
-        redisCache.deleteObject(LoginRedisConstant.USER_REDIS_PREFIX + userid);
+        redisCache.deleteObject(LoginConstant.USER_REDIS_PREFIX + userid);
         return ResponseResult.okResult();
     }
 
@@ -76,18 +74,18 @@ public class AuthServiceImpl implements AuthService {
         Claims claims = null;
         //解析获取userId用于续签
         try {
-            claims = JwtUtil.parseJWT(refreshToken);
+            claims = JwtUtil.parseLongToken(refreshToken);
         } catch (Exception e) {
             e.printStackTrace();
             //refreshToken超时重新登录
             return ResponseResult.errorResult(AppHttpCodeEnum.TOKEN_REFRESH_FAIL);
         }
         String userId = claims.getSubject();
-        //利用userId重新生成access_token
+        //利用userId重新生成access_token 和 refresh_token
         String accessToken = JwtUtil.createShortToken(userId);
-        Map<String ,String> map = new TreeMap<>();
-        map.put("access_token" ,accessToken);
-        return ResponseResult.okResult(map);
+        refreshToken = JwtUtil.createLongToken(userId);
+        TokenInfoVo tokenInfoVo = new TokenInfoVo(accessToken ,refreshToken);
+        return ResponseResult.okResult(tokenInfoVo);
     }
 }
 

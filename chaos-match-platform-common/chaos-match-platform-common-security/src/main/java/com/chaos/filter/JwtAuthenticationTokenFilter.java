@@ -2,7 +2,7 @@ package com.chaos.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.constant.LoginRedisConstant;
+import com.chaos.constant.LoginConstant;
 import com.chaos.entity.LoginUser;
 import com.chaos.response.ResponseResult;
 import com.chaos.util.JwtUtil;
@@ -40,7 +40,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         Claims claims = null;
         //解析获取userid
         try {
-            claims = JwtUtil.parseJWT(token);
+            claims = JwtUtil.parseShortToken(token);
         } catch (Exception e) {
             e.printStackTrace();
             //token超时 token非法
@@ -51,7 +51,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         String userId = claims.getSubject();
         //从redis中获取用户信息
-        LoginUser loginUser = redisCache.getCacheObject(LoginRedisConstant.USER_REDIS_PREFIX + userId);
+        LoginUser loginUser = redisCache.getCacheObject(LoginConstant.USER_REDIS_PREFIX + userId);
         //如果获取不到
         if (Objects.isNull(loginUser)) {
             //说明登录过期  提示重新登录
