@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @RestController
@@ -43,5 +44,16 @@ public class LoginController {
     @PostMapping("/logout")
     public ResponseResult logout(){
         return authService.logout();
+    }
+
+    /**
+     * 对access_token进行续签
+     * @param request 用于获取请求头中的refresh_token
+     * @return
+     */
+    @GetMapping("/refresh")
+    public ResponseResult refreshToken(HttpServletRequest request){
+        String refreshToken = request.getHeader("refresh_token");
+        return authService.refreshAccessToken(refreshToken);
     }
 }

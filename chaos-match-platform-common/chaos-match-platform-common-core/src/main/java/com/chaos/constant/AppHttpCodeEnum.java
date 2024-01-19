@@ -9,9 +9,11 @@ public enum AppHttpCodeEnum {
 
     LOGIN_ERROR(404, "登录失败"),
     WEIXIN_LOGIN_FAIL(405,"微信登录失败"),
+    TOKEN_REFRESH_FAIL(406, "续签失败，请重新登录"),
     SYSTEM_ERROR(500,"出现错误"),
     EMPTY_JSCODE(501, "empty jscode"),
     FILE_TYPE_ERROR(502 ,"文件类型错误");
+
     int code;
     String msg;
 

@@ -1,4 +1,4 @@
-package com.chaos.config.security;
+package com.chaos.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;

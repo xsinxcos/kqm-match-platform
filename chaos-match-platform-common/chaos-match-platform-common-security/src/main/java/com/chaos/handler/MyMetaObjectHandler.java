@@ -1,4 +1,4 @@
-package com.chaos.mybatisplus;
+package com.chaos.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.chaos.entity.LoginUser;

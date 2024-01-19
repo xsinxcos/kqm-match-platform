@@ -14,5 +14,7 @@ public interface AuthService {
     ResponseResult wxlogin(String openid);
 
     ResponseResult logout();
+
+    ResponseResult refreshAccessToken(String refreshToken);
 }
 

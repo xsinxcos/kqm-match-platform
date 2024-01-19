@@ -1,6 +1,6 @@
 package com.chaos.config;
 
-import com.chaos.config.filter.JwtAuthenticationTokenFilter;
+import com.chaos.filter.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
