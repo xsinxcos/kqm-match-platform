@@ -4,28 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ee7f1ec-6385-4523-97d2-c53c0db87610" name="变更" comment="feat: 实现双token续签机制">
-      <change afterPath="$PROJECT_DIR$/.idea/ApifoxUploaderProjectSetting.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/chaos-match-platform-common-core.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/src/main/java/com/chaos/service/impl/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/controller/LoginController.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/controller/LoginController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/AuthService.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/AuthService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/impl/AuthServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-auth/target/classes/com/chaos/service/impl/AuthServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-core/src/main/java/com/chaos/constant/LoginRedisConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/constant/LoginConstant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-core/target/classes/com/chaos/constant/AppHttpCodeEnum.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-core/target/classes/com/chaos/constant/AppHttpCodeEnum.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-core/target/classes/com/chaos/constant/LoginRedisPrefix.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/filter/JwtAuthenticationTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/filter/JwtAuthenticationTokenFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/util/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/src/main/java/com/chaos/util/JwtUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/SecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/filter/JwtAuthenticationTokenFilter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/security/AccessDeniedHandlerImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/config/security/AuthenticationEntryPointImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/mybatisplus/MyMetaObjectHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/util/JwtUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-common/chaos-match-platform-common-security/target/classes/com/chaos/util/JwtUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chaos-match-platform-user/target/classes/com/chaos/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/chaos-match-platform-user/target/classes/com/chaos/controller/UserController.class" afterDir="false" />
-    </list>
+    <list default="true" id="9ee7f1ec-6385-4523-97d2-c53c0db87610" name="变更" comment="fix: 修复了双token的bug" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,7 +87,7 @@
     "Spring Boot.LoginApplication (1).executor": "Run",
     "Spring Boot.LoginApplication.executor": "Run",
     "Spring Boot.OAuthApplication.executor": "Run",
-    "Spring Boot.UserApplication.executor": "Debug",
+    "Spring Boot.UserApplication.executor": "Run",
     "Spring Boot.WeiXinApplication.executor": "Run",
     "Spring Boot.WinXinApplication.executor": "Run",
     "WebServerToolWindowFactoryState": "false",
@@ -316,7 +295,7 @@
       <workItem from="1705609776574" duration="322000" />
       <workItem from="1705610120543" duration="30000" />
       <workItem from="1705641145600" duration="4347000" />
-      <workItem from="1705688917487" duration="13437000" />
+      <workItem from="1705688917487" duration="14006000" />
     </task>
     <task id="LOCAL-00001" summary="feat:登录功能">
       <option name="closed" value="true" />
@@ -382,7 +361,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705698936161</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fix: 修复了双token的bug">
+      <option name="closed" value="true" />
+      <created>1705703804063</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1705703804063</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -407,7 +394,8 @@
     <MESSAGE value="feat: add UpdateUserInfo" />
     <MESSAGE value="feat: add SystemLog" />
     <MESSAGE value="feat: 实现双token续签机制" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 实现双token续签机制" />
+    <MESSAGE value="fix: 修复了双token的bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: 修复了双token的bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

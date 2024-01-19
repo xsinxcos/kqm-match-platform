@@ -16,6 +16,7 @@
         <module>chaos-match-platform-auth</module>
         <module>chaos-match-platform-weixin</module>
         <module>chaos-match-platform-user</module>
+        <module>chaos-match-platform-log</module>
     </modules>
 
     <!-- 继承Spring boot工程 -->
