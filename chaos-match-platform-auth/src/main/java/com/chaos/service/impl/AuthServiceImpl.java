@@ -1,15 +1,16 @@
 package com.chaos.service.impl;
 
-import com.chaos.bo.TokenInfoVo;
+import com.chaos.entity.AuthParam;
+import com.chaos.entity.TokenInfo;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.constant.LoginConstant;
 import com.chaos.entity.LoginUser;
-import com.chaos.entity.User;
+import com.chaos.enums.GrantTypeEnum;
+import com.chaos.factory.AuthFactory;
 import com.chaos.feign.UserFeignClient;
-import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthService;
-import com.chaos.util.BeanCopyUtils;
+import com.chaos.strategy.AuthGranterStrategy;
 import com.chaos.util.JwtUtil;
 import com.chaos.util.RedisCache;
 import io.jsonwebtoken.Claims;
@@ -18,7 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -34,27 +34,20 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserFeignClient userFeignClient;
 
+    private final AuthFactory authFactory;
+
     @Override
     public ResponseResult wxlogin(String openid) {
-        //判断OPENID未存在则存入数据库(第一次登录)
-        AuthUserBo authUserBo = userFeignClient.getUserByOpenId(openid).getData();
-        if(Objects.isNull(authUserBo)){
-            authUserBo = new AuthUserBo();
-            authUserBo.setOpenid(openid);
-            userFeignClient.addUserByOpenId(openid);
-        }
-        //根据openID 生成token
-        LoginUser loginUser = new LoginUser(BeanCopyUtils.copyBean(authUserBo, User.class));
-        long userid = loginUser.getUser().getId();
-        TokenInfoVo vo = new TokenInfoVo();
-        vo.setAccess_token(JwtUtil.createShortToken(String.valueOf(userid)));
-        vo.setRefresh_token(JwtUtil.createLongToken(String.valueOf(userid)));
-
-        //将用户信息存入redis
-        redisCache.setCacheObject(LoginConstant.USER_REDIS_PREFIX + userid, loginUser ,
-                LoginConstant.REFRESH_TOKEN_TTL , TimeUnit.SECONDS);
-
-        return ResponseResult.okResult(vo);
+        //包装成统一登录类型
+        AuthParam authParam = AuthParam.builder()
+                .openid(openid)
+                .build();
+        //找到相应策略的类型
+        String grantType = GrantTypeEnum.getValueByType("openId");
+        AuthGranterStrategy granterStrategy = authFactory.getGranter(grantType);
+        //调用策略
+        TokenInfo tokenInfo = granterStrategy.grant(authParam);
+        return ResponseResult.okResult(tokenInfo);
     }
 
     @Override
@@ -84,8 +77,10 @@ public class AuthServiceImpl implements AuthService {
         //利用userId重新生成access_token 和 refresh_token
         String accessToken = JwtUtil.createShortToken(userId);
         refreshToken = JwtUtil.createLongToken(userId);
-        TokenInfoVo tokenInfoVo = new TokenInfoVo(accessToken ,refreshToken);
-        return ResponseResult.okResult(tokenInfoVo);
+        redisCache.expire(LoginConstant.USER_REDIS_PREFIX + userId ,
+                LoginConstant.REFRESH_TOKEN_TTL , TimeUnit.SECONDS);
+        TokenInfo tokenInfo = new TokenInfo(accessToken ,refreshToken);
+        return ResponseResult.okResult(tokenInfo);
     }
 }
 
