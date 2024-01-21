@@ -32,4 +32,9 @@ public class UserController {
     public ResponseResult updateUserInfo(@RequestBody UserInfoDto userInfoDto){
         return authUserService.updateUserInfo(userInfoDto);
     }
+
+    @PostMapping("/register")
+    public ResponseResult register(){
+        return ResponseResult.okResult();
+    }
 }

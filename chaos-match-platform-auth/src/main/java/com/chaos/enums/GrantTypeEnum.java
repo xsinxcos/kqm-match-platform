@@ -11,7 +11,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum GrantTypeEnum {
-    WX_OPENID("openId" ,"WxOpenIdStrategy");
+    WX_OPENID("openId" ,"wxOpenIdStrategy"),
+    PASSWORD("password","passwordStrategy");
 
     private final String type;
 

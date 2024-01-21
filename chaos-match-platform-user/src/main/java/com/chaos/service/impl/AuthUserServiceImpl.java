@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 /**
  * 用户表(AuthUser)表服务实现类
  *
- * @author makejava
+ * @author xsinxcos
  * @since 2024-01-13 06:22:18
  */
 @Service("authUserService")

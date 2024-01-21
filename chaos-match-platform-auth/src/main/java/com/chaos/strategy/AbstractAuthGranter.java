@@ -1,5 +1,7 @@
 package com.chaos.strategy;
 
+import com.chaos.entity.TokenInfo;
+import com.chaos.util.JwtUtil;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,4 +11,12 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public abstract class AbstractAuthGranter implements AuthGranterStrategy{
+    protected TokenInfo createTokenInfoByUserId(String userid){
+        //生成并返回TokenInfo
+        return TokenInfo.builder()
+                .access_token(JwtUtil.createShortToken(String.valueOf(userid)))
+                .refresh_token(JwtUtil.createLongToken(String.valueOf(userid)))
+                .build();
+    }
+
 }
