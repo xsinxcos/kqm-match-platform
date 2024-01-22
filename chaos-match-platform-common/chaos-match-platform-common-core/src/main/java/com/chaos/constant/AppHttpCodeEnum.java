@@ -12,7 +12,7 @@ public enum AppHttpCodeEnum {
     TOKEN_REFRESH_FAIL(406, "续签失败，请重新登录"),
     SYSTEM_ERROR(500,"出现错误"),
     EMPTY_JSCODE(501, "empty jscode"),
-    FILE_TYPE_ERROR(502 ,"文件类型错误");
+    FILE_TYPE_ERROR(502 ,"文件类型错误"), MESSAGE_SEND_FAIL(505, "消息发送失败");
 
     int code;
     String msg;
