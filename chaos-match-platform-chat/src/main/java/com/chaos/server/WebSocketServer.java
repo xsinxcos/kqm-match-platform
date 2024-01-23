@@ -2,13 +2,16 @@ package com.chaos.server;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson.JSON;
-import com.chaos.async.event.MessageReceiveEvent;
-import com.chaos.async.event.MessageSendEvent;
-import com.chaos.bo.MessageBo;
 import com.chaos.constant.AppHttpCodeEnum;
+import com.chaos.entity.Message;
+import com.chaos.entity.MessageInfo;
+import com.chaos.enums.MessageTypeEnum;
 import com.chaos.exception.SystemException;
-import lombok.RequiredArgsConstructor;
+import com.chaos.strategy.MessageHandler;
+import com.chaos.util.RedisCache;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -30,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Slf4j
 @Service
+@Getter
 @ServerEndpoint("/chat/socket/{sid}")
 public class WebSocketServer {
     //使用ConcurrentHashMap来保证线程安全
@@ -38,11 +42,19 @@ public class WebSocketServer {
     private Session session;
     //接收SID
     private String sid = "";
+    //异步保存聊天数据
     private static ApplicationEventPublisher messageEventPublisher;
+    //使用Redis对离线消息进行存储
+    private static RedisCache redisCache;
 
     @Autowired
-    public void setMessageEventPublisher(ApplicationEventPublisher applicationEventPublisher){
+    public void setMessageEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
         messageEventPublisher = applicationEventPublisher;
+    }
+
+    @Autowired
+    public void setRedisCache(RedisCache redis) {
+        redisCache = redis;
     }
 
 
@@ -83,23 +95,18 @@ public class WebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        MessageBo messagebo = JSON.parseObject(message, MessageBo.class);
-        //异步持久化发送消息
-        messageEventPublisher.publishEvent(new MessageSendEvent(messagebo));
-        WebSocketServer server = webSocketMap.get(messagebo.getSendTo().toString());
-        try {
-            if (Objects.nonNull(server)) {
-                server.sendMessage(messagebo.getContent());
-                messageEventPublisher.publishEvent(new MessageReceiveEvent(messagebo));
-                log.info(sid + "消息发送成功" + "消息内容为" + message);
+        Message parseMessage = JSON.parseObject(message, Message.class);
+        MessageInfo messageInfo = parseMessage.getMessage();
 
-            } else {
-                //todo 转为离线消息
-            }
+        WebSocketServer server = webSocketMap.get(messageInfo.getSendTo().toString());
+
+        try {
+            MessageHandler.handleMessage(parseMessage, this, server);
         } catch (IOException e) {
             log.error("sid为" + sid + "的链接发送消息失败");
             throw new SystemException(AppHttpCodeEnum.MESSAGE_SEND_FAIL);
         }
+
     }
 
     /**
