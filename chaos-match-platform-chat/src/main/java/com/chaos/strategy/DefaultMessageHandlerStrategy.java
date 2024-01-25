@@ -9,6 +9,8 @@ import com.chaos.entity.Message;
 import com.chaos.entity.MessageInfo;
 import com.chaos.enums.MessageTypeEnum;
 import com.chaos.server.WebSocketServer;
+import com.chaos.util.SnowFlakeUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -24,15 +26,16 @@ import java.util.Objects;
  **/
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class DefaultMessageHandlerStrategy extends AbstractMessageHandlerStrategy {
-    public DefaultMessageHandlerStrategy(ApplicationEventPublisher messageEventPublisher) {
-        super(messageEventPublisher);
-    }
+    //异步保存聊天数据到数据库、异步保存离线消息到redis
+    private final ApplicationEventPublisher messageEventPublisher;
 
     @Override
     public void handleMessage(MessageInfo messageInfo, WebSocketServer from, WebSocketServer to) throws IOException {
 
         Message message = Message.builder()
+                .uuid(SnowFlakeUtil.getDefaultSnowFlakeId())
                 .msgFrom(messageInfo.getSendFrom())
                 .msgTo(messageInfo.getSendTo())
                 .content(messageInfo.getContent())
@@ -56,9 +59,9 @@ public class DefaultMessageHandlerStrategy extends AbstractMessageHandlerStrateg
         from.sendMessage(JSON.toJSONString(
                 MessageBo.builder()
                         .type(MessageTypeEnum.MESSAGE_SEND_ACK.getType())
-                        .message(new MessageInfo(null, null,
+                        .message(new MessageInfo(null ,null, null,
                                 MessageConstants.MessageStatusConstants.MESSAGE_SEND_SUCCESS,
-                                new Date().getTime()))
+                                messageInfo.getTimestamp()))
                         .build())
         );
     }

@@ -1,5 +1,6 @@
 package com.chaos.server;
 
+import cn.hutool.core.lang.Snowflake;
 import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.bo.MessageBo;
@@ -8,6 +9,7 @@ import com.chaos.entity.MessageInfo;
 import com.chaos.exception.SystemException;
 import com.chaos.strategy.MessageHandlerStrategy;
 import com.chaos.util.RedisCache;
+import com.chaos.util.SnowFlakeUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,7 +133,7 @@ public class WebSocketServer {
     }
 
     /**
-     *  将离线消息进行推送
+     *  将离线消息进行推送并删除redis中的离线数据
      */
     public void sendBatchOffLineMessage(){
         String key = MessageConstants.OFFLINE_MESSAGE_REDIS_KEY + sid;
@@ -146,7 +148,5 @@ public class WebSocketServer {
                 throw new SystemException(AppHttpCodeEnum.MESSAGE_SEND_FAIL);
             }
         });
-
-        cacheZSet.removeRange(key ,0 ,-1);
     }
 }

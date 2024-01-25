@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MessageInfo {
+    private Long uuid;
     private Long sendFrom;
     private Long sendTo;
     private String content;

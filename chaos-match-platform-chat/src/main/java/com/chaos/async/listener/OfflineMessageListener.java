@@ -48,11 +48,11 @@ public class OfflineMessageListener implements ApplicationListener<OfflineMessag
         }
         MessageBo messageBo = MessageBo.builder()
                 .type(MessageTypeEnum.MESSAGE_SEND_NORMAL.getType())
-                .message(new MessageInfo(message.getMsgFrom(), message.getMsgTo(),
+                .message(new MessageInfo(message.getUuid(),message.getMsgFrom(), message.getMsgTo(),
                         message.getContent(), message.getSendTime().getTime()))
                 .build();
 
-        //插入数据，将时间戳作为分值
-        operations.add(userKey , JSON.toJSONString(messageBo) ,messageBo.getMessage().getTimestamp());
+        //插入数据，将uuid作为分值
+        operations.add(userKey , JSON.toJSONString(messageBo) ,messageBo.getMessage().getUuid());
     }
 }

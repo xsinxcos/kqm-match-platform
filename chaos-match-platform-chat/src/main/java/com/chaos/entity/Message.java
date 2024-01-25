@@ -24,6 +24,8 @@ import java.util.Date;
 public class Message {
     @TableId
     private Long id;
+    //分布式ID
+    private Long uuid;
 
     //消息内容
     private String content;
