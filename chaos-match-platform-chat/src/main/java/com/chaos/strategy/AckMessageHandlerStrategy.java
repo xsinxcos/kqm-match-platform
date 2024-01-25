@@ -1,6 +1,5 @@
 package com.chaos.strategy;
 
-import com.chaos.entity.Message;
 import com.chaos.entity.MessageInfo;
 import com.chaos.server.WebSocketServer;
 import com.chaos.util.RedisCache;
@@ -16,10 +15,10 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 @Slf4j
-public class AckMessageHandler extends AbstractMessageHandler {
+public class AckMessageHandlerStrategy extends AbstractMessageHandlerStrategy {
 
-    public AckMessageHandler(ApplicationEventPublisher messageEventPublisher, RedisCache redisCache) {
-        super(messageEventPublisher, redisCache);
+    public AckMessageHandlerStrategy(ApplicationEventPublisher messageEventPublisher, RedisCache redisCache) {
+        super(messageEventPublisher);
     }
 
     @Override

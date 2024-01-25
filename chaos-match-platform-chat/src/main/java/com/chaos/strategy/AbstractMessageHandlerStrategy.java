@@ -12,10 +12,8 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 @RequiredArgsConstructor
-public abstract class AbstractMessageHandler implements MessageHandler {
-    //异步保存聊天数据
+public abstract class AbstractMessageHandlerStrategy implements MessageHandlerStrategy {
+    //异步保存聊天数据到数据库、异步保存离线消息到redis
     protected final ApplicationEventPublisher messageEventPublisher;
-    //使用Redis对离线消息进行存储
-    protected final RedisCache redisCache;
 
 }

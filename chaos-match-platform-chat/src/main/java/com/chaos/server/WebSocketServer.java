@@ -1,19 +1,18 @@
 package com.chaos.server;
 
-import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.entity.Message;
+import com.chaos.bo.MessageBo;
+import com.chaos.constants.MessageConstants;
 import com.chaos.entity.MessageInfo;
-import com.chaos.enums.MessageTypeEnum;
 import com.chaos.exception.SystemException;
-import com.chaos.strategy.MessageHandler;
+import com.chaos.strategy.MessageHandlerStrategy;
 import com.chaos.util.RedisCache;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +22,8 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -68,12 +69,16 @@ public class WebSocketServer {
         //将webSocket加入其中
         webSocketMap.put(sid, this);     //加入set中
 
+
         try {
             sendMessage("conn_success");
             log.info("用户:+ " + sid + "的websocket链接建立成功");
         } catch (IOException e) {
             log.error("websocket IO Exception");
         }
+
+        //将离线消息进行推送
+        sendBatchOffLineMessage();
     }
 
     /**
@@ -95,15 +100,14 @@ public class WebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        Message parseMessage = JSON.parseObject(message, Message.class);
-        MessageInfo messageInfo = parseMessage.getMessage();
+        MessageBo parseMessageBo = JSON.parseObject(message, MessageBo.class);
+        MessageInfo messageInfo = parseMessageBo.getMessage();
 
         WebSocketServer server = webSocketMap.get(messageInfo.getSendTo().toString());
 
         try {
-            MessageHandler.handleMessage(parseMessage, this, server);
+            MessageHandlerStrategy.handleMessage(parseMessageBo, this, server);
         } catch (IOException e) {
-            log.error("sid为" + sid + "的链接发送消息失败");
             throw new SystemException(AppHttpCodeEnum.MESSAGE_SEND_FAIL);
         }
 
@@ -126,5 +130,23 @@ public class WebSocketServer {
         this.session.getBasicRemote().sendText(message);
     }
 
+    /**
+     *  将离线消息进行推送
+     */
+    public void sendBatchOffLineMessage(){
+        String key = MessageConstants.OFFLINE_MESSAGE_REDIS_KEY + sid;
+        ZSetOperations<String, String> cacheZSet = redisCache.getCacheZSet();
+        Set<String> message = cacheZSet.range(key ,0 ,-1);
+        if(Objects.isNull(message)) return;
 
+        message.forEach(t -> {
+            try {
+                sendMessage(t);
+            } catch (IOException e) {
+                throw new SystemException(AppHttpCodeEnum.MESSAGE_SEND_FAIL);
+            }
+        });
+
+        cacheZSet.removeRange(key ,0 ,-1);
+    }
 }

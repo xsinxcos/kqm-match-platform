@@ -1,10 +1,7 @@
 package com.chaos.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BoundSetOperations;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -237,5 +234,14 @@ public class RedisCache
     public Collection<String> keys(final String pattern)
     {
         return redisTemplate.keys(pattern);
+    }
+
+    /**
+     * 获取缓存中ZSet对象
+     * @return 对象列表
+     */
+    public ZSetOperations<String ,String> getCacheZSet()
+    {
+        return redisTemplate.opsForZSet();
     }
 }

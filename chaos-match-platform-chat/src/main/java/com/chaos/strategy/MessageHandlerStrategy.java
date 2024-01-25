@@ -1,7 +1,7 @@
 package com.chaos.strategy;
 
 import cn.hutool.extra.spring.SpringUtil;
-import com.chaos.entity.Message;
+import com.chaos.bo.MessageBo;
 import com.chaos.entity.MessageInfo;
 import com.chaos.enums.MessageTypeEnum;
 import com.chaos.server.WebSocketServer;
@@ -15,17 +15,17 @@ import java.util.Objects;
  * @author: xsinxcos
  * @create: 2024-01-24 03:01
  **/
-public interface MessageHandler {
-    static void handleMessage(Message message ,WebSocketServer from, WebSocketServer to) throws IOException {
+public interface MessageHandlerStrategy {
+    static void handleMessage(MessageBo messageBo, WebSocketServer from, WebSocketServer to) throws IOException {
         ListableBeanFactory beanFactory = SpringUtil.getBeanFactory();
-        String type = MessageTypeEnum.getValueByType(message.getType());
+        String type = MessageTypeEnum.getValueByType(messageBo.getType());
 
         if (!beanFactory.containsBean(Objects.requireNonNull(type))) {
             throw new RuntimeException("未找到此种类型");
         }
 
-        MessageHandler handler = (MessageHandler) beanFactory.getBean(type);
-        handler.handleMessage(message.getMessage() ,from ,to);
+        MessageHandlerStrategy handler = (MessageHandlerStrategy) beanFactory.getBean(type);
+        handler.handleMessage(messageBo.getMessage() ,from ,to);
     }
 
     void handleMessage(MessageInfo messageInfo, WebSocketServer from, WebSocketServer to) throws IOException;

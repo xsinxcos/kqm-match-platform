@@ -11,8 +11,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum MessageTypeEnum {
-    MESSAGE_SEND_ACK("ack" ,"ackMessageHandler"),
-    MESSAGE_SEND_NORMAL("message" ,"defaultMessageHandler");
+    MESSAGE_SEND_ACK("ack" ,"ackMessageHandlerStrategy"),
+    MESSAGE_SEND_NORMAL("message" ,"defaultMessageHandlerStrategy");
     private final String type;
     private final String value;
 
