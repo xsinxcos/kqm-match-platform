@@ -36,7 +36,7 @@ public class WxOpenIdStrategy extends AbstractAuthGranter{
         if(Objects.isNull(authUserBo)){
             authUserBo = new AuthUserBo();
             authUserBo.setOpenid(openid);
-            userFeignClient.addUserByOpenId(openid);
+            authUserBo = userFeignClient.addUserByOpenId(openid).getData();
         }
         //根据openID 生成token
         LoginUser loginUser = new LoginUser(BeanCopyUtils.copyBean(authUserBo, User.class));

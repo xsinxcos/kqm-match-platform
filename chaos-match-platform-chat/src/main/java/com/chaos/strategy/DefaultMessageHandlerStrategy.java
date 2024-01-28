@@ -33,9 +33,12 @@ public class DefaultMessageHandlerStrategy extends AbstractMessageHandlerStrateg
 
     @Override
     public void handleMessage(MessageInfo messageInfo, WebSocketServer from, WebSocketServer to) throws IOException {
+        //利用雪花算法生成uuid
+        Long snowFlakeId = SnowFlakeUtil.getDefaultSnowFlakeId();
+        messageInfo.setUuid(snowFlakeId);
 
         Message message = Message.builder()
-                .uuid(SnowFlakeUtil.getDefaultSnowFlakeId())
+                .uuid(messageInfo.getUuid())
                 .msgFrom(messageInfo.getSendFrom())
                 .msgTo(messageInfo.getSendTo())
                 .content(messageInfo.getContent())
@@ -49,10 +52,10 @@ public class DefaultMessageHandlerStrategy extends AbstractMessageHandlerStrateg
         if (Objects.nonNull(to)) {
             to.sendMessage(JSON.toJSONString(
                     new MessageBo(MessageTypeEnum.MESSAGE_SEND_NORMAL.getType(), messageInfo)));
-        } else {
-            //转为离线消息异步存入Redis
-            messageEventPublisher.publishEvent(new OfflineMessageEvent(message));
         }
+
+        //转为离线消息异步存入Redis，防止消息丢失
+        messageEventPublisher.publishEvent(new OfflineMessageEvent(message));
 
         log.info(from.getSid() + "消息发送成功" + "消息内容为" + messageInfo);
         //发送ack消息通知发送者

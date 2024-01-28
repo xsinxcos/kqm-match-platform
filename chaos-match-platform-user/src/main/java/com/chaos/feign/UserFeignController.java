@@ -20,7 +20,13 @@ public class UserFeignController implements UserFeignClient{
     public ResponseResult getUserByOpenId(String openid) {
         LambdaQueryWrapper<AuthUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Objects.nonNull(openid) , AuthUser::getOpenid ,openid);
-        AuthUserBo bo = BeanCopyUtils.copyBean(authUserMapper.selectOne(wrapper), AuthUserBo.class);
+
+        AuthUser authUser = authUserMapper.selectOne(wrapper);
+
+        if(Objects.isNull(authUser))
+            return ResponseResult.okResult();
+
+        AuthUserBo bo = BeanCopyUtils.copyBean(authUser, AuthUserBo.class);
         return ResponseResult.okResult(bo);
     }
 
@@ -29,7 +35,8 @@ public class UserFeignController implements UserFeignClient{
         AuthUser user = new AuthUser();
         user.setOpenid(openid);
         authUserMapper.insert(user);
-        return ResponseResult.okResult();
+        AuthUserBo bo = BeanCopyUtils.copyBean(user, AuthUserBo.class);
+        return ResponseResult.okResult(bo);
     }
 
     @Override

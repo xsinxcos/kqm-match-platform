@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/refresh").anonymous()
                 .antMatchers("/feign/*").anonymous()
                 // 除上面外的所有请求全部需要认证即可访问
-                .anyRequest().anonymous();
+                .anyRequest().authenticated();
 
         //配置异常处理器
         http

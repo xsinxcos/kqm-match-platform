@@ -5,16 +5,20 @@ import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.bo.MessageBo;
 import com.chaos.constants.MessageConstants;
+import com.chaos.entity.LoginUser;
 import com.chaos.entity.MessageInfo;
 import com.chaos.exception.SystemException;
 import com.chaos.strategy.MessageHandlerStrategy;
 import com.chaos.util.RedisCache;
+import com.chaos.util.SecurityUtils;
 import com.chaos.util.SnowFlakeUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Service
 @Getter
-@ServerEndpoint("/chat/socket/{sid}")
+@ServerEndpoint("/web/socket")
 public class WebSocketServer {
     //使用ConcurrentHashMap来保证线程安全
     private static Map<String, WebSocketServer> webSocketMap = new ConcurrentHashMap<>();
@@ -65,9 +69,13 @@ public class WebSocketServer {
      * 连接建立成功调用的方法
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("sid") String sid) {
+    public void onOpen(Session session) {
         this.session = session;
-        this.sid = sid;
+
+        Authentication authentication = (Authentication) session.getUserPrincipal();
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        this.sid = SecurityUtils.getUserId().toString();
         //将webSocket加入其中
         webSocketMap.put(sid, this);     //加入set中
 
@@ -105,7 +113,11 @@ public class WebSocketServer {
         MessageBo parseMessageBo = JSON.parseObject(message, MessageBo.class);
         MessageInfo messageInfo = parseMessageBo.getMessage();
 
-        WebSocketServer server = webSocketMap.get(messageInfo.getSendTo().toString());
+        parseMessageBo.getMessage().setSendFrom(Long.parseLong(sid));
+        WebSocketServer server = null;
+
+        if(Objects.nonNull(messageInfo.getSendTo()))
+           server = webSocketMap.get(messageInfo.getSendTo().toString());
 
         try {
             MessageHandlerStrategy.handleMessage(parseMessageBo, this, server);

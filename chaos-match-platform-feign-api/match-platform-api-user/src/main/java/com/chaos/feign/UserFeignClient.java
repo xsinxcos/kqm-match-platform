@@ -13,7 +13,7 @@ public interface UserFeignClient {
     ResponseResult<AuthUserBo> getUserByOpenId(@RequestParam("openid") String openid);
 
     @PostMapping("/feign/addUser")
-    ResponseResult<Void> addUserByOpenId(@RequestParam("openid") String openid);
+    ResponseResult<AuthUserBo> addUserByOpenId(@RequestParam("openid") String openid);
 
     @GetMapping("/feign/getUserByUsername")
     ResponseResult<AuthUserBo> getUserByUsername(@RequestParam("username") String username);

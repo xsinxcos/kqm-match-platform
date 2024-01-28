@@ -38,16 +38,6 @@ public class AuthUserBo {
     private Integer sex;
     //状态 1:启用 0:禁用
     private Integer status;
-    //创建者
-    private Long createBy;
-    //创建时间
-    private Date createTime;
-    //更新者
-    private Long updateBy;
-    //更新时间
-    private Date updateTime;
-    //删除标记 默认为0，删除为-1
-    private Integer delFlag;
 
 
 }
