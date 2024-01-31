@@ -12,6 +12,7 @@ public class WeiXinFeignController implements WeiXinFeignClient {
 
     /**
      * 从微信端获取登录用户资料
+     *
      * @param code
      * @return ResponseResult<WxLoginUserDetailBo>
      */

@@ -10,12 +10,13 @@ import org.springframework.context.ApplicationEvent;
  **/
 public class OfflineMessageEvent extends ApplicationEvent {
     Message message;
+
     public OfflineMessageEvent(Message source) {
         super(source);
         this.message = source;
     }
 
-    public Message getOffineMessage(){
+    public Message getOffineMessage() {
         return message;
     }
 }

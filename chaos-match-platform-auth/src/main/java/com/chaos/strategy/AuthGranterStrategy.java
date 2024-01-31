@@ -12,6 +12,7 @@ public interface AuthGranterStrategy {
 
     /**
      * 登录
+     *
      * @param authParam
      * @return
      */

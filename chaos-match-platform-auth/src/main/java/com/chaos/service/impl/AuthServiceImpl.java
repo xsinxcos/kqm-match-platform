@@ -1,10 +1,10 @@
 package com.chaos.service.impl;
 
-import com.chaos.entity.AuthParam;
-import com.chaos.entity.TokenInfo;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.constant.LoginConstant;
+import com.chaos.entity.AuthParam;
 import com.chaos.entity.LoginUser;
+import com.chaos.entity.TokenInfo;
 import com.chaos.enums.GrantTypeEnum;
 import com.chaos.factory.AuthFactory;
 import com.chaos.feign.UserFeignClient;
@@ -77,9 +77,9 @@ public class AuthServiceImpl implements AuthService {
         //利用userId重新生成access_token 和 refresh_token
         String accessToken = JwtUtil.createShortToken(userId);
         refreshToken = JwtUtil.createLongToken(userId);
-        redisCache.expire(LoginConstant.USER_REDIS_PREFIX + userId ,
-                LoginConstant.REFRESH_TOKEN_TTL , TimeUnit.SECONDS);
-        TokenInfo tokenInfo = new TokenInfo(accessToken ,refreshToken);
+        redisCache.expire(LoginConstant.USER_REDIS_PREFIX + userId,
+                LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
+        TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
         return ResponseResult.okResult(tokenInfo);
     }
 }

@@ -25,13 +25,14 @@ public class LoginController {
 
     /**
      * 用户微信登录
+     *
      * @param code 微信登录code
      * @return token
      */
     @GetMapping("/wxLogin")
-    public ResponseResult wxlogin(String code){
+    public ResponseResult wxlogin(String code) {
         WxLoginUserDetailBo detailBo = weiXinFeignClient.wxLoginUserDetail(code).getData();
-        if(Objects.isNull(detailBo.getOpenid())){
+        if (Objects.isNull(detailBo.getOpenid())) {
             ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR);
         }
         return authService.wxlogin(detailBo.getOpenid());
@@ -39,20 +40,22 @@ public class LoginController {
 
     /**
      * 退出登录
+     *
      * @return void
      */
     @PostMapping("/logout")
-    public ResponseResult logout(){
+    public ResponseResult logout() {
         return authService.logout();
     }
 
     /**
      * 对access_token进行续签
+     *
      * @param request 用于获取请求头中的refresh_token
      * @return
      */
     @GetMapping("/refresh")
-    public ResponseResult refreshToken(HttpServletRequest request){
+    public ResponseResult refreshToken(HttpServletRequest request) {
         String refreshToken = request.getHeader("refresh_token");
         return authService.refreshAccessToken(refreshToken);
     }

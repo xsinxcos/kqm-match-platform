@@ -1,9 +1,9 @@
 package com.chaos.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chaos.mapper.AuthUserMapper;
 import com.chaos.model.dto.UserInfoDto;
 import com.chaos.model.entity.AuthUser;
-import com.chaos.mapper.AuthUserMapper;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
 import com.chaos.util.BeanCopyUtils;

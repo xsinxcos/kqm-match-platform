@@ -10,6 +10,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class WeiXinApplication {
     public static void main(String[] args) {
-        SpringApplication.run(WeiXinApplication.class,args);
+        SpringApplication.run(WeiXinApplication.class, args);
     }
 }

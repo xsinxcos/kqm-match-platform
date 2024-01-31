@@ -30,16 +30,16 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
         Long myUserID = SecurityUtils.getUserId();
         QueryWrapper<Message> queryWrapper = new QueryWrapper<>();
         queryWrapper.and(
-                wrapper -> wrapper.eq("msg_from" ,userId).eq("msg_to" ,myUserID)
+                wrapper -> wrapper.eq("msg_from", userId).eq("msg_to", myUserID)
         ).or(
-                wrapper -> wrapper.eq("msg_from" ,myUserID).eq("msg_to" ,userId)
+                wrapper -> wrapper.eq("msg_from", myUserID).eq("msg_to", userId)
         ).orderByDesc("send_time");
 
-        Page<Message> page = new Page<>(pageNum ,pageSize);
-        page(page ,queryWrapper);
+        Page<Message> page = new Page<>(pageNum, pageSize);
+        page(page, queryWrapper);
 
-        List<HistoryMessageVo> vos = BeanCopyUtils.copyBeanList(page.getRecords() , HistoryMessageVo.class);
-        return ResponseResult.okResult(new PageVo(vos ,page.getTotal()));
+        List<HistoryMessageVo> vos = BeanCopyUtils.copyBeanList(page.getRecords(), HistoryMessageVo.class);
+        return ResponseResult.okResult(new PageVo(vos, page.getTotal()));
 
     }
 }

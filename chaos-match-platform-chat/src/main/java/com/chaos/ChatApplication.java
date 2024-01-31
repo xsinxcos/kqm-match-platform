@@ -12,6 +12,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @MapperScan("com.chaos.mapper")
 public class ChatApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ChatApplication.class ,args);
+        SpringApplication.run(ChatApplication.class, args);
     }
 }

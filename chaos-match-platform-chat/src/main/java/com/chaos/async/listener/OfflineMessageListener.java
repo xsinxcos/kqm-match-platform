@@ -2,8 +2,8 @@ package com.chaos.async.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.chaos.async.event.OfflineMessageEvent;
-import com.chaos.domain.bo.MessageBo;
 import com.chaos.constants.MessageConstants;
+import com.chaos.domain.bo.MessageBo;
 import com.chaos.domain.entity.Message;
 import com.chaos.domain.entity.MessageInfo;
 import com.chaos.enums.MessageTypeEnum;
@@ -33,6 +33,7 @@ public class OfflineMessageListener implements ApplicationListener<OfflineMessag
     /**
      * 将离线消息存储进redis缓存，每个用户缓存1000条数据，超出删除最早的消息
      * （PS：离线消息的作用：降低首次登陆的消息数据全量拉取）
+     *
      * @param event 离线消息
      */
     @Async
@@ -42,17 +43,17 @@ public class OfflineMessageListener implements ApplicationListener<OfflineMessag
 
         String userKey = MessageConstants.OFFLINE_MESSAGE_REDIS_KEY + message.getMsgTo();
         ZSetOperations<String, String> operations = redisCache.getCacheZSet();
-        if(operations.zCard(userKey) > MessageConstants.USER_MAX_NUMBER_MESSAGE){
+        if (operations.zCard(userKey) > MessageConstants.USER_MAX_NUMBER_MESSAGE) {
             //如果队列数据超过阈值，则删除最前面数据
-            operations.removeRange(userKey ,0 ,0);
+            operations.removeRange(userKey, 0, 0);
         }
         MessageBo messageBo = MessageBo.builder()
                 .type(MessageTypeEnum.MESSAGE_SEND_NORMAL.getType())
-                .message(new MessageInfo(message.getUuid(),message.getMsgFrom(), message.getMsgTo(),
+                .message(new MessageInfo(message.getUuid(), message.getMsgFrom(), message.getMsgTo(),
                         message.getContent(), message.getSendTime().getTime()))
                 .build();
 
         //插入数据，将uuid作为分值
-        operations.add(userKey , JSON.toJSONString(messageBo) ,messageBo.getMessage().getUuid());
+        operations.add(userKey, JSON.toJSONString(messageBo), messageBo.getMessage().getUuid());
     }
 }

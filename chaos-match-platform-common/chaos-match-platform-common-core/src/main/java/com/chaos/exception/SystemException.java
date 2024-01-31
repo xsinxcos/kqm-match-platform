@@ -2,7 +2,7 @@ package com.chaos.exception;
 
 import com.chaos.constant.AppHttpCodeEnum;
 
-public class SystemException extends RuntimeException{
+public class SystemException extends RuntimeException {
 
     private int code;
 
@@ -21,5 +21,5 @@ public class SystemException extends RuntimeException{
         this.code = httpCodeEnum.getCode();
         this.msg = httpCodeEnum.getMsg();
     }
-    
+
 }

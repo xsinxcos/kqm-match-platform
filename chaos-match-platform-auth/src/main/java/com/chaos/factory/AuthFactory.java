@@ -16,11 +16,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AuthFactory {
     private final Map<String, AuthGranterStrategy> granterMap = new ConcurrentHashMap<>();
 
-    public AuthFactory(Map<String, AuthGranterStrategy> granterMap){
+    public AuthFactory(Map<String, AuthGranterStrategy> granterMap) {
         this.granterMap.putAll(granterMap);
     }
 
-    public AuthGranterStrategy getGranter(String grantType){
+    public AuthGranterStrategy getGranter(String grantType) {
         AuthGranterStrategy granterStrategy = granterMap.get(grantType);
         Optional.ofNullable(granterStrategy).orElseThrow(() -> new RuntimeException("不存在此种登录类型"));
         return granterStrategy;

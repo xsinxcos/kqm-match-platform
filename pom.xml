@@ -54,7 +54,7 @@
         <weixin-java-miniapp.version>4.6.0</weixin-java-miniapp.version>
         <hutool.version>5.8.11</hutool.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
-<!--        <spring-security.version>2.6.11</spring-security.version>-->
+        <!--        <spring-security.version>2.6.11</spring-security.version>-->
     </properties>
     <dependencies>
         <!--日志处理包-->
@@ -214,16 +214,16 @@
         </dependencies>
     </dependencyManagement>
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>spring</id>-->
-<!--            <url>https://maven.aliyun.com/repository/spring</url>-->
-<!--            <releases>-->
-<!--                <enabled>true</enabled>-->
-<!--            </releases>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--        </repository>-->
-<!--    </repositories>-->
+    <!--    <repositories>-->
+    <!--        <repository>-->
+    <!--            <id>spring</id>-->
+    <!--            <url>https://maven.aliyun.com/repository/spring</url>-->
+    <!--            <releases>-->
+    <!--                <enabled>true</enabled>-->
+    <!--            </releases>-->
+    <!--            <snapshots>-->
+    <!--                <enabled>true</enabled>-->
+    <!--            </snapshots>-->
+    <!--        </repository>-->
+    <!--    </repositories>-->
 </project>

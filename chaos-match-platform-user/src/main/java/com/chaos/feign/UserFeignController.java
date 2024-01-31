@@ -1,9 +1,9 @@
 package com.chaos.feign;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.chaos.model.entity.AuthUser;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.mapper.AuthUserMapper;
+import com.chaos.model.entity.AuthUser;
 import com.chaos.response.ResponseResult;
 import com.chaos.util.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +13,17 @@ import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
-public class UserFeignController implements UserFeignClient{
+public class UserFeignController implements UserFeignClient {
     private final AuthUserMapper authUserMapper;
 
     @Override
     public ResponseResult getUserByOpenId(String openid) {
         LambdaQueryWrapper<AuthUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Objects.nonNull(openid) , AuthUser::getOpenid ,openid);
+        wrapper.eq(Objects.nonNull(openid), AuthUser::getOpenid, openid);
 
         AuthUser authUser = authUserMapper.selectOne(wrapper);
 
-        if(Objects.isNull(authUser))
+        if (Objects.isNull(authUser))
             return ResponseResult.okResult();
 
         AuthUserBo bo = BeanCopyUtils.copyBean(authUser, AuthUserBo.class);

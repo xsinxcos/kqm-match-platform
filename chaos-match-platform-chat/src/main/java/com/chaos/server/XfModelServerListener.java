@@ -4,13 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.chaos.domain.XfChatRequest;
 import com.chaos.domain.XfChatResponse;
 import com.chaos.utils.XfGPTUtils;
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +22,7 @@ public class XfModelServerListener extends WebSocketListener {
 
     public boolean is_finished;
 
-    public XfModelServerListener(){
+    public XfModelServerListener() {
         totalAnswer = "";
         is_finished = false;
     }
@@ -72,17 +69,17 @@ public class XfModelServerListener extends WebSocketListener {
         }
     }
 
-    public XfModelServerListener sendQuestion(String question ,XfModelServerListener webSocketListener) throws Exception {
+    public XfModelServerListener sendQuestion(String question, XfModelServerListener webSocketListener) throws Exception {
         //构建鉴权url
         String authUrl = XfGPTUtils.getAuthUrl();
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         String url = authUrl.toString().replace("http://", "ws://").replace("https://", "wss://");
         //建立websocket请求
         Request request = new Request.Builder().url(url).build();
-        WebSocket webSocket = client.newWebSocket(request ,webSocketListener);
+        WebSocket webSocket = client.newWebSocket(request, webSocketListener);
         //构建请求内容
         List<XfChatRequest.Text> requestTexts = new ArrayList<>();
-        requestTexts.add(new XfChatRequest.Text("user" ,question));
+        requestTexts.add(new XfChatRequest.Text("user", question));
         XfChatRequest request1 = XfGPTUtils.getRequest(requestTexts);
         //发送请求
         String message = JSON.toJSON(request1).toString();

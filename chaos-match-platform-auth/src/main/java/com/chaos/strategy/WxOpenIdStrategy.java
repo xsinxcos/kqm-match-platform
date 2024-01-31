@@ -8,13 +8,11 @@ import com.chaos.entity.User;
 import com.chaos.feign.UserFeignClient;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.util.BeanCopyUtils;
-import com.chaos.util.JwtUtil;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,16 +22,17 @@ import java.util.concurrent.TimeUnit;
  **/
 @Component
 @RequiredArgsConstructor
-public class WxOpenIdStrategy extends AbstractAuthGranter{
+public class WxOpenIdStrategy extends AbstractAuthGranter {
 
     private final UserFeignClient userFeignClient;
     private final RedisCache redisCache;
+
     @Override
     public TokenInfo grant(AuthParam authParam) {
         String openid = authParam.getOpenid();
         AuthUserBo authUserBo = userFeignClient.getUserByOpenId(openid).getData();
         //判断OPENID未存在则存入数据库(第一次登录)
-        if(Objects.isNull(authUserBo)){
+        if (Objects.isNull(authUserBo)) {
             authUserBo = new AuthUserBo();
             authUserBo.setOpenid(openid);
             authUserBo = userFeignClient.addUserByOpenId(openid).getData();
@@ -44,8 +43,8 @@ public class WxOpenIdStrategy extends AbstractAuthGranter{
         //生成TokenInfo
         TokenInfo tokenInfo = createTokenInfoByUserId(String.valueOf(userid));
         //将用户信息存入redis
-        redisCache.setCacheObject(LoginConstant.USER_REDIS_PREFIX + userid, loginUser ,
-                LoginConstant.REFRESH_TOKEN_TTL , TimeUnit.SECONDS);
+        redisCache.setCacheObject(LoginConstant.USER_REDIS_PREFIX + userid, loginUser,
+                LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
         return tokenInfo;
     }
 }

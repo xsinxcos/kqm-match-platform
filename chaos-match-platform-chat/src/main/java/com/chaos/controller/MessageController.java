@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -30,22 +28,23 @@ public class MessageController {
 
     /**
      * 展示用户之间的历史记录
+     *
      * @return
      */
     @GetMapping("/history")
-    public ResponseResult showHistoryMessage(Integer pageNum ,Integer pageSize ,Long userId){
-        return messageService.showHistoryMessage(pageNum ,pageSize ,userId);
+    public ResponseResult showHistoryMessage(Integer pageNum, Integer pageSize, Long userId) {
+        return messageService.showHistoryMessage(pageNum, pageSize, userId);
     }
 
     @PostMapping("/gpt")
-    public ResponseResult chatWithGPT(String question){
+    public ResponseResult chatWithGPT(String question) {
         long timeOut = 30;
         String answer = "";
         XfModelServerListener xfListener = new XfModelServerListener();
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() ->{
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
             try {
                 XfModelServerListener websocket = xfListener.sendQuestion(question, xfListener);
-                while (!xfListener.is_finished){
+                while (!xfListener.is_finished) {
                     continue;
                 }
                 return websocket.getTotalAnswer();
@@ -55,7 +54,7 @@ public class MessageController {
         });
 
         try {
-            answer = future.get(timeOut , TimeUnit.SECONDS);
+            answer = future.get(timeOut, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException("回答失败");
         }

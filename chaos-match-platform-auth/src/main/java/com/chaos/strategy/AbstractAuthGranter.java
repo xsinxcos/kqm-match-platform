@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
  * @create: 2024-01-20 23:30
  **/
 @Component
-public abstract class AbstractAuthGranter implements AuthGranterStrategy{
-    protected TokenInfo createTokenInfoByUserId(String userid){
+public abstract class AbstractAuthGranter implements AuthGranterStrategy {
+    protected TokenInfo createTokenInfoByUserId(String userid) {
         //生成并返回TokenInfo
         return TokenInfo.builder()
                 .access_token(JwtUtil.createShortToken(String.valueOf(userid)))

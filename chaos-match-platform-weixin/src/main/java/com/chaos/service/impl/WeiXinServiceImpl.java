@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class WeiXinServiceImpl implements WeiXinService {
     private final WxMaService wxMaService;
+
     @Override
     public ResponseResult wxLoginUserDetail(String code) {
         String appid = DefaultWxConfig.WX_APPID;

@@ -21,6 +21,6 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
         e.printStackTrace();
         ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NO_OPERATOR_AUTH);
         //响应给前端
-        WebUtils.renderString(httpServletResponse , JSON.toJSONString(result));
+        WebUtils.renderString(httpServletResponse, JSON.toJSONString(result));
     }
 }

@@ -1,6 +1,7 @@
 package com.chaos.util;
 
 import cn.hutool.core.lang.Singleton;
+
 /**
  * 雪花算法工具类
  */
@@ -54,7 +55,7 @@ public class SnowFlakeUtil {
 
     private long getNextMill() {
         long mill;
-        for(mill = this.getNewstmp(); mill <= this.lastStmp; mill = this.getNewstmp()) {
+        for (mill = this.getNewstmp(); mill <= this.lastStmp; mill = this.getNewstmp()) {
         }
 
         return mill;
@@ -65,6 +66,6 @@ public class SnowFlakeUtil {
     }
 
     public static Long getDefaultSnowFlakeId() {
-        return ((SnowFlakeUtil)Singleton.get(SnowFlakeUtil.class, new Object[]{1L, 1L})).nextId();
+        return ((SnowFlakeUtil) Singleton.get(SnowFlakeUtil.class, new Object[]{1L, 1L})).nextId();
     }
 }

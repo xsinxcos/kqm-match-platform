@@ -16,25 +16,27 @@ public class UserController {
 
     /**
      * 获取用户个人信息
+     *
      * @return UserInfoVo
      */
     @GetMapping("/userInfo")
-    public ResponseResult getUserInfo(){
+    public ResponseResult getUserInfo() {
         return authUserService.getUserInfo();
     }
 
     /**
      * 更新个人信息
+     *
      * @param userInfoDto
      * @return
      */
     @PutMapping("/userInfo")
-    public ResponseResult updateUserInfo(@RequestBody UserInfoDto userInfoDto){
+    public ResponseResult updateUserInfo(@RequestBody UserInfoDto userInfoDto) {
         return authUserService.updateUserInfo(userInfoDto);
     }
 
     @PostMapping("/register")
-    public ResponseResult register(){
+    public ResponseResult register() {
         return ResponseResult.okResult();
     }
 }

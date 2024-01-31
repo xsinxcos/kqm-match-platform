@@ -1,7 +1,6 @@
 package com.chaos.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.chaos.entity.LoginUser;
 import com.chaos.util.SecurityUtils;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
             userId = -1L;//表示是自己创建
         }
         this.setFieldValByName("createTime", new Date(), metaObject);
-        this.setFieldValByName("createBy",userId , metaObject);
+        this.setFieldValByName("createBy", userId, metaObject);
         this.setFieldValByName("updateTime", new Date(), metaObject);
         this.setFieldValByName("updateBy", userId, metaObject);
     }
@@ -29,7 +28,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
 
-        if(!Objects.isNull(SecurityUtils.getLoginUser())) {
+        if (!Objects.isNull(SecurityUtils.getLoginUser())) {
             long userId = SecurityUtils.getLoginUser().getUser().getId();
             this.setFieldValByName("updateTime", new Date(), metaObject);
             this.setFieldValByName("updateBy", userId, metaObject);

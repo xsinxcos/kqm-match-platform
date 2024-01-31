@@ -44,9 +44,8 @@ class HotelDemoApplicationTests {
     IHotelService iHotelService;
 
 
-
     @Test
-    public void test(){
+    public void test() {
         WxMaService wxMaService = new WxMaServiceImpl();
         String appid = "wxaf871f55adccb5c5";
         String code = "0c3ZM30w3Vzk323EHF1w3NhCS60ZM305";
@@ -65,6 +64,7 @@ class HotelDemoApplicationTests {
         }
         System.out.println("111");
     }
+
     @Test
     public void testAddDoc() throws IOException {
         BulkRequest request = new BulkRequest();
@@ -109,7 +109,7 @@ class HotelDemoApplicationTests {
                 .query(QueryBuilders.boolQuery()
                         .must(QueryBuilders.termQuery("name", "北京"))
                         .filter(QueryBuilders.rangeQuery("price").gt(1000)
-                ));
+                        ));
 
         SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
         long totalHits = response.getHits().totalHits;

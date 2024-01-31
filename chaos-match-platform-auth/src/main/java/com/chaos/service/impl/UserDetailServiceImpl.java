@@ -23,7 +23,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         //根据用户名查询用户信息
         AuthUserBo user = userFeignClient.getUserByUsername(username).getData();
         //判断是否查到用户，如果没有查到抛出异常
-        if(Objects.isNull(user)){
+        if (Objects.isNull(user)) {
             throw new RuntimeException("用户不存在");
         }
         //返回用户信息
@@ -32,7 +32,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 //            List<String> list = menuMapper.selectPermsByUserId(user.getId());
 //            return new LoginUser(user ,list);
 //        }
-        return new LoginUser(BeanCopyUtils.copyBean(user , User.class));
+        return new LoginUser(BeanCopyUtils.copyBean(user, User.class));
     }
 
 }

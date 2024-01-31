@@ -1,6 +1,8 @@
 package com.chaos.util;
+
 import java.lang.reflect.Field;
 import java.util.*;
+
 public class MapUtils {
 
     /**

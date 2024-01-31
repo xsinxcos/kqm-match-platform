@@ -2,8 +2,8 @@ package com.chaos.server;
 
 import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.domain.bo.MessageBo;
 import com.chaos.constants.MessageConstants;
+import com.chaos.domain.bo.MessageBo;
 import com.chaos.domain.entity.MessageInfo;
 import com.chaos.exception.SystemException;
 import com.chaos.strategy.MessageHandlerStrategy;
@@ -111,8 +111,8 @@ public class WebSocketServer {
         parseMessageBo.getMessage().setSendFrom(Long.parseLong(sid));
         WebSocketServer server = null;
 
-        if(Objects.nonNull(messageInfo.getSendTo()))
-           server = webSocketMap.get(messageInfo.getSendTo().toString());
+        if (Objects.nonNull(messageInfo.getSendTo()))
+            server = webSocketMap.get(messageInfo.getSendTo().toString());
 
         try {
             MessageHandlerStrategy.handleMessage(parseMessageBo, this, server);
@@ -140,13 +140,13 @@ public class WebSocketServer {
     }
 
     /**
-     *  将离线消息进行推送并删除redis中的离线数据
+     * 将离线消息进行推送并删除redis中的离线数据
      */
-    public void sendBatchOffLineMessage(){
+    public void sendBatchOffLineMessage() {
         String key = MessageConstants.OFFLINE_MESSAGE_REDIS_KEY + sid;
         ZSetOperations<String, String> cacheZSet = redisCache.getCacheZSet();
-        Set<String> message = cacheZSet.range(key ,0 ,-1);
-        if(Objects.isNull(message)) return;
+        Set<String> message = cacheZSet.range(key, 0, -1);
+        if (Objects.isNull(message)) return;
 
         message.forEach(t -> {
             try {

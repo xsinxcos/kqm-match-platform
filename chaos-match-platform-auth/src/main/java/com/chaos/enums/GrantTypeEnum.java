@@ -11,16 +11,16 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum GrantTypeEnum {
-    WX_OPENID("openId" ,"wxOpenIdStrategy"),
-    PASSWORD("password","passwordStrategy");
+    WX_OPENID("openId", "wxOpenIdStrategy"),
+    PASSWORD("password", "passwordStrategy");
 
     private final String type;
 
     private final String value;
 
-    public static String getValueByType(String grantType){
-        for(GrantTypeEnum grantTypeEnum : values()){
-            if(grantTypeEnum.getType().equals(grantType)){
+    public static String getValueByType(String grantType) {
+        for (GrantTypeEnum grantTypeEnum : values()) {
+            if (grantTypeEnum.getType().equals(grantType)) {
                 return grantTypeEnum.getValue();
             }
         }

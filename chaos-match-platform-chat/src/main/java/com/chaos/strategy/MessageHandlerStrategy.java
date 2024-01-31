@@ -25,7 +25,7 @@ public interface MessageHandlerStrategy {
         }
 
         MessageHandlerStrategy handler = (MessageHandlerStrategy) beanFactory.getBean(type);
-        handler.handleMessage(messageBo.getMessage() ,from ,to);
+        handler.handleMessage(messageBo.getMessage(), from, to);
     }
 
     void handleMessage(MessageInfo messageInfo, WebSocketServer from, WebSocketServer to) throws IOException;

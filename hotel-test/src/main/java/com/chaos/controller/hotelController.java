@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class hotelController {
     @GetMapping("/hotel")
-    public String test(){
+    public String test() {
         System.out.println("111");
         return "111";
     }
