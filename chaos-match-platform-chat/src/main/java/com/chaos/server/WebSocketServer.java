@@ -1,17 +1,14 @@
 package com.chaos.server;
 
-import cn.hutool.core.lang.Snowflake;
 import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.bo.MessageBo;
+import com.chaos.domain.bo.MessageBo;
 import com.chaos.constants.MessageConstants;
-import com.chaos.entity.LoginUser;
-import com.chaos.entity.MessageInfo;
+import com.chaos.domain.entity.MessageInfo;
 import com.chaos.exception.SystemException;
 import com.chaos.strategy.MessageHandlerStrategy;
 import com.chaos.util.RedisCache;
 import com.chaos.util.SecurityUtils;
-import com.chaos.util.SnowFlakeUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +20,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.*;
-import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -1,9 +1,7 @@
 package com.chaos.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.chaos.entity.Message;
-
-import java.util.List;
+import com.chaos.domain.entity.Message;
 
 
 /**

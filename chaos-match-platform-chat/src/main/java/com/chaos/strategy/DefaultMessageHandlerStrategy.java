@@ -3,10 +3,10 @@ package com.chaos.strategy;
 import com.alibaba.fastjson.JSON;
 import com.chaos.async.event.MessageEvent;
 import com.chaos.async.event.OfflineMessageEvent;
-import com.chaos.bo.MessageBo;
+import com.chaos.domain.bo.MessageBo;
 import com.chaos.constants.MessageConstants;
-import com.chaos.entity.Message;
-import com.chaos.entity.MessageInfo;
+import com.chaos.domain.entity.Message;
+import com.chaos.domain.entity.MessageInfo;
 import com.chaos.enums.MessageTypeEnum;
 import com.chaos.server.WebSocketServer;
 import com.chaos.util.SnowFlakeUtil;
@@ -57,7 +57,9 @@ public class DefaultMessageHandlerStrategy extends AbstractMessageHandlerStrateg
         //转为离线消息异步存入Redis，防止消息丢失
         messageEventPublisher.publishEvent(new OfflineMessageEvent(message));
 
-        log.info(from.getSid() + "消息发送成功" + "消息内容为" + messageInfo);
+        //todo 消息重发（主要解决消息丢失，及时重发）
+
+        log.debug(from.getSid() + "消息发送成功" + "消息内容为" + messageInfo);
         //发送ack消息通知发送者
         from.sendMessage(JSON.toJSONString(
                 MessageBo.builder()

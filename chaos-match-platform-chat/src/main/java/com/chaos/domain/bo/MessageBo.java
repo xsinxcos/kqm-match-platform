@@ -1,6 +1,6 @@
-package com.chaos.bo;
+package com.chaos.domain.bo;
 
-import com.chaos.entity.MessageInfo;
+import com.chaos.domain.entity.MessageInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

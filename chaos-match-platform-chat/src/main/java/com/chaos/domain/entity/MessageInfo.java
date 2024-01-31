@@ -1,4 +1,4 @@
-package com.chaos.entity;
+package com.chaos.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

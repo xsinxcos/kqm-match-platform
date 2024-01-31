@@ -2,10 +2,10 @@ package com.chaos.async.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.chaos.async.event.OfflineMessageEvent;
-import com.chaos.bo.MessageBo;
+import com.chaos.domain.bo.MessageBo;
 import com.chaos.constants.MessageConstants;
-import com.chaos.entity.Message;
-import com.chaos.entity.MessageInfo;
+import com.chaos.domain.entity.Message;
+import com.chaos.domain.entity.MessageInfo;
 import com.chaos.enums.MessageTypeEnum;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;

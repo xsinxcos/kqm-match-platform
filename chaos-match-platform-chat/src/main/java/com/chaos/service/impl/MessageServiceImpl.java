@@ -1,11 +1,10 @@
 package com.chaos.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
-import com.chaos.entity.Message;
+import com.chaos.domain.entity.Message;
 import com.chaos.mapper.MessageMapper;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.MessageService;
@@ -15,7 +14,6 @@ import com.chaos.vo.HistoryMessageVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 消息表(Message)表服务实现类

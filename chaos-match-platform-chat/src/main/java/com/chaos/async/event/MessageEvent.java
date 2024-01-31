@@ -1,6 +1,6 @@
 package com.chaos.async.event;
 
-import com.chaos.entity.Message;
+import com.chaos.domain.entity.Message;
 import org.springframework.context.ApplicationEvent;
 
 /**

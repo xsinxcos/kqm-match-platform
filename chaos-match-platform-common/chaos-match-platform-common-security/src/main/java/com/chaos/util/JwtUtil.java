@@ -26,7 +26,7 @@ public class JwtUtil {
     //长token有效期
     public static final Long LONG_JWT_TTL =3 * 24 * 60 * 60 *1000L;
     //短token有效期
-    public static final Long SHORT_JWT_TTL =  60 * 60 * 60 * 1000L;
+    public static final Long SHORT_JWT_TTL =  15 * 1000L;
 
     public static String getUUID(){
         String token = UUID.randomUUID().toString().replaceAll("-", "");
