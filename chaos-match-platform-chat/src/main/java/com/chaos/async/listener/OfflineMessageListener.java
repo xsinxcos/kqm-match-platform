@@ -36,8 +36,8 @@ public class OfflineMessageListener implements ApplicationListener<OfflineMessag
     @Async
     @Override
     public void onApplicationEvent(OfflineMessageEvent event) {
-        MessageBo offlineMessage = event.getOfflineMessage();
-        Long sendTo = offlineMessage.getMessage().getSendTo();
+        MessageBo messageBo = event.getOfflineMessage();
+        Long sendTo = messageBo.getMessage().getSendTo();
         String userKey = MessageConstants.OFFLINE_MESSAGE_REDIS_KEY + sendTo;
         ZSetOperations<String, String> operations = redisCache.getCacheZSet();
         if (operations.zCard(userKey) > MessageConstants.USER_MAX_NUMBER_MESSAGE) {
@@ -45,6 +45,6 @@ public class OfflineMessageListener implements ApplicationListener<OfflineMessag
             operations.removeRange(userKey, 0, 0);
         }
         //插入数据，将uuid作为分值
-        operations.add(userKey, JSON.toJSONString(offlineMessage), offlineMessage.getMessage().getUuid());
+        operations.add(userKey, JSON.toJSONString(messageBo), messageBo.getMessage().getUuid());
     }
 }

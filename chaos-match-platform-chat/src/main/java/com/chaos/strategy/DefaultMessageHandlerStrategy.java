@@ -6,7 +6,7 @@ import com.chaos.async.event.OfflineMessageEvent;
 import com.chaos.constants.MessageConstants;
 import com.chaos.domain.bo.MessageBo;
 import com.chaos.domain.entity.MessageInfo;
-import com.chaos.enums.MessageTypeEnum;
+import com.chaos.strategy.enums.MessageTypeEnum;
 import com.chaos.server.WebSocketServer;
 import com.chaos.util.SnowFlakeUtil;
 import lombok.RequiredArgsConstructor;

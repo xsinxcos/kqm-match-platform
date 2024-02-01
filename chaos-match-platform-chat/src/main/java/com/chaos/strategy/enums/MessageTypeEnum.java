@@ -1,4 +1,4 @@
-package com.chaos.enums;
+package com.chaos.strategy.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
