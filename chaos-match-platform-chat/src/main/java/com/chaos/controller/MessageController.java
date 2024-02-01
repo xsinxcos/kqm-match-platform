@@ -36,6 +36,12 @@ public class MessageController {
         return messageService.showHistoryMessage(pageNum, pageSize, userId);
     }
 
+    /**
+     * 与GPT对话
+     *
+     * @param question
+     * @return
+     */
     @PostMapping("/gpt")
     public ResponseResult chatWithGPT(String question) {
         long timeOut = 30;
