@@ -1,6 +1,6 @@
 package com.chaos.async.event;
 
-import com.chaos.domain.entity.Message;
+import com.chaos.domain.bo.MessageBo;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -12,14 +12,14 @@ public class MessageEvent extends ApplicationEvent {
     /**
      * 接收信息
      */
-    Message message;
+    MessageBo messageBo;
 
-    public MessageEvent(Message source) {
+    public MessageEvent(MessageBo source) {
         super(source);
-        this.message = source;
+        this.messageBo = source;
     }
 
-    public Message getMessageSend() {
-        return message;
+    public MessageBo getMessageSend() {
+        return messageBo;
     }
 }

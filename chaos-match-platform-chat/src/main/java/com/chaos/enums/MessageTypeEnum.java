@@ -11,12 +11,15 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum MessageTypeEnum {
-    MESSAGE_SEND_ACK("ack", "ackMessageHandlerStrategy"),
-    MESSAGE_SEND_NORMAL("message", "defaultMessageHandlerStrategy");
-    private final String type;
+    MESSAGE_SEND_ACK(999, "ackMessageHandlerStrategy"),
+    MESSAGE_SEND_NORMAL(0, "defaultMessageHandlerStrategy"),
+    MESSAGE_MATCH(1, "matchMessageHandlerStrategy"),
+    MESSAGE_MATCH_SUCCESS(2, "matchSuccessMessageHandlerStrategy"),
+    MESSAGE_MATCH_FAIL(3, "matchFailMessageHandlerStrategy");
+    private final Integer type;
     private final String value;
 
-    public static String getValueByType(String grantType) {
+    public static String getValueByType(Integer grantType) {
         for (MessageTypeEnum grantTypeEnum : values()) {
             if (grantTypeEnum.getType().equals(grantType)) {
                 return grantTypeEnum.getValue();

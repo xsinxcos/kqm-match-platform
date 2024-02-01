@@ -17,5 +17,6 @@ public class MessageInfo {
     private Long sendFrom;
     private Long sendTo;
     private String content;
+    private Long postId;
     private Long timestamp;
 }

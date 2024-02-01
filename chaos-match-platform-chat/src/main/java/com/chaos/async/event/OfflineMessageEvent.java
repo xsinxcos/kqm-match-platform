@@ -1,6 +1,6 @@
 package com.chaos.async.event;
 
-import com.chaos.domain.entity.Message;
+import com.chaos.domain.bo.MessageBo;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -9,14 +9,14 @@ import org.springframework.context.ApplicationEvent;
  * @create: 2024-01-25 21:10
  **/
 public class OfflineMessageEvent extends ApplicationEvent {
-    Message message;
+    MessageBo messageBo;
 
-    public OfflineMessageEvent(Message source) {
+    public OfflineMessageEvent(MessageBo source) {
         super(source);
-        this.message = source;
+        this.messageBo = source;
     }
 
-    public Message getOffineMessage() {
-        return message;
+    public MessageBo getOfflineMessage() {
+        return messageBo;
     }
 }

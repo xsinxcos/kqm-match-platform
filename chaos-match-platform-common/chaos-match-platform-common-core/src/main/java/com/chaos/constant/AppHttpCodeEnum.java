@@ -5,7 +5,7 @@ public enum AppHttpCodeEnum {
     SUCCESS(200, "操作成功"),
     // 登录
     NEED_LOGIN(401, "需要登录后操作"),
-    TOKEN_EXPIRED(402 ,"无效TOKEN"),
+    TOKEN_EXPIRED(402, "无效TOKEN"),
     NO_OPERATOR_AUTH(403, "无权限操作"),
 
     LOGIN_ERROR(404, "登录失败"),

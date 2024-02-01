@@ -21,7 +21,7 @@ public class AckMessageHandlerStrategy extends AbstractMessageHandlerStrategy {
     private final RedisCache redisCache;
 
     @Override
-    public void handleMessage(MessageInfo messageInfo, WebSocketServer from, WebSocketServer to) {
+    public void handleMessage(MessageInfo messageInfo, WebSocketServer from, WebSocketServer to, Integer type) {
         String key = MessageConstants.OFFLINE_MESSAGE_REDIS_KEY + from.getSid();
         redisCache.getCacheZSet().removeRangeByScore(key, messageInfo.getUuid(), messageInfo.getUuid());
     }

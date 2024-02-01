@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MessageBo {
-    private String type;
+    private Integer type;
     private MessageInfo message;
 }

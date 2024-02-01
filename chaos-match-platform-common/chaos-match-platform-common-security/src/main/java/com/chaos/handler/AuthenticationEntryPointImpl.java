@@ -24,13 +24,13 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         ResponseResult result = null;
         if (e instanceof BadCredentialsException) {
             result = ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR);
-            log.warn("IP:{} 登录失败 ",httpServletRequest.getRemoteHost());
+            log.warn("IP:{} 登录失败 ", httpServletRequest.getRemoteHost());
         } else if (e instanceof InsufficientAuthenticationException) {
             result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
-            log.warn("IP: {} 无对应权限访问" ,httpServletRequest.getRemoteHost());
+            log.warn("IP: {} 无对应权限访问", httpServletRequest.getRemoteHost());
         } else {
             result = ResponseResult.errorResult(AppHttpCodeEnum.SYSTEM_ERROR.getCode(), "认证或授权失败");
-            log.error("IP: {} 访问时出现系统错误" ,httpServletRequest.getRemoteHost());
+            log.error("IP: {} 访问时出现系统错误", httpServletRequest.getRemoteHost());
             e.printStackTrace();
         }
 

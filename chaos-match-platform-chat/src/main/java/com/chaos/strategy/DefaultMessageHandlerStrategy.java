@@ -5,7 +5,6 @@ import com.chaos.async.event.MessageEvent;
 import com.chaos.async.event.OfflineMessageEvent;
 import com.chaos.constants.MessageConstants;
 import com.chaos.domain.bo.MessageBo;
-import com.chaos.domain.entity.Message;
 import com.chaos.domain.entity.MessageInfo;
 import com.chaos.enums.MessageTypeEnum;
 import com.chaos.server.WebSocketServer;
@@ -16,7 +15,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -32,22 +30,13 @@ public class DefaultMessageHandlerStrategy extends AbstractMessageHandlerStrateg
     private final ApplicationEventPublisher messageEventPublisher;
 
     @Override
-    public void handleMessage(MessageInfo messageInfo, WebSocketServer from, WebSocketServer to) throws IOException {
+    public void handleMessage(MessageInfo messageInfo, WebSocketServer from, WebSocketServer to, Integer type) throws IOException {
         //利用雪花算法生成uuid
         Long snowFlakeId = SnowFlakeUtil.getDefaultSnowFlakeId();
         messageInfo.setUuid(snowFlakeId);
-
-        Message message = Message.builder()
-                .uuid(messageInfo.getUuid())
-                .msgFrom(messageInfo.getSendFrom())
-                .msgTo(messageInfo.getSendTo())
-                .content(messageInfo.getContent())
-                .sendTime(new Date(messageInfo.getTimestamp()))
-                .type(MessageConstants.MessageStatusConstants.MESSAGE_TYPE_TEXT)
-                .build();
-
+        MessageBo messageBo = new MessageBo(type, messageInfo);
         //异步持久化发送消息
-        messageEventPublisher.publishEvent(new MessageEvent(message));
+        messageEventPublisher.publishEvent(new MessageEvent(messageBo));
 
         if (Objects.nonNull(to)) {
             to.sendMessage(JSON.toJSONString(
@@ -55,7 +44,7 @@ public class DefaultMessageHandlerStrategy extends AbstractMessageHandlerStrateg
         }
 
         //转为离线消息异步存入Redis，防止消息丢失
-        messageEventPublisher.publishEvent(new OfflineMessageEvent(message));
+        messageEventPublisher.publishEvent(new OfflineMessageEvent(messageBo));
 
         //todo 消息重发（主要解决消息丢失，及时重发）
 
@@ -65,7 +54,7 @@ public class DefaultMessageHandlerStrategy extends AbstractMessageHandlerStrateg
                 MessageBo.builder()
                         .type(MessageTypeEnum.MESSAGE_SEND_ACK.getType())
                         .message(new MessageInfo(null, null, null,
-                                MessageConstants.MessageStatusConstants.MESSAGE_SEND_SUCCESS,
+                                MessageConstants.MessageStatusConstants.MESSAGE_SEND_SUCCESS, null,
                                 messageInfo.getTimestamp()))
                         .build())
         );
