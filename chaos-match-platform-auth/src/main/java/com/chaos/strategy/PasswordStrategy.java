@@ -1,5 +1,6 @@
 package com.chaos.strategy;
 
+import com.alibaba.fastjson.JSON;
 import com.chaos.constant.LoginConstant;
 import com.chaos.entity.AuthParam;
 import com.chaos.entity.LoginUser;
@@ -38,7 +39,7 @@ public class PasswordStrategy extends AbstractAuthGranter {
         //生成TokenInfo
         TokenInfo tokenInfo = createTokenInfoByUserId(String.valueOf(userid));
         //将用户信息存入redis
-        redisCache.setCacheObject(LoginConstant.USER_REDIS_PREFIX + userid, loginUser,
+        redisCache.setCacheObject(LoginConstant.USER_REDIS_PREFIX + userid, JSON.toJSONString(loginUser),
                 LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
         return tokenInfo;
     }
