@@ -6,6 +6,7 @@ import com.chaos.server.WebSocketServer;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 
@@ -16,9 +17,12 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class AckMessageHandlerStrategy extends AbstractMessageHandlerStrategy {
-    private final RedisCache redisCache;
+
+
+    public AckMessageHandlerStrategy(ApplicationEventPublisher messageEventPublisher, RedisCache redisCache) {
+        super(messageEventPublisher, redisCache);
+    }
 
     @Override
     public void handleMessage(MessageInfo messageInfo, WebSocketServer from, WebSocketServer to, Integer type) {

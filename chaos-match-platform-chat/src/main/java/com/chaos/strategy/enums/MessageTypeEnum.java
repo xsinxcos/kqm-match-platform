@@ -13,7 +13,7 @@ import lombok.Getter;
 public enum MessageTypeEnum {
     MESSAGE_SEND_ACK(999, "ackMessageHandlerStrategy"),
     MESSAGE_SEND_NORMAL(0, "defaultMessageHandlerStrategy"),
-    MESSAGE_MATCH(1, "matchMessageHandlerStrategy"),
+    MESSAGE_MATCH(1, "matchRequestMessageHandlerStrategy"),
     MESSAGE_MATCH_SUCCESS(2, "matchSuccessMessageHandlerStrategy"),
     MESSAGE_MATCH_FAIL(3, "matchFailMessageHandlerStrategy");
     private final Integer type;

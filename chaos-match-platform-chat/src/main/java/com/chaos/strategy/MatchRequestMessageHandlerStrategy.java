@@ -1,14 +1,12 @@
 package com.chaos.strategy;
 
 import com.alibaba.fastjson.JSON;
-import com.chaos.async.event.MatchFailMessageEvent;
+import com.chaos.async.event.MatchRequestMessageEvent;
 import com.chaos.async.event.MessageEvent;
 import com.chaos.async.event.OfflineMessageEvent;
-import com.chaos.constants.MessageConstants;
 import com.chaos.domain.bo.MessageBo;
 import com.chaos.domain.entity.MessageInfo;
 import com.chaos.server.WebSocketServer;
-import com.chaos.strategy.enums.MessageTypeEnum;
 import com.chaos.util.RedisCache;
 import com.chaos.util.SnowFlakeUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +18,14 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * @description: 匹配失败消息处理策略
+ * @description: 匹配消息处理策略
  * @author: xsinxcos
- * @create: 2024-02-02 04:03
+ * @create: 2024-02-02 04:00
  **/
 @Component
 @Slf4j
-public class MatchFailMessageHandlerStrategy extends AbstractMessageHandlerStrategy {
-
-    public MatchFailMessageHandlerStrategy(ApplicationEventPublisher messageEventPublisher, RedisCache redisCache) {
+public class MatchRequestMessageHandlerStrategy extends AbstractMessageHandlerStrategy {
+    public MatchRequestMessageHandlerStrategy(ApplicationEventPublisher messageEventPublisher, RedisCache redisCache) {
         super(messageEventPublisher, redisCache);
     }
 
@@ -40,10 +37,9 @@ public class MatchFailMessageHandlerStrategy extends AbstractMessageHandlerStrat
         MessageBo messageBo = new MessageBo(type, messageInfo);
         //异步存入数据库
         messageEventPublisher.publishEvent(new MessageEvent(messageBo));
-        //处理Redis中存放的请求
-        messageEventPublisher.publishEvent(new MatchFailMessageEvent(messageBo));
+        //将匹配消息存入redis，待匹配
+        messageEventPublisher.publishEvent(new MatchRequestMessageEvent(messageBo));
         //发送ack消息
-        //发送ack消息通知发送者
         sendAckMessageToMsgFrom(messageBo ,from);
         //消息转发
         sendMessageAndSaveOfflineMessage(messageBo ,to);
