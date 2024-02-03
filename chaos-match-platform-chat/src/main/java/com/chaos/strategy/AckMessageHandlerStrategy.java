@@ -4,7 +4,6 @@ import com.chaos.constants.MessageConstants;
 import com.chaos.domain.entity.MessageInfo;
 import com.chaos.server.WebSocketServer;
 import com.chaos.util.RedisCache;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

@@ -3,7 +3,6 @@ package com.chaos.async.listener;
 import com.chaos.async.event.MatchFailMessageEvent;
 import com.chaos.domain.bo.MessageBo;
 import com.chaos.util.RedisCache;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MatchFailMessageListener implements ApplicationListener<MatchFailMessageEvent> {
     private final RedisCache redisCache;
+
     @Async
     @Override
     public void onApplicationEvent(MatchFailMessageEvent event) {

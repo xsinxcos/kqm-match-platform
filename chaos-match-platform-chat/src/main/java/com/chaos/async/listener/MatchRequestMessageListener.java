@@ -6,7 +6,6 @@ import com.chaos.domain.bo.MatchBo;
 import com.chaos.domain.bo.MessageBo;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -24,6 +23,7 @@ public class MatchRequestMessageListener implements ApplicationListener<MatchReq
     private final RedisCache redisCache;
     //匹配消息有效
     private final Integer MATCH_EXPIRED_TIME = 60 * 60 * 24 * 3;
+
     @Async
     @Override
     public void onApplicationEvent(MatchRequestMessageEvent event) {
@@ -33,8 +33,8 @@ public class MatchRequestMessageListener implements ApplicationListener<MatchReq
         Long matchTo = matchMessage.getMessage().getSendTo();
         Long matchPost = matchMessage.getMessage().getPostId();
         //加入BO
-        MatchBo matchBo = new MatchBo(matchFrom ,matchTo ,matchPost);
+        MatchBo matchBo = new MatchBo(matchFrom, matchTo, matchPost);
         String key = "USER:" + matchFrom + " invited USER:" + matchTo + "with " + "POST:" + matchPost;
-        redisCache.setCacheObject(key , JSON.toJSONString(matchBo) ,MATCH_EXPIRED_TIME , TimeUnit.SECONDS);
+        redisCache.setCacheObject(key, JSON.toJSONString(matchBo), MATCH_EXPIRED_TIME, TimeUnit.SECONDS);
     }
 }

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MatchSuccessMessageListener implements ApplicationListener<MatchSuccessMessageEvent> {
     private final RedisCache redisCache;
+
     @Async
     @Override
     public void onApplicationEvent(MatchSuccessMessageEvent event) {

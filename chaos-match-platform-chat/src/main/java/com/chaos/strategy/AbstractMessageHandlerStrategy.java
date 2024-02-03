@@ -30,11 +30,12 @@ public abstract class AbstractMessageHandlerStrategy implements MessageHandlerSt
 
     /**
      * 发送ack应答
+     *
      * @param messageBo
      * @param from
      */
 
-   protected void sendAckMessageToMsgFrom(MessageBo messageBo , WebSocketServer from){
+    protected void sendAckMessageToMsgFrom(MessageBo messageBo, WebSocketServer from) {
         MessageInfo messageInfo = messageBo.getMessage();
         try {
             from.sendMessage(JSON.toJSONString(
@@ -46,17 +47,18 @@ public abstract class AbstractMessageHandlerStrategy implements MessageHandlerSt
                             .build())
             );
         } catch (IOException e) {
-            throw new RuntimeException("USERID为：" + from.getSid() + " ,内容为" + JSON.toJSON(messageBo) +"的ack消息发送失败");
+            throw new RuntimeException("USERID为：" + from.getSid() + " ,内容为" + JSON.toJSON(messageBo) + "的ack消息发送失败");
         }
     }
 
     /**
      * 消息转发，并且存入离线消息防止消息丢失
+     *
      * @param messageBo
      * @param to
      * @throws IOException
      */
-    protected void sendMessageAndSaveOfflineMessage(MessageBo messageBo ,WebSocketServer to) throws IOException {
+    protected void sendMessageAndSaveOfflineMessage(MessageBo messageBo, WebSocketServer to) throws IOException {
         if (Objects.nonNull(to)) {
             to.sendMessage(JSON.toJSONString(messageBo));
         }

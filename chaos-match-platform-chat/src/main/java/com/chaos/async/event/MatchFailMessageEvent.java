@@ -1,7 +1,6 @@
 package com.chaos.async.event;
 
 import com.chaos.domain.bo.MessageBo;
-import lombok.NonNull;
 import org.springframework.context.ApplicationEvent;
 
 /**

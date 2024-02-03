@@ -1,21 +1,17 @@
 package com.chaos.strategy;
 
-import com.alibaba.fastjson.JSON;
 import com.chaos.async.event.MatchRequestMessageEvent;
 import com.chaos.async.event.MessageEvent;
-import com.chaos.async.event.OfflineMessageEvent;
 import com.chaos.domain.bo.MessageBo;
 import com.chaos.domain.entity.MessageInfo;
 import com.chaos.server.WebSocketServer;
 import com.chaos.util.RedisCache;
 import com.chaos.util.SnowFlakeUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * @description: 匹配消息处理策略
@@ -40,8 +36,8 @@ public class MatchRequestMessageHandlerStrategy extends AbstractMessageHandlerSt
         //将匹配消息存入redis，待匹配
         messageEventPublisher.publishEvent(new MatchRequestMessageEvent(messageBo));
         //发送ack消息
-        sendAckMessageToMsgFrom(messageBo ,from);
+        sendAckMessageToMsgFrom(messageBo, from);
         //消息转发
-        sendMessageAndSaveOfflineMessage(messageBo ,to);
+        sendMessageAndSaveOfflineMessage(messageBo, to);
     }
 }
