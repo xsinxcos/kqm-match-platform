@@ -1,13 +1,12 @@
 package com.chaos.controller;
 
+import com.chaos.domain.dto.ChatGPTMessageDto;
+import com.chaos.domain.vo.ChatGPTMessageVo;
 import com.chaos.response.ResponseResult;
 import com.chaos.server.XfModelServerListener;
 import com.chaos.service.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -43,7 +42,8 @@ public class MessageController {
      * @return
      */
     @PostMapping("/gpt")
-    public ResponseResult chatWithGPT(String question) {
+    public ResponseResult chatWithGPT(@RequestBody ChatGPTMessageDto chatGPTMessageDto) {
+        String question = chatGPTMessageDto.getQuestion();
         long timeOut = 30;
         String answer = "";
         XfModelServerListener xfListener = new XfModelServerListener();
@@ -65,6 +65,6 @@ public class MessageController {
             throw new RuntimeException("回答失败");
         }
 
-        return ResponseResult.okResult(answer);
+        return ResponseResult.okResult(new ChatGPTMessageVo(answer));
     }
 }

@@ -10,7 +10,7 @@ import com.chaos.response.ResponseResult;
 import com.chaos.service.MessageService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
-import com.chaos.vo.HistoryMessageVo;
+import com.chaos.domain.vo.HistoryMessageVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
