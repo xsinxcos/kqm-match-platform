@@ -1,7 +1,7 @@
 package com.chaos.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.chaos.entity.PostTag;
+import com.chaos.domain.entity.PostTag;
 import com.chaos.mapper.PostTagMapper;
 import com.chaos.service.PostTagService;
 import org.springframework.stereotype.Service;

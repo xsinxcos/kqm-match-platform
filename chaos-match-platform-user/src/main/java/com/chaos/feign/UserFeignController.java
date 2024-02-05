@@ -2,6 +2,7 @@ package com.chaos.feign;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chaos.feign.bo.AuthUserBo;
+import com.chaos.feign.bo.PosterBo;
 import com.chaos.mapper.AuthUserMapper;
 import com.chaos.model.entity.AuthUser;
 import com.chaos.response.ResponseResult;
@@ -9,7 +10,10 @@ import com.chaos.util.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,6 +50,23 @@ public class UserFeignController implements UserFeignClient {
                 AuthUser::getUserName,
                 username
         ));
+        AuthUserBo bo = BeanCopyUtils.copyBean(user, AuthUserBo.class);
+        return ResponseResult.okResult(bo);
+    }
+
+    @Override
+    public ResponseResult getBatchUserByUserIds(List<Long> ids) {
+        List<AuthUser> authUsers = authUserMapper.selectBatchIds(ids);
+        List<PosterBo> posterBos = BeanCopyUtils.copyBeanList(authUsers, PosterBo.class);
+        Map<Long, PosterBo> posterBoMap = posterBos.stream()
+                .collect(Collectors.toMap(PosterBo::getId, t -> t, (oldValue, newValue) -> oldValue));
+
+        return ResponseResult.okResult(posterBoMap);
+    }
+
+    @Override
+    public ResponseResult getUserById(Long id) {
+        AuthUser user = authUserMapper.selectById(id);
         AuthUserBo bo = BeanCopyUtils.copyBean(user, AuthUserBo.class);
         return ResponseResult.okResult(bo);
     }

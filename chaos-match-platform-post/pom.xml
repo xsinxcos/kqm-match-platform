@@ -18,6 +18,16 @@
     </properties>
 
     <dependencies>
+        <!-- nacos客户端依赖 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>${nacos.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.chaos</groupId>
             <artifactId>chaos-match-platform-common-core</artifactId>
@@ -34,6 +44,13 @@
             <groupId>com.chaos</groupId>
             <artifactId>chaos-match-platform-common-security</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.chaos</groupId>
+            <artifactId>match-platform-api-user</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

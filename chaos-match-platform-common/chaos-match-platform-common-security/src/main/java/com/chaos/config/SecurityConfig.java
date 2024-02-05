@@ -42,7 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/wxLogin").anonymous()
                 .antMatchers("/auth/refresh").anonymous()
                 .antMatchers("/feign/*").anonymous()
-                .antMatchers("/chat/gpt").anonymous()
+                .antMatchers("/tag/list").anonymous()
+                .antMatchers("/post/list/**").anonymous()
                 // 除上面外的所有请求全部需要认证即可访问
                 .anyRequest().authenticated();
 

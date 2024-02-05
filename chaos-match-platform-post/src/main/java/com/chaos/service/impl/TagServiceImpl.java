@@ -1,7 +1,7 @@
 package com.chaos.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.chaos.entity.Tag;
+import com.chaos.domain.entity.Tag;
 import com.chaos.mapper.TagMapper;
 import com.chaos.service.TagService;
 import org.springframework.stereotype.Service;

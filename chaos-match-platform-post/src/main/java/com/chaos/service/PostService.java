@@ -1,7 +1,10 @@
 package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chaos.entity.Post;
+import com.chaos.domain.dto.AddPostDto;
+import com.chaos.domain.dto.ModifyMyPostDto;
+import com.chaos.domain.entity.Post;
+import com.chaos.response.ResponseResult;
 
 
 /**
@@ -12,5 +15,14 @@ import com.chaos.entity.Post;
  */
 public interface PostService extends IService<Post> {
 
+    ResponseResult addPost(AddPostDto addPostDto);
+
+    ResponseResult listPost(Integer pageNum, Integer pageSize, Long tagId);
+
+    ResponseResult showPost(Long id);
+
+    ResponseResult getMyPost(Integer pageNum, Integer pageSize);
+
+    ResponseResult modifyMyPost(ModifyMyPostDto modifyMyPostDto);
 }
 

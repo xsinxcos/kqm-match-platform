@@ -1,7 +1,7 @@
 package com.chaos.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.chaos.entity.Comment;
+import com.chaos.domain.entity.Comment;
 import com.chaos.mapper.CommentMapper;
 import com.chaos.service.CommentService;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chaos.entity.Tag;
+import com.chaos.domain.entity.Tag;
 
 
 /**

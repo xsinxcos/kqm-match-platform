@@ -1,7 +1,7 @@
 package com.chaos.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.chaos.entity.Tag;
+import com.chaos.domain.entity.Tag;
 
 
 /**

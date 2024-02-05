@@ -1,7 +1,7 @@
 package com.chaos.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.chaos.entity.PostUser;
+import com.chaos.domain.entity.PostUser;
 import com.chaos.mapper.PostUserMapper;
 import com.chaos.service.PostUserService;
 import org.springframework.stereotype.Service;
