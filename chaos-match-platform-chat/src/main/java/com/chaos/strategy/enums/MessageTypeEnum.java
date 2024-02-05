@@ -16,7 +16,7 @@ public enum MessageTypeEnum {
     MESSAGE_MATCH(1, "matchRequestMessageHandlerStrategy"),
     MESSAGE_MATCH_SUCCESS(2, "matchSuccessMessageHandlerStrategy"),
     MESSAGE_MATCH_FAIL(3, "matchFailMessageHandlerStrategy"),
-    MESSAGE_APPENDIX(4 ,"defaultMessageHandlerStrategy");
+    MESSAGE_APPENDIX(4, "defaultMessageHandlerStrategy");
     private final Integer type;
     private final String value;
 

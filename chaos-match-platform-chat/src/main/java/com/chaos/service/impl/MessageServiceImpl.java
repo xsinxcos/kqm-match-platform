@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
 import com.chaos.domain.entity.Message;
+import com.chaos.domain.vo.HistoryMessageVo;
 import com.chaos.mapper.MessageMapper;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.MessageService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
-import com.chaos.domain.vo.HistoryMessageVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
