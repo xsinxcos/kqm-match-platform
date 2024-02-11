@@ -1,5 +1,6 @@
 package com.chaos.controller;
 
+import com.chaos.domain.dto.AddFavoritePostDto;
 import com.chaos.domain.dto.AddPostDto;
 import com.chaos.domain.dto.ModifyMyPostDto;
 import com.chaos.response.ResponseResult;
@@ -75,5 +76,26 @@ public class PostController {
     @PutMapping("/getme")
     public ResponseResult modifyMyPost(@RequestBody ModifyMyPostDto modifyMyPostDto) {
         return postService.modifyMyPost(modifyMyPostDto);
+    }
+
+    /**
+     *
+     * 删除本人帖子
+     * @param id 帖子ID
+     * @return
+     */
+    @DeleteMapping("/getme/{id}")
+    public ResponseResult deleteMyPost(@PathVariable String id){
+        return postService.deleteMyPost(id);
+    }
+
+    /**
+     * 收藏帖子
+     * @param addFavoritePostDto
+     * @return
+     */
+    @PostMapping("/post/favorite")
+    public ResponseResult addFavoritePost(@RequestBody AddFavoritePostDto addFavoritePostDto){
+        return postService.addFavoritePost(addFavoritePostDto);
     }
 }

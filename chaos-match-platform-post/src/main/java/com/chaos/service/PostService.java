@@ -1,6 +1,7 @@
 package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.chaos.domain.dto.AddFavoritePostDto;
 import com.chaos.domain.dto.AddPostDto;
 import com.chaos.domain.dto.ModifyMyPostDto;
 import com.chaos.domain.entity.Post;
@@ -24,5 +25,9 @@ public interface PostService extends IService<Post> {
     ResponseResult getMyPost(Integer pageNum, Integer pageSize);
 
     ResponseResult modifyMyPost(ModifyMyPostDto modifyMyPostDto);
+
+    ResponseResult deleteMyPost(String id);
+
+    ResponseResult addFavoritePost(AddFavoritePostDto addFavoritePostDto);
 }
 

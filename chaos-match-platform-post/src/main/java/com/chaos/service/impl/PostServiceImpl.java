@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
 import com.chaos.constant.AppHttpCodeEnum;
+import com.chaos.domain.dto.AddFavoritePostDto;
 import com.chaos.domain.dto.AddPostDto;
 import com.chaos.domain.dto.ModifyMyPostDto;
 import com.chaos.domain.entity.Post;
 import com.chaos.domain.entity.PostTag;
+import com.chaos.domain.entity.PostUser;
 import com.chaos.domain.vo.PostListVo;
 import com.chaos.domain.vo.PostShowVo;
 import com.chaos.feign.UserFeignClient;
@@ -19,15 +21,13 @@ import com.chaos.mapper.PostMapper;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.PostService;
 import com.chaos.service.PostTagService;
+import com.chaos.service.PostUserService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -39,8 +39,13 @@ import java.util.stream.Collectors;
 @Service("postService")
 @RequiredArgsConstructor
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
+    private static final int FAVORITE_STATUS = 1;
+
     private final UserFeignClient userFeignClient;
+
     private final PostTagService postTagService;
+
+    private final PostUserService postUserService;
 
     @Override
     public ResponseResult addPost(AddPostDto addPostDto) {
@@ -189,6 +194,26 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         }
         postTagService.saveBatch(postTags);
 
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult deleteMyPost(String id) {
+        Post byId = getById(id);
+        if(Objects.isNull(byId) || !byId.getUserId().equals(SecurityUtils.getUserId()))
+            throw new RuntimeException(AppHttpCodeEnum.NO_OPERATOR_AUTH.getMsg());
+        byId.setDelFlag(1);
+        updateById(byId);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult addFavoritePost(AddFavoritePostDto addFavoritePostDto) {
+        Long userId = SecurityUtils.getUserId();
+        Long id = addFavoritePostDto.getId();
+        Post byId = getById(id);
+        if(Objects.isNull(byId)) throw new RuntimeException("帖子不存在");
+        postUserService.getBaseMapper().insert(new PostUser(addFavoritePostDto.getId(), userId));
         return ResponseResult.okResult();
     }
 
