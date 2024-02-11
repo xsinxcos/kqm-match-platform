@@ -6,16 +6,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
 import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.domain.dto.AddFavoritePostDto;
-import com.chaos.domain.dto.AddPostDto;
-import com.chaos.domain.dto.DeleteFavoritePostDto;
-import com.chaos.domain.dto.ModifyMyPostDto;
+import com.chaos.domain.dto.*;
 import com.chaos.domain.entity.Post;
 import com.chaos.domain.entity.PostTag;
 import com.chaos.domain.entity.PostUser;
 import com.chaos.domain.vo.PostListVo;
 import com.chaos.domain.vo.PostShowVo;
 import com.chaos.feign.UserFeignClient;
+import com.chaos.feign.bo.AddPostUserMatchRelationBo;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.feign.bo.PosterBo;
 import com.chaos.mapper.PostMapper;
@@ -25,12 +23,13 @@ import com.chaos.service.PostTagService;
 import com.chaos.service.PostUserService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
-import javafx.geometry.Pos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +42,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
     private static final int FAVORITE_STATUS = 1;
+    private static final int USER_POST_MATCH_STATUS = 0;
+
+    private static final int POST_STATUS_MATCHING = 0;
+    private static final int POST_STATUS_MATCH_COMPLETE = 1;
+    private static final int POST_STATUS_HAND_UP = 2;
 
     private final UserFeignClient userFeignClient;
 
@@ -81,6 +85,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         QueryWrapper<Post> postQueryWrapper = new QueryWrapper<Post>()
                 .in("id", postIds)
+                .in("status",POST_STATUS_MATCHING)
                 .orderByDesc("update_time");
         Page<Post> postPage = new Page<>(pageNum, pageSize);
         page(postPage, postQueryWrapper);
@@ -183,7 +188,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public ResponseResult deleteMyPost(String id) {
         Post byId = getById(id);
-        if(Objects.isNull(byId) || !byId.getUserId().equals(SecurityUtils.getUserId()))
+        if (Objects.isNull(byId) || !byId.getUserId().equals(SecurityUtils.getUserId()))
             throw new RuntimeException(AppHttpCodeEnum.NO_OPERATOR_AUTH.getMsg());
         byId.setDelFlag(1);
         updateById(byId);
@@ -195,17 +200,17 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         Long userId = SecurityUtils.getUserId();
         Long id = addFavoritePostDto.getId();
         Post byId = getById(id);
-        if(Objects.isNull(byId)) throw new RuntimeException("帖子不存在");
-        postUserService.getBaseMapper().insert(new PostUser(addFavoritePostDto.getId(), userId ,FAVORITE_STATUS));
+        if (Objects.isNull(byId)) throw new RuntimeException("帖子不存在");
+        postUserService.getBaseMapper().insert(new PostUser(addFavoritePostDto.getId(), userId, FAVORITE_STATUS));
         return ResponseResult.okResult();
     }
 
     @Override
     public ResponseResult deleteFavoritePost(DeleteFavoritePostDto dto) {
         LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(PostUser::getPostId,dto.getId())
-                .eq(PostUser::getUserId ,SecurityUtils.getUserId())
-                .eq(PostUser::getStatus ,FAVORITE_STATUS);
+        wrapper.eq(PostUser::getPostId, dto.getId())
+                .eq(PostUser::getUserId, SecurityUtils.getUserId())
+                .eq(PostUser::getStatus, FAVORITE_STATUS);
         postUserService.getBaseMapper().delete(wrapper);
         return ResponseResult.okResult();
     }
@@ -214,26 +219,49 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult listFavoritePost(Integer pageNum, Integer pageSize) {
         LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
         //查询用户收藏的帖子
-        wrapper.eq(PostUser::getUserId,SecurityUtils.getUserId())
-                .eq(PostUser::getStatus ,FAVORITE_STATUS);
+        wrapper.eq(PostUser::getUserId, SecurityUtils.getUserId())
+                .eq(PostUser::getStatus, FAVORITE_STATUS);
         List<Long> postIds = postUserService.list(wrapper)
                 .stream()
                 .map(PostUser::getPostId)
                 .collect(Collectors.toList());
         //分页获取相应的帖子
-        if(postIds.isEmpty()) return ResponseResult.okResult(new PageVo(new ArrayList() ,0L));
+        if (postIds.isEmpty()) return ResponseResult.okResult(new PageVo(new ArrayList(), 0L));
 
         QueryWrapper<Post> postQueryWrapper = new QueryWrapper<Post>()
-                .in("id" ,postIds)
+                .in("id", postIds)
                 .orderByDesc("update_time");
         Page<Post> postPage = new Page<>(pageNum, pageSize);
-        page(postPage ,postQueryWrapper);
+        page(postPage, postQueryWrapper);
         List<PostListVo> vos = getAndSetPostListVoByPostPage(postPage);
 
-        return ResponseResult.okResult(new PageVo(vos ,postPage.getTotal()));
+        return ResponseResult.okResult(new PageVo(vos, postPage.getTotal()));
     }
 
-    private List<PostListVo> getAndSetPostListVoByPostPage(Page<Post> postPage){
+    @Override
+    public ResponseResult modifyPostStatus(ModifyPostStatusDto modifyPostStatusDto) {
+        Post byId = getById(modifyPostStatusDto.getPostId());
+        if (Objects.isNull(byId) || !(SecurityUtils.getUserId().equals(byId.getUserId())))
+            throw new RuntimeException("操作失败");
+
+        byId.setStatus(modifyPostStatusDto.getStatus());
+        updateById(byId);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult addPostUserMatchRelation(AddPostUserMatchRelationBo addPostUserMatchRelationBo) {
+        for (Long userId : addPostUserMatchRelationBo.getUserIds()) {
+            postUserService.getBaseMapper().insert(new PostUser(
+                    addPostUserMatchRelationBo.getPostId(),
+                    userId,
+                    USER_POST_MATCH_STATUS)
+            );
+        }
+        return ResponseResult.okResult();
+    }
+
+    private List<PostListVo> getAndSetPostListVoByPostPage(Page<Post> postPage) {
         //查询每个帖子贴主的头像及其昵称
         List<Long> postIds = postPage.getRecords()
                 .stream()
@@ -258,6 +286,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         return vos;
     }
+
 
 }
 

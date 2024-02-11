@@ -1,11 +1,9 @@
 package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chaos.domain.dto.AddFavoritePostDto;
-import com.chaos.domain.dto.AddPostDto;
-import com.chaos.domain.dto.DeleteFavoritePostDto;
-import com.chaos.domain.dto.ModifyMyPostDto;
+import com.chaos.domain.dto.*;
 import com.chaos.domain.entity.Post;
+import com.chaos.feign.bo.AddPostUserMatchRelationBo;
 import com.chaos.response.ResponseResult;
 
 
@@ -16,6 +14,7 @@ import com.chaos.response.ResponseResult;
  * @since 2024-02-01 07:56:42
  */
 public interface PostService extends IService<Post> {
+
 
     ResponseResult addPost(AddPostDto addPostDto);
 
@@ -34,5 +33,9 @@ public interface PostService extends IService<Post> {
     ResponseResult deleteFavoritePost(DeleteFavoritePostDto dto);
 
     ResponseResult listFavoritePost(Integer pageNum, Integer pageSize);
+
+    ResponseResult modifyPostStatus(ModifyPostStatusDto modifyPostStatusDto);
+
+    ResponseResult addPostUserMatchRelation(AddPostUserMatchRelationBo addPostUserMatchRelationBo);
 }
 

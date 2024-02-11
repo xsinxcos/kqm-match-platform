@@ -1,19 +1,12 @@
 package com.chaos.controller;
 
-import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.domain.dto.AddFavoritePostDto;
-import com.chaos.domain.dto.AddPostDto;
-import com.chaos.domain.dto.DeleteFavoritePostDto;
-import com.chaos.domain.dto.ModifyMyPostDto;
+import com.chaos.domain.dto.*;
 import com.chaos.domain.entity.Post;
-import com.chaos.exception.SystemException;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -87,41 +80,55 @@ public class PostController {
     }
 
     /**
-     *
      * 删除本人帖子
+     *
      * @param id 帖子ID
      * @return
      */
     @DeleteMapping("/getme/{id}")
-    public ResponseResult deleteMyPost(@PathVariable String id){
+    public ResponseResult deleteMyPost(@PathVariable String id) {
         return postService.deleteMyPost(id);
     }
 
     /**
      * 收藏帖子
+     *
      * @param addFavoritePostDto
      * @return
      */
     @PostMapping("/post/favorite")
-    public ResponseResult addFavoritePost(@RequestBody AddFavoritePostDto addFavoritePostDto){
+    public ResponseResult addFavoritePost(@RequestBody AddFavoritePostDto addFavoritePostDto) {
         return postService.addFavoritePost(addFavoritePostDto);
     }
 
     /**
      * 移除收藏的帖子
+     *
      * @param dto
      * @return
      */
 
     @DeleteMapping("/post/favorite")
-    public ResponseResult deleteFavoritePost(@RequestBody DeleteFavoritePostDto dto){
+    public ResponseResult deleteFavoritePost(@RequestBody DeleteFavoritePostDto dto) {
         Post byId = postService.getById(dto.getId());
-        Optional.ofNullable(byId).orElseThrow(()->(new RuntimeException("操作失败")));
+        Optional.ofNullable(byId).orElseThrow(() -> (new RuntimeException("操作失败")));
         return postService.deleteFavoritePost(dto);
     }
 
+    /**
+     * 罗列收藏的帖子
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/post/favorite")
-    public ResponseResult listFavoritePost(Integer pageNum, Integer pageSize){
-        return postService.listFavoritePost(pageNum ,pageSize);
+    public ResponseResult listFavoritePost(Integer pageNum, Integer pageSize) {
+        return postService.listFavoritePost(pageNum, pageSize);
+    }
+
+    @PostMapping("/post/modify")
+    public ResponseResult modifyPostStatus(@RequestBody ModifyPostStatusDto modifyPostStatusDto) {
+        return postService.modifyPostStatus(modifyPostStatusDto);
     }
 }

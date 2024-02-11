@@ -14,6 +14,7 @@
     <modules>
         <module>match-platform-api-weixin</module>
         <module>match-platform-api-user</module>
+        <module>match-platform-api-post</module>
     </modules>
 
     <properties>
