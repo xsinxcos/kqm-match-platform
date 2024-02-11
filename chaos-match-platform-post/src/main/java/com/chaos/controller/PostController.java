@@ -127,6 +127,11 @@ public class PostController {
         return postService.listFavoritePost(pageNum, pageSize);
     }
 
+    /**
+     * 修改帖子状态
+     * @param modifyPostStatusDto
+     * @return
+     */
     @PostMapping("/post/modify")
     public ResponseResult modifyPostStatus(@RequestBody ModifyPostStatusDto modifyPostStatusDto) {
         return postService.modifyPostStatus(modifyPostStatusDto);

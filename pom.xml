@@ -36,7 +36,7 @@
 
         <!-- 依赖包版本管理 -->
         <spring.boot.version>2.6.11</spring.boot.version>
-        <lombok.version>1.18.8</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <mysql.version>8.0.30</mysql.version>
         <mybatis.plus.version>3.4.1</mybatis.plus.version>
         <jsoup.version>1.10.2</jsoup.version>

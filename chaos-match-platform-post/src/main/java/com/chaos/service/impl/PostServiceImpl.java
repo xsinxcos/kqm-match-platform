@@ -2,6 +2,7 @@ package com.chaos.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
@@ -47,6 +48,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     private static final int POST_STATUS_MATCHING = 0;
     private static final int POST_STATUS_MATCH_COMPLETE = 1;
     private static final int POST_STATUS_HAND_UP = 2;
+    private static final int POST_DELETE = 1;
 
     private final UserFeignClient userFeignClient;
 
@@ -187,11 +189,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResponseResult deleteMyPost(String id) {
+        //检查帖子所属人
         Post byId = getById(id);
         if (Objects.isNull(byId) || !byId.getUserId().equals(SecurityUtils.getUserId()))
             throw new RuntimeException(AppHttpCodeEnum.NO_OPERATOR_AUTH.getMsg());
-        byId.setDelFlag(1);
-        updateById(byId);
+        //删除帖子
+        LambdaUpdateWrapper<Post> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Post::getId ,id)
+                .set(Post::getDelFlag ,POST_DELETE);
+
+        update(wrapper);
         return ResponseResult.okResult();
     }
 

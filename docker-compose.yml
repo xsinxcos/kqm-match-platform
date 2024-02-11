@@ -1,5 +1,19 @@
 version: '3'
 services:
+
+  match-platform-gateway:
+    container_name: match-platform-gateway #配置容器名
+    build:
+      context: ./chaos-match-platform-gateway
+      dockerfile: Dockerfile #指定dockerFile文件
+    image: java/match-platform-gateway # 指定镜像名
+    ports:
+      - "10010:10010" # 暴露端口
+    volumes:
+      - ./logs:/logs # 创建容器数据卷
+    networks:
+      - KQM
+
   match-platform-auth:
     container_name: match-platform-auth #配置容器名
     build:
@@ -13,15 +27,14 @@ services:
     networks:
       - KQM
 
-
-  match-platform-gateway:
-    container_name: match-platform-gateway #配置容器名
+  match-platform-weixin:
+    container_name: match-platform-weixin #配置容器名
     build:
-      context: ./chaos-match-platform-gateway
+      context: ./chaos-match-platform-weixin
       dockerfile: Dockerfile #指定dockerFile文件
-    image: java/match-platform-gateway # 指定镜像名
+    image: java/match-platform-weixin # 指定镜像名
     ports:
-      - "10010:10010" # 暴露端口
+      - "8072:8072" # 暴露端口
     volumes:
       - ./logs:/logs # 创建容器数据卷
     networks:
@@ -40,18 +53,32 @@ services:
     networks:
       - KQM
 
-  match-platform-weixin:
-    container_name: match-platform-weixin #配置容器名
+  match-platform-chat:
+    container_name: match-platform-chat #配置容器名
     build:
-      context: ./chaos-match-platform-weixin
+      context: ./chaos-match-platform-chat
       dockerfile: Dockerfile #指定dockerFile文件
-    image: java/match-platform-weixin # 指定镜像名
+    image: java/match-platform-chat # 指定镜像名
     ports:
-      - "8072:8072" # 暴露端口
+      - "8074:8074" # 暴露端口
     volumes:
       - ./logs:/logs # 创建容器数据卷
     networks:
       - KQM
+
+  match-platform-post:
+    container_name: match-platform-post #配置容器名
+    build:
+      context: ./chaos-match-platform-post
+      dockerfile: Dockerfile #指定dockerFile文件
+    image: java/match-platform-post # 指定镜像名
+    ports:
+      - "8075:8075" # 暴露端口
+    volumes:
+      - ./logs:/logs # 创建容器数据卷
+    networks:
+      - KQM
+
 
 networks:
   KQM:
