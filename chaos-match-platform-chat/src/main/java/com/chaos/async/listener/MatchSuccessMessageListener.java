@@ -7,7 +7,6 @@ import com.chaos.feign.bo.AddPostUserMatchRelationBo;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -26,6 +25,7 @@ import java.util.List;
 public class MatchSuccessMessageListener implements ApplicationListener<MatchSuccessMessageEvent> {
     private final RedisCache redisCache;
     private final PostFeignClient postFeignClient;
+
     @Async
     @Override
     public void onApplicationEvent(MatchSuccessMessageEvent event) {

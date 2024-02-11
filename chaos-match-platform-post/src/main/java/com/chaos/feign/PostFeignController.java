@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequiredArgsConstructor
-public class PostFeignController implements PostFeignClient{
+public class PostFeignController implements PostFeignClient {
     private final PostService postService;
 
     @Override

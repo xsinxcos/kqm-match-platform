@@ -85,7 +85,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         QueryWrapper<Post> postQueryWrapper = new QueryWrapper<Post>()
                 .in("id", postIds)
-                .in("status",POST_STATUS_MATCHING)
+                .in("status", POST_STATUS_MATCHING)
                 .orderByDesc("update_time");
         Page<Post> postPage = new Page<>(pageNum, pageSize);
         page(postPage, postQueryWrapper);
