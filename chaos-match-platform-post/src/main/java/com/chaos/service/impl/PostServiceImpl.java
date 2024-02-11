@@ -8,6 +8,7 @@ import com.chaos.config.vo.PageVo;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.domain.dto.AddFavoritePostDto;
 import com.chaos.domain.dto.AddPostDto;
+import com.chaos.domain.dto.DeleteFavoritePostDto;
 import com.chaos.domain.dto.ModifyMyPostDto;
 import com.chaos.domain.entity.Post;
 import com.chaos.domain.entity.PostTag;
@@ -24,8 +25,10 @@ import com.chaos.service.PostTagService;
 import com.chaos.service.PostUserService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
+import javafx.geometry.Pos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -82,28 +85,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         Page<Post> postPage = new Page<>(pageNum, pageSize);
         page(postPage, postQueryWrapper);
 
-        //查询每个帖子贴主的头像及其名称
-        List<Long> posterId = postPage.getRecords()
-                .stream()
-                .map(Post::getUserId)
-                .collect(Collectors.toList());
+        List<PostListVo> vos = getAndSetPostListVoByPostPage(postPage);
 
-        Map<Long, PosterBo> posterBoMap = userFeignClient.getBatchUserByUserIds(posterId).getData();
-
-        //将帖子与贴主进行对应并封装到vo
-        List<PostListVo> vos = new ArrayList<>();
-        for (Post record : postPage.getRecords()) {
-            PosterBo posterBo = posterBoMap.get(record.getUserId());
-            PostListVo postListVo = PostListVo.builder()
-                    .id(record.getId())
-                    .title(record.getTitle())
-                    .posterId(record.getUserId())
-                    .posterAvatar(posterBo.getAvatar())
-                    .status(record.getStatus())
-                    .posterUsername(posterBo.getUsername())
-                    .build();
-            vos.add(postListVo);
-        }
         return ResponseResult.okResult(new PageVo(vos, postPage.getTotal()));
     }
 
@@ -213,8 +196,67 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         Long id = addFavoritePostDto.getId();
         Post byId = getById(id);
         if(Objects.isNull(byId)) throw new RuntimeException("帖子不存在");
-        postUserService.getBaseMapper().insert(new PostUser(addFavoritePostDto.getId(), userId));
+        postUserService.getBaseMapper().insert(new PostUser(addFavoritePostDto.getId(), userId ,FAVORITE_STATUS));
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult deleteFavoritePost(DeleteFavoritePostDto dto) {
+        LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(PostUser::getPostId,dto.getId())
+                .eq(PostUser::getUserId ,SecurityUtils.getUserId())
+                .eq(PostUser::getStatus ,FAVORITE_STATUS);
+        postUserService.getBaseMapper().delete(wrapper);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult listFavoritePost(Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
+        //查询用户收藏的帖子
+        wrapper.eq(PostUser::getUserId,SecurityUtils.getUserId())
+                .eq(PostUser::getStatus ,FAVORITE_STATUS);
+        List<Long> postIds = postUserService.list(wrapper)
+                .stream()
+                .map(PostUser::getPostId)
+                .collect(Collectors.toList());
+        //分页获取相应的帖子
+        if(postIds.isEmpty()) return ResponseResult.okResult(new PageVo(new ArrayList() ,0L));
+
+        QueryWrapper<Post> postQueryWrapper = new QueryWrapper<Post>()
+                .in("id" ,postIds)
+                .orderByDesc("update_time");
+        Page<Post> postPage = new Page<>(pageNum, pageSize);
+        page(postPage ,postQueryWrapper);
+        List<PostListVo> vos = getAndSetPostListVoByPostPage(postPage);
+
+        return ResponseResult.okResult(new PageVo(vos ,postPage.getTotal()));
+    }
+
+    private List<PostListVo> getAndSetPostListVoByPostPage(Page<Post> postPage){
+        //查询每个帖子贴主的头像及其昵称
+        List<Long> postIds = postPage.getRecords()
+                .stream()
+                .map(Post::getUserId)
+                .collect(Collectors.toList());
+        Map<Long, PosterBo> posterBoMap = userFeignClient.getBatchUserByUserIds(postIds).getData();
+
+        //将帖子与贴主进行对应并封装到vo
+        List<PostListVo> vos = new ArrayList<>();
+        for (Post record : postPage.getRecords()) {
+            PosterBo posterBo = posterBoMap.get(record.getUserId());
+            PostListVo postListVo = PostListVo.builder()
+                    .id(record.getId())
+                    .title(record.getTitle())
+                    .posterId(record.getUserId())
+                    .posterAvatar(posterBo.getAvatar())
+                    .status(record.getStatus())
+                    .posterUsername(posterBo.getUsername())
+                    .build();
+            vos.add(postListVo);
+        }
+
+        return vos;
     }
 
 }

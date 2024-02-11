@@ -1,12 +1,20 @@
 package com.chaos.controller;
 
+import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.domain.dto.AddFavoritePostDto;
 import com.chaos.domain.dto.AddPostDto;
+import com.chaos.domain.dto.DeleteFavoritePostDto;
 import com.chaos.domain.dto.ModifyMyPostDto;
+import com.chaos.domain.entity.Post;
+import com.chaos.exception.SystemException;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.swing.text.html.Option;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @description: PostController
@@ -97,5 +105,23 @@ public class PostController {
     @PostMapping("/post/favorite")
     public ResponseResult addFavoritePost(@RequestBody AddFavoritePostDto addFavoritePostDto){
         return postService.addFavoritePost(addFavoritePostDto);
+    }
+
+    /**
+     * 移除收藏的帖子
+     * @param dto
+     * @return
+     */
+
+    @DeleteMapping("/post/favorite")
+    public ResponseResult deleteFavoritePost(@RequestBody DeleteFavoritePostDto dto){
+        Post byId = postService.getById(dto.getId());
+        Optional.ofNullable(byId).orElseThrow(()->(new RuntimeException("操作失败")));
+        return postService.deleteFavoritePost(dto);
+    }
+
+    @GetMapping("/post/favorite")
+    public ResponseResult listFavoritePost(Integer pageNum, Integer pageSize){
+        return postService.listFavoritePost(pageNum ,pageSize);
     }
 }

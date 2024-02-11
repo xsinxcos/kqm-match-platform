@@ -22,7 +22,7 @@ public class PostUser {
     private Long postId;
     //用户ID@TableId
     private Long userId;
-
-
+    //0为帖子与用户匹配关系 1为帖子与用户收藏关系
+    private Integer status;
 }
 
