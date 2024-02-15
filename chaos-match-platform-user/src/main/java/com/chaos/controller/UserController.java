@@ -33,6 +33,11 @@ public class UserController {
         return authUserService.updateUserInfo(userInfoDto);
     }
 
+    @GetMapping("/userInfoById")
+    public ResponseResult getUserInfoById(Long userId){
+        return authUserService.getUserInfoById(userId);
+    }
+
     @PostMapping("/register")
     public ResponseResult register() {
         return ResponseResult.okResult();

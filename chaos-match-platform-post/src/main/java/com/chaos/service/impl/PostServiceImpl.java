@@ -27,10 +27,7 @@ import com.chaos.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +57,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult addPost(AddPostDto addPostDto) {
         Post post = BeanCopyUtils.copyBean(addPostDto, Post.class);
         post.setUserId(SecurityUtils.getUserId());
-
         //保存帖子内容
         save(post);
         //保存标签与帖子得对应关系
@@ -122,6 +118,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .posterId(byId.getUserId())
                 .posterUsername(authUserBo.getUserName())
                 .posterAvatar(authUserBo.getAvatar())
+                .beginTime(byId.getBeginTime())
+                .endTime(byId.getEndTime())
                 .build();
 
         return ResponseResult.okResult(postShowVo);
@@ -169,7 +167,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         byId.setLatitude(modifyMyPostDto.getLatitude());
         byId.setLongitude(modifyMyPostDto.getLongitude());
         byId.setMeetAddress(modifyMyPostDto.getMeetAddress());
-
+        byId.setBeginTime(modifyMyPostDto.getBeginTime());
+        byId.setEndTime(modifyMyPostDto.getEndTime());
         updateById(byId);
 
         //删除原有tag与帖子的关系

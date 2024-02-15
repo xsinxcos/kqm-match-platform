@@ -1,9 +1,13 @@
 package com.chaos.domain.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+
+import java.util.Date;
 
 /**
  * @description: ModifyMyPostDto
@@ -25,6 +29,12 @@ public class ModifyMyPostDto {
     private String latitude;
     //经度
     private String longitude;
+    //开始时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date beginTime;
+    //结束时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date endTime;
     //标签
     @NonNull
     private Long[] tags;

@@ -37,6 +37,10 @@ public class Post {
     private String longitude;
     //状态（0待匹配，1匹配完成）
     private Integer status;
+    //开始时间
+    private Date beginTime;
+    //结束时间
+    private Date endTime;
     //乐观锁
     private Integer version;
     //创建者

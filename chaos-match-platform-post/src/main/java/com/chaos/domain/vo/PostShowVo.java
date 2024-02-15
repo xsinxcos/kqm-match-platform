@@ -1,9 +1,12 @@
 package com.chaos.domain.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * @description: PostShowVo
@@ -32,6 +35,10 @@ public class PostShowVo {
     private String latitude;
     //经度
     private String longitude;
+    //开始时间
+    private Date beginTime;
+    //结束时间
+    private Date endTime;
     //状态（0待匹配，1匹配完成）
     private Integer status;
 }

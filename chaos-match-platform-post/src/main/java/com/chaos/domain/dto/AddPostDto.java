@@ -1,8 +1,12 @@
 package com.chaos.domain.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * @description: 发布帖子
@@ -19,10 +23,17 @@ public class AddPostDto {
     private String content;
     //集合地点
     private String meetAddress;
+    //开始时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date beginTime;
+    //结束时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date endTime;
     //纬度
     private String latitude;
     //经度
     private String longitude;
     //标签
     private Long[] tags;
+
 }

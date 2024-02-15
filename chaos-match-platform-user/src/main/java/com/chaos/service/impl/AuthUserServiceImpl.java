@@ -38,5 +38,12 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         updateById(user);
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult getUserInfoById(Long userId) {
+        AuthUser user = getById(userId);
+        UserInfoVo vo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
+        return ResponseResult.okResult(vo);
+    }
 }
 
