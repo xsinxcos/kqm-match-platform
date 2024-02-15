@@ -1,5 +1,5 @@
 # 以jdk8为基础镜像
-FROM adoptopenjdk/openjdk8
+FROM ibm-semeru-runtimes:open-8-jre
 # 描述
 LABEL description="match-platform-auth"
 # 暴露接口
