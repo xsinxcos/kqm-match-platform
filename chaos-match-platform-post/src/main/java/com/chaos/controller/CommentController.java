@@ -51,4 +51,16 @@ public class CommentController {
     public ResponseResult deleteComment(@RequestBody DeleteCommentDto dto){
         return commentService.deleteComment(dto);
     }
+
+    /**
+     * 分页查询评论的子评论
+     * @param commentId 评论ID
+     * @param pageSize  pageSize
+     * @param pageNum pageNum
+     * @return
+     */
+    @PostMapping("/get")
+    public ResponseResult showChildCommentById(Long commentId ,Integer pageSize ,Integer pageNum){
+        return commentService.showChildCommentById(commentId ,pageSize ,pageNum);
+    }
 }

@@ -20,5 +20,7 @@ public interface CommentService extends IService<Comment> {
     ResponseResult listCommentByPostId(Long postId, Integer pageNum, Integer pageSize);
 
     ResponseResult deleteComment(DeleteCommentDto dto);
+
+    ResponseResult showChildCommentById(Long commentId, Integer pageSize, Integer pageNum);
 }
 

@@ -11,6 +11,7 @@ import com.chaos.domain.dto.AddCommentDto;
 import com.chaos.domain.dto.DeleteCommentDto;
 import com.chaos.domain.entity.Comment;
 import com.chaos.domain.vo.CommentVo;
+import com.chaos.domain.vo.ShowCommentVo;
 import com.chaos.exception.SystemException;
 import com.chaos.feign.UserFeignClient;
 import com.chaos.feign.bo.PosterBo;
@@ -126,6 +127,32 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         update(wrapper);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult showChildCommentById(Long commentId, Integer pageSize, Integer pageNum) {
+        //根据commentID获取子评论
+        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Objects.nonNull(commentId) ,Comment::getRootId ,commentId)
+                .orderByAsc(Comment::getCreateTime);
+        //进行分页
+        Page<Comment> commentPage = new Page<>(pageNum ,pageSize);
+        page(commentPage ,wrapper);
+        List<Long> ids = commentPage.getRecords().stream()
+                .map(Comment::getCreateBy)
+                .collect(Collectors.toList());
+        //调用feign获取用户信息
+        Map<Long, PosterBo> map = userFeignClient.getBatchUserByUserIds(ids).getData();
+        //封装vo
+        List<ShowCommentVo> commentVos = new ArrayList<>();
+        for (Comment record : commentPage.getRecords()) {
+            PosterBo user = map.get(record.getCreateBy());
+            ShowCommentVo vo = BeanCopyUtils.copyBean(record, ShowCommentVo.class);
+            vo.setAvatar(user.getAvatar());
+            vo.setUsername(user.getUsername());
+            commentVos.add(vo);
+        }
+        return ResponseResult.okResult(new PageVo(commentVos ,commentPage.getTotal()));
     }
 }
 
