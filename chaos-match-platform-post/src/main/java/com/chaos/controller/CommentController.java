@@ -1,6 +1,7 @@
 package com.chaos.controller;
 
 import com.chaos.domain.dto.AddCommentDto;
+import com.chaos.domain.dto.DeleteCommentDto;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,15 @@ public class CommentController {
     @PostMapping("/list")
     public ResponseResult listCommentByPostId(Long postId ,Integer pageNum ,Integer pageSize){
         return commentService.listCommentByPostId(postId ,pageNum ,pageSize);
+    }
+
+    /**
+     *
+     * @param dto DeleteCommentDto
+     * @return
+     */
+    @PostMapping("/delete")
+    public ResponseResult deleteComment(@RequestBody DeleteCommentDto dto){
+        return commentService.deleteComment(dto);
     }
 }
