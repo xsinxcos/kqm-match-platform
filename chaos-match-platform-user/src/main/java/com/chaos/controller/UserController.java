@@ -3,6 +3,7 @@ package com.chaos.controller;
 import com.chaos.model.dto.UserInfoDto;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/userInfoById")
-    public ResponseResult getUserInfoById(Long userId){
+    public ResponseResult getUserInfoById(@NonNull Long userId){
         return authUserService.getUserInfoById(userId);
     }
 
