@@ -28,4 +28,16 @@ public class CommentController {
     public ResponseResult addComment(@RequestBody AddCommentDto addCommentDto){
         return commentService.addComment(addCommentDto);
     }
+
+    /**
+     * 分页获取评论
+     * @param postId 帖子ID
+     * @param pageNum 页码
+     * @param pageSize 页条数
+     * @return
+     */
+    @PostMapping("/list")
+    public ResponseResult listCommentByPostId(Long postId ,Integer pageNum ,Integer pageSize){
+        return commentService.listCommentByPostId(postId ,pageNum ,pageSize);
+    }
 }

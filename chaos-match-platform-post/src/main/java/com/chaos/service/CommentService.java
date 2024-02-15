@@ -16,5 +16,6 @@ public interface CommentService extends IService<Comment> {
 
     ResponseResult addComment(AddCommentDto addCommentDto);
 
+    ResponseResult listCommentByPostId(Long postId, Integer pageNum, Integer pageSize);
 }
 
