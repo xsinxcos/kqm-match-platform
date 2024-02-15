@@ -1,0 +1,8 @@
+*.class
+*.lst
+*.xml
+*.meta
+*.iml
+*.jar
+*.jar.original
+*.properties
