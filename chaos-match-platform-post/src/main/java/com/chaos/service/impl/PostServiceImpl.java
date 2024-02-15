@@ -82,7 +82,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         if (postIds.isEmpty()) return ResponseResult.okResult(new PageVo(new ArrayList(), 0L));
 
         QueryWrapper<Post> postQueryWrapper = new QueryWrapper<Post>()
-                .in("id", postIds)
+                .in(Objects.nonNull(tagId) && tagId > 0,"id", postIds)
                 .in("status", POST_STATUS_MATCHING)
                 .orderByDesc("update_time");
         Page<Post> postPage = new Page<>(pageNum, pageSize);
