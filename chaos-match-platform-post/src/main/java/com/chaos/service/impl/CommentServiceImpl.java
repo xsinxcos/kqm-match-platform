@@ -79,6 +79,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             commentVo.setAvatar(user.getAvatar());
             commentVo.setUsername(user.getUsername());
             commentVo.setChildren(getChildCommentForList(record.getId()));
+            commentVos.add(commentVo);
         }
         return ResponseResult.okResult(new PageVo(commentVos ,page.getTotal()));
     }

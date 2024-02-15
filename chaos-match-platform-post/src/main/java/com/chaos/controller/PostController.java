@@ -96,7 +96,7 @@ public class PostController {
      * @param addFavoritePostDto
      * @return
      */
-    @PostMapping("/post/favorite")
+    @PostMapping("/favorite")
     public ResponseResult addFavoritePost(@RequestBody AddFavoritePostDto addFavoritePostDto) {
         return postService.addFavoritePost(addFavoritePostDto);
     }
@@ -108,7 +108,7 @@ public class PostController {
      * @return
      */
 
-    @DeleteMapping("/post/favorite")
+    @DeleteMapping("/favorite")
     public ResponseResult deleteFavoritePost(@RequestBody DeleteFavoritePostDto dto) {
         Post byId = postService.getById(dto.getId());
         Optional.ofNullable(byId).orElseThrow(() -> (new RuntimeException("操作失败")));
@@ -122,7 +122,7 @@ public class PostController {
      * @param pageSize
      * @return
      */
-    @GetMapping("/post/favorite")
+    @GetMapping("/favorite")
     public ResponseResult listFavoritePost(Integer pageNum, Integer pageSize) {
         return postService.listFavoritePost(pageNum, pageSize);
     }
@@ -132,7 +132,7 @@ public class PostController {
      * @param modifyPostStatusDto
      * @return
      */
-    @PostMapping("/post/modify")
+    @PostMapping("/modify")
     public ResponseResult modifyPostStatus(@RequestBody ModifyPostStatusDto modifyPostStatusDto) {
         return postService.modifyPostStatus(modifyPostStatusDto);
     }

@@ -24,7 +24,7 @@ public class CommentController {
      * @param addCommentDto
      * @return
      */
-    @PostMapping
+    @PostMapping("/add")
     public ResponseResult addComment(@RequestBody AddCommentDto addCommentDto){
         return commentService.addComment(addCommentDto);
     }
