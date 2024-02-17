@@ -14,13 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Configuration
 @Getter
 public class XfModelServerListener extends WebSocketListener {
 
     private String totalAnswer;
 
     public boolean is_finished;
+
+    private WebSocket nowWebSocket;
 
     public XfModelServerListener() {
         totalAnswer = "";
@@ -29,6 +30,7 @@ public class XfModelServerListener extends WebSocketListener {
 
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
+        nowWebSocket = webSocket;
         super.onOpen(webSocket, response);
     }
 
@@ -89,4 +91,7 @@ public class XfModelServerListener extends WebSocketListener {
         return webSocketListener;
     }
 
+    public void onClosed() {
+        super.onClosed(nowWebSocket, 500, "");
+    }
 }

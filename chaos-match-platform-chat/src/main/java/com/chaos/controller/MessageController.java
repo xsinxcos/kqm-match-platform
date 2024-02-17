@@ -23,7 +23,6 @@ import java.util.concurrent.TimeoutException;
 @RequestMapping("/chat")
 public class MessageController {
     private final MessageService messageService;
-    private final XfModelServerListener xfListener;
 
     /**
      * 展示用户之间的历史记录
@@ -46,6 +45,7 @@ public class MessageController {
         String question = chatGPTMessageDto.getQuestion();
         long timeOut = 30;
         String answer = "";
+        XfModelServerListener xfListener = new XfModelServerListener();
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
             try {
                 XfModelServerListener websocket = xfListener.sendQuestion(question, xfListener);
@@ -54,6 +54,7 @@ public class MessageController {
                 }
                 return websocket.getTotalAnswer();
             } catch (Exception e) {
+                xfListener.onClosed();
                 throw new RuntimeException(e);
             }
         });
@@ -62,6 +63,8 @@ public class MessageController {
             answer = future.get(timeOut, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException("回答失败");
+        }finally {
+            xfListener.onClosed();
         }
 
         return ResponseResult.okResult(new ChatGPTMessageVo(answer));
