@@ -6,6 +6,7 @@ import com.chaos.response.ResponseResult;
 import com.chaos.server.XfModelServerListener;
 import com.chaos.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeoutException;
  **/
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/chat")
 public class MessageController {
     private final MessageService messageService;
@@ -50,12 +52,14 @@ public class MessageController {
             try {
                 XfModelServerListener websocket = xfListener.sendQuestion(question, xfListener);
                 while (!xfListener.is_finished) {
+                    Thread.sleep(200);
                     continue;
                 }
                 return websocket.getTotalAnswer();
             } catch (Exception e) {
-                xfListener.onClosed();
                 throw new RuntimeException(e);
+            } finally {
+                xfListener.onClosed();
             }
         });
 
@@ -63,10 +67,7 @@ public class MessageController {
             answer = future.get(timeOut, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             throw new RuntimeException("回答失败");
-        }finally {
-            xfListener.onClosed();
         }
-
         return ResponseResult.okResult(new ChatGPTMessageVo(answer));
     }
 }

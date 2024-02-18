@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Getter
@@ -29,8 +32,7 @@ public class XfModelServerListener extends WebSocketListener {
     }
 
     @Override
-    public void onOpen(WebSocket webSocket, Response response) {
-        nowWebSocket = webSocket;
+    public void onOpen(WebSocket webSocket, Response response) {;
         super.onOpen(webSocket, response);
     }
 
@@ -79,6 +81,7 @@ public class XfModelServerListener extends WebSocketListener {
         //建立websocket请求
         Request request = new Request.Builder().url(url).build();
         WebSocket webSocket = client.newWebSocket(request, webSocketListener);
+        nowWebSocket = webSocket;
         //构建请求内容
         List<XfChatRequest.Text> requestTexts = new ArrayList<>();
         requestTexts.add(new XfChatRequest.Text("user", question));
@@ -87,11 +90,11 @@ public class XfModelServerListener extends WebSocketListener {
         String message = JSON.toJSON(request1).toString();
         is_finished = false;
         webSocket.send(message);
-
         return webSocketListener;
     }
 
     public void onClosed() {
-        super.onClosed(nowWebSocket, 500, "");
+        nowWebSocket.close(1000 ,"");
     }
+
 }
