@@ -16,4 +16,6 @@ public class TagListVo {
     private Long id;
     //标签名
     private String name;
+    //标签图片
+    private String url;
 }

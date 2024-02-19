@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
 import com.chaos.constant.AppHttpCodeEnum;
+import com.chaos.domain.bo.PostBo;
 import com.chaos.domain.dto.*;
 import com.chaos.domain.entity.Post;
 import com.chaos.domain.entity.PostTag;
@@ -23,6 +24,7 @@ import com.chaos.service.PostService;
 import com.chaos.service.PostTagService;
 import com.chaos.service.PostUserService;
 import com.chaos.util.BeanCopyUtils;
+import com.chaos.util.MeiliSearchUtils;
 import com.chaos.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,11 +63,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         save(post);
         //保存标签与帖子得对应关系
         List<PostTag> postTags = new ArrayList<>();
-        for (Long tag : addPostDto.getTags()) {
-            postTags.add(new PostTag(post.getId(), tag));
+        for (TagDto tag : addPostDto.getTags()) {
+            postTags.add(new PostTag(post.getId(), tag.getId()));
         }
         postTagService.saveBatch(postTags);
+        //将帖子存入MeiliSearch中
+        PostBo postBo = BeanCopyUtils.copyBean(post, PostBo.class);
+        postBo.setBeginTimeStamp(post.getBeginTime().getTime());
+        postBo.setEndTimeStamp(post.getEndTime().getTime());
 
+        MeiliSearchUtils.addDocumentByIndex(postBo ,"post");
         return ResponseResult.okResult();
     }
 

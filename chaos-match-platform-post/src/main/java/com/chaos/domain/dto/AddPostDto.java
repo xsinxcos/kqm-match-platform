@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @description: 发布帖子
@@ -34,6 +35,6 @@ public class AddPostDto {
     //经度
     private String longitude;
     //标签
-    private Long[] tags;
+    private List<TagDto> tags;
 
 }

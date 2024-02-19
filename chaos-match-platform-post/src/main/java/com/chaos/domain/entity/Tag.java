@@ -28,6 +28,9 @@ public class Tag {
     //标签名
     private String name;
 
+    //标签图片
+    private String url;
+
     @TableField(fill = FieldFill.INSERT)
     private Long createBy;
 
