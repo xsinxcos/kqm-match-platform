@@ -38,14 +38,31 @@ public class MeiliSearchUtils {
         MeiliSearchUtils.apiKey = apiKey;
     }
 
+    /**
+     * 添加新的文档
+     * @param source 对象
+     * @param uid   索引名称
+     */
     public static void addDocumentByIndex(Object source, String uid) {
         Index index = client.index(uid);
         index.addDocuments(JSON.toJSONString(source));
     }
 
+    /**
+     * 添加新的索引
+     * @param indexName 索引名称
+     */
     public static void addIndex(String indexName) {
         client.index(indexName);
     }
+
+    /**
+     * 根据索引查找文档
+     * @param uid 索引
+     * @param searchRequest 查询请求
+     * @param clazz 类名
+     * @return List<V>
+     */
 
     public static <V> List<V> searchDocumentByIndex(String uid , SearchRequest searchRequest , Class<V> clazz) {
         Index index = client.index(uid);
