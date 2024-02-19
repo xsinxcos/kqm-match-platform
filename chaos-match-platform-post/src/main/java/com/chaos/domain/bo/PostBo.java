@@ -1,26 +1,25 @@
-package com.chaos.domain.dto;
+package com.chaos.domain.bo;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.chaos.domain.bo.TagBo;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * @description: ModifyMyPostDto
+ * @description:
  * @author: xsinxcos
- * @create: 2024-02-06 06:46
+ * @create: 2024-02-19 05:49
  **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModifyMyPostDto {
+public class PostBo {
     private Long id;
+
+    //贴主ID
+    private Long userId;
     //标题
     private String title;
     //帖子内容
@@ -31,13 +30,16 @@ public class ModifyMyPostDto {
     private String latitude;
     //经度
     private String longitude;
+    //状态（0待匹配，1匹配完成）
+    private Integer status;
     //开始时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date beginTime;
     //结束时间
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
-    //标签
-    @NonNull
+    //开始时间戳
+    private Long beginTimeStamp;
+    //结束时间戳
+    private Long endTimeStamp;
+    //拥有标签
     private List<TagBo> tags;
 }

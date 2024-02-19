@@ -1,6 +1,7 @@
 package com.chaos.domain.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.chaos.domain.bo.TagBo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +36,6 @@ public class AddPostDto {
     //经度
     private String longitude;
     //标签
-    private List<TagDto> tags;
+    private List<TagBo> tags;
 
 }

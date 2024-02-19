@@ -1,12 +1,14 @@
 package com.chaos.domain.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.chaos.domain.bo.TagBo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @description: PostShowVo
@@ -41,4 +43,6 @@ public class PostShowVo {
     private Date endTime;
     //状态（0待匹配，1匹配完成）
     private Integer status;
+    //帖子的标签
+    private List<TagBo> tags;
 }
