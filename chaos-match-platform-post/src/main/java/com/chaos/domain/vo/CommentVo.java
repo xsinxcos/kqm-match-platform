@@ -32,6 +32,8 @@ public class CommentVo {
     private Long rootId;
     //所回复的目标评论的userid
     private Long toCommentUserId;
+    //所回复的目标评论的username
+    private String toCommentUserName;
     //所回复评论id
     private Long toCommentId;
     //创建者

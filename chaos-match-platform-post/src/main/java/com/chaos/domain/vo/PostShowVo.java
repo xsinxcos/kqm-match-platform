@@ -1,6 +1,5 @@
 package com.chaos.domain.vo;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.chaos.domain.bo.TagBo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

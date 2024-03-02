@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PosterBo {
     private Long id;
-    private String username;
+    private String userName;
     private String avatar;
 }

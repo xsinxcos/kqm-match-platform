@@ -33,16 +33,13 @@ public class PostController {
 
 
     /**
-     * 罗列帖子
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param tagId
+     * 罗列条件帖子
+     * @param listPostDto listPostDto
      * @return
      */
-    @GetMapping("/list")
-    public ResponseResult listPost(Integer pageNum, Integer pageSize, Long tagId) {
-        return postService.listPost(pageNum, pageSize, tagId);
+    @PostMapping("/list")
+    public ResponseResult listPost(@RequestBody ListPostDto listPostDto) {
+        return postService.listPost(listPostDto);
     }
 
     /**
@@ -129,6 +126,7 @@ public class PostController {
 
     /**
      * 修改帖子状态
+     *
      * @param modifyPostStatusDto
      * @return
      */

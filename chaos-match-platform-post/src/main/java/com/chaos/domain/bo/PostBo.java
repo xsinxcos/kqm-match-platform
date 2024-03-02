@@ -19,7 +19,7 @@ public class PostBo {
     private Long id;
 
     //贴主ID
-    private Long userId;
+    private Long posterId;
     //标题
     private String title;
     //帖子内容
@@ -34,11 +34,11 @@ public class PostBo {
     private Integer status;
     //开始时间
     private Date beginTime;
+    //开始时间时间戳
+    private Long beginTimeStamp;
     //结束时间
     private Date endTime;
-    //开始时间戳
-    private Long beginTimeStamp;
-    //结束时间戳
+    //结束时间时间戳
     private Long endTimeStamp;
     //拥有标签
     private List<TagBo> tags;

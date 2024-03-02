@@ -36,6 +36,16 @@ public class MessageController {
         return messageService.showHistoryMessage(pageNum, pageSize, userId);
     }
 
+
+    /**
+     * 获取用户历史聊天对象
+     * @return
+     */
+    @GetMapping("/history/user")
+    public ResponseResult showHistoryChatUser(){
+        return messageService.showHistoryChatUser();
+    }
+
     /**
      * 与GPT对话
      *

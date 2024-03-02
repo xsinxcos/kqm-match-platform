@@ -1,7 +1,6 @@
 package com.chaos.domain.vo;
 
 import com.chaos.domain.bo.TagBo;
-import com.chaos.domain.dto.TagDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

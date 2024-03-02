@@ -14,5 +14,7 @@ import com.chaos.response.ResponseResult;
 public interface MessageService extends IService<Message> {
 
     ResponseResult showHistoryMessage(Integer pageNum, Integer pageSize, Long userId);
+
+    ResponseResult showHistoryChatUser();
 }
 

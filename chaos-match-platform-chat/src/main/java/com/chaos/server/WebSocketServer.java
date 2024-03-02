@@ -77,7 +77,7 @@ public class WebSocketServer {
 
         try {
             sendMessage("conn_success");
-            log.info("用户:+ " + sid + "的websocket链接建立成功");
+            log.info("用户id为:" + sid + "的websocket链接建立成功");
         } catch (IOException e) {
             log.error("websocket IO Exception");
         }

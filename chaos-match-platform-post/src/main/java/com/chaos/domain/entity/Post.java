@@ -26,7 +26,7 @@ public class Post {
     private Long id;
 
     //贴主ID
-    private Long userId;
+    private Long posterId;
     //标题
     private String title;
     //帖子内容

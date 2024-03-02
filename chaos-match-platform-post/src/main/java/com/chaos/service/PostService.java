@@ -18,7 +18,7 @@ public interface PostService extends IService<Post> {
 
     ResponseResult addPost(AddPostDto addPostDto);
 
-    ResponseResult listPost(Integer pageNum, Integer pageSize, Long tagId);
+    ResponseResult listPost(ListPostDto listPostDto);
 
     ResponseResult showPost(Long id);
 

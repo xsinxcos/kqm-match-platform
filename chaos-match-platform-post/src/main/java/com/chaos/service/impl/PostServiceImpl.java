@@ -31,10 +31,7 @@ import com.meilisearch.sdk.SearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -53,7 +50,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     private static final int POST_STATUS_MATCH_COMPLETE = 1;
     private static final int POST_STATUS_HAND_UP = 2;
     private static final int POST_DELETE = 1;
-    private static final int LIST_CONTENT_CORP_LENGTH = 50;
+    private static final int LIST_CONTENT_CORP_LENGTH = 20;
     private static final String POST_INDEX_UID = "post";
 
     private final UserFeignClient userFeignClient;
@@ -62,10 +59,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     private final PostUserService postUserService;
 
+    private final MeiliSearchUtils meiliSearchUtils;
+
     @Override
     public ResponseResult addPost(AddPostDto addPostDto) {
         Post post = BeanCopyUtils.copyBean(addPostDto, Post.class);
-        post.setUserId(SecurityUtils.getUserId());
+        post.setPosterId(SecurityUtils.getUserId());
         //保存帖子内容
         save(post);
         //保存标签与帖子得对应关系
@@ -76,36 +75,51 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         postTagService.saveBatch(postTags);
         //将帖子存入MeiliSearch中
         PostBo postBo = BeanCopyUtils.copyBean(post, PostBo.class);
-        postBo.setBeginTimeStamp(post.getBeginTime().getTime());
-        postBo.setEndTimeStamp(post.getEndTime().getTime());
+        postBo.setStatus(POST_STATUS_MATCHING);
         postBo.setTags(addPostDto.getTags());
+        postBo.setBeginTimeStamp(postBo.getBeginTime().getTime());
+        postBo.setEndTimeStamp(postBo.getEndTime().getTime());
 
-        MeiliSearchUtils.addDocumentByIndex(postBo, POST_INDEX_UID);
+        meiliSearchUtils.addDocumentByIndex(postBo, POST_INDEX_UID);
         return ResponseResult.okResult();
     }
 
     @Override
-    public ResponseResult listPost(Integer pageNum, Integer pageSize, Long tagId) {
+    public ResponseResult listPost(ListPostDto listPostDto) {
+        //获取筛选条件
+        Long tagId = listPostDto.getTagId();
+        String q = listPostDto.getQ();
+        Date beginTime = listPostDto.getBeginTime();
+        Date endTime = listPostDto.getEndTime();
+
+        //设置筛选条件
+        List<String[]> con = new ArrayList<>();
+        con.add(new String[]{"status = " + POST_STATUS_MATCHING});
+
+        if (Objects.nonNull(tagId) && tagId > 0)
+            con.add(new String[]{"tags.id = " + tagId});
+        if (Objects.nonNull(beginTime) && Objects.nonNull(endTime))
+            con.add(new String[]{"beginTimeStamp >= " + beginTime.getTime() +
+                    " AND " + "endTimeStamp <= " + endTime.getTime()});
+
         //通过MeiliSearch查找
-        MeiliSearchUtils.SearchDocumentBo<PostBo> post = postdocByCondArrToList(new String[][]{
-                new String[]{"tags.id = " + tagId},
-                new String[]{"status = " + POST_STATUS_MATCHING}
-        }, pageSize, pageNum);
+        MeiliSearchUtils.SearchDocumentBo<PostBo> post =
+                postdocByCondArrToList(con.toArray(new String[0][]), listPostDto.getPageSize(), listPostDto.getPageNum() ,q);
+
         //转化vos
         List<PostListVo> vos = BeanCopyUtils.copyBeanList(post.getData(), PostListVo.class);
 
         //查询每个帖子贴主的头像及其昵称
         setPosterDetail(vos);
-
         return ResponseResult.okResult(new PageVo(vos, (long) post.getTotal()));
     }
 
     @Override
     public ResponseResult showPost(Long postId) {
         //获通过MeiliSearch帖子
-        PostBo byId = MeiliSearchUtils.searchDocumentById(POST_INDEX_UID, postId.toString(), PostBo.class);
+        PostBo byId = meiliSearchUtils.searchDocumentById(POST_INDEX_UID, postId.toString(), PostBo.class);
         //获取发帖人信息
-        AuthUserBo authUserBo = userFeignClient.getUserById(byId.getUserId()).getData();
+        AuthUserBo authUserBo = userFeignClient.getUserById(byId.getPosterId()).getData();
         //封装VO
         PostShowVo postShowVo = BeanCopyUtils.copyBean(byId, PostShowVo.class);
         postShowVo.setTags(byId.getTags());
@@ -120,8 +134,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         //获取用户的userid
         Long userId = SecurityUtils.getUserId();
         //通过MeiliSearch筛选出用户的帖子
-        MeiliSearchUtils.SearchDocumentBo<PostBo> documentBo = postdocByCondArrToList(new String[][]{new String[]{"userId = " + userId}},
-                pageSize, pageNum);
+        MeiliSearchUtils.SearchDocumentBo<PostBo> documentBo = postdocByCondArrToList(new String[][]{new String[]{"posterId = " + userId}},
+                pageSize, pageNum ,null);
         //获取发帖人信息
         AuthUserBo authUserBo = userFeignClient.getUserById(userId).getData();
         //将帖子与贴主信息进行对应并封装到vo
@@ -137,7 +151,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult modifyMyPost(ModifyMyPostDto modifyMyPostDto) {
         Post byId = getById(modifyMyPostDto.getId());
         //检验帖子是否属于该用户
-        if (!byId.getUserId().equals(SecurityUtils.getUserId()))
+        if (!byId.getPosterId().equals(SecurityUtils.getUserId()))
             return ResponseResult.errorResult(AppHttpCodeEnum.ERROR);
 
         //更新帖子信息
@@ -165,7 +179,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         //更新meilisearch中的document
         PostBo postBo = BeanCopyUtils.copyBean(byId, PostBo.class);
         postBo.setTags(modifyMyPostDto.getTags());
-        MeiliSearchUtils.updateDocumentByIndex(postBo, POST_INDEX_UID);
+        postBo.setBeginTimeStamp(postBo.getBeginTime().getTime());
+        postBo.setEndTimeStamp(postBo.getEndTime().getTime());
+
+        meiliSearchUtils.updateDocumentByIndex(postBo, POST_INDEX_UID);
 
         return ResponseResult.okResult();
     }
@@ -174,7 +191,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult deleteMyPost(String id) {
         //检查帖子所属人
         Post byId = getById(id);
-        if (Objects.isNull(byId) || !byId.getUserId().equals(SecurityUtils.getUserId()))
+        if (Objects.isNull(byId) || !byId.getPosterId().equals(SecurityUtils.getUserId()))
             throw new RuntimeException(AppHttpCodeEnum.NO_OPERATOR_AUTH.getMsg());
         //删除帖子
         LambdaUpdateWrapper<Post> wrapper = new LambdaUpdateWrapper<>();
@@ -184,7 +201,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         update(wrapper);
 
         //删除相应的document
-        MeiliSearchUtils.deleteDocumentByIndex("post", byId.getId().toString());
+        meiliSearchUtils.deleteDocumentByIndex("post", byId.getId().toString());
         return ResponseResult.okResult();
     }
 
@@ -225,7 +242,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         if (postIds.isEmpty()) return ResponseResult.okResult(new PageVo(new ArrayList(), 0L));
         //通过MeiliSearch查找相应的帖子并封装VO
         List<PostBo> postBos = postIds.stream()
-                .map(o -> MeiliSearchUtils.searchDocumentById(POST_INDEX_UID, o.toString(), PostBo.class))
+                .map(o -> meiliSearchUtils.searchDocumentById(POST_INDEX_UID, o.toString(), PostBo.class))
                 .collect(Collectors.toList());
 
         List<PostListVo> vos = BeanCopyUtils.copyBeanList(postBos, PostListVo.class);
@@ -246,7 +263,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         //将用户名称及其头像set进vos
         for (PostListVo vo : vos) {
             PosterBo posterBo = posterBoMap.get(vo.getPosterId());
-            vo.setPosterUsername(posterBo.getUsername());
+            vo.setPosterUsername(posterBo.getUserName());
             vo.setPosterAvatar(posterBo.getAvatar());
         }
     }
@@ -254,16 +271,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public ResponseResult modifyPostStatus(ModifyPostStatusDto modifyPostStatusDto) {
         Post byId = getById(modifyPostStatusDto.getPostId());
-        if (Objects.isNull(byId) || !(SecurityUtils.getUserId().equals(byId.getUserId())))
+        if (Objects.isNull(byId) || !(SecurityUtils.getUserId().equals(byId.getPosterId())))
             throw new RuntimeException("操作失败");
 
         byId.setStatus(modifyPostStatusDto.getStatus());
         updateById(byId);
 
         //将MeiliSearch中对应的doc进行更新
-        PostBo postBo = MeiliSearchUtils.searchDocumentById(POST_INDEX_UID, byId.getId().toString(), PostBo.class);
+        PostBo postBo = meiliSearchUtils.searchDocumentById(POST_INDEX_UID, byId.getId().toString(), PostBo.class);
         postBo.setStatus(modifyPostStatusDto.getStatus());
-        MeiliSearchUtils.updateDocumentByIndex(postBo ,POST_INDEX_UID);
+        meiliSearchUtils.updateDocumentByIndex(postBo, POST_INDEX_UID);
 
         return ResponseResult.okResult();
     }
@@ -280,9 +297,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return ResponseResult.okResult();
     }
 
-    private MeiliSearchUtils.SearchDocumentBo<PostBo> postdocByCondArrToList(String[][] condition, Integer pageSize, Integer pageNum) {
+    private MeiliSearchUtils.SearchDocumentBo<PostBo> postdocByCondArrToList(String[][] condition, Integer pageSize, Integer pageNum ,String q) {
         //筛选出满足条件的doc，根据id排序
         SearchRequest searchRequest = SearchRequest.builder()
+                .q(q)
                 .filterArray(condition)
                 .sort(new String[]{"id:desc"})
                 .attributesToCrop(new String[]{"content"})
@@ -291,7 +309,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .offset((pageNum - 1) * pageSize)
                 .build();
 
-        return MeiliSearchUtils.searchDocumentArrByIndex(POST_INDEX_UID, searchRequest, PostBo.class);
+        return meiliSearchUtils.searchDocumentArrByIndex(POST_INDEX_UID, searchRequest, PostBo.class);
     }
 
 

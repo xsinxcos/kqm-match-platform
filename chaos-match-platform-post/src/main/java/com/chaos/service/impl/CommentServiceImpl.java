@@ -11,7 +11,7 @@ import com.chaos.domain.dto.AddCommentDto;
 import com.chaos.domain.dto.DeleteCommentDto;
 import com.chaos.domain.entity.Comment;
 import com.chaos.domain.vo.CommentVo;
-import com.chaos.domain.vo.ShowCommentVo;
+import com.chaos.domain.vo.ShowChildCommentVo;
 import com.chaos.exception.SystemException;
 import com.chaos.feign.UserFeignClient;
 import com.chaos.feign.bo.PosterBo;
@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 评论表(Comment)表服务实现类
@@ -82,7 +83,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             PosterBo user = map.get(record.getCreateBy());
             CommentVo commentVo = BeanCopyUtils.copyBean(record, CommentVo.class);
             commentVo.setAvatar(user.getAvatar());
-            commentVo.setUsername(user.getUsername());
+            commentVo.setUsername(user.getUserName());
             commentVo.setChildren(getChildCommentForList(record.getId()));
             commentVos.add(commentVo);
         }
@@ -99,15 +100,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<Comment> list = list(wrapper);
         List<CommentVo> commentVos = BeanCopyUtils.copyBeanList(list, CommentVo.class);
         List<Long> ids = commentVos.stream()
-                .map(CommentVo::getCreateBy)
+                .flatMap(commentVo -> Stream.of(commentVo.getCreateBy(), commentVo.getToCommentUserId()))
+                .distinct()
                 .collect(Collectors.toList());
         //feign调用获取用户信息
         Map<Long, PosterBo> map = userFeignClient.getBatchUserByUserIds(ids).getData();
         //将用户信息封装进VO
         for (CommentVo commentVo : commentVos) {
+            //回复者
             Long createBy = commentVo.getCreateBy();
-            commentVo.setUsername(map.get(createBy).getUsername());
+            commentVo.setUsername(map.get(createBy).getUserName());
             commentVo.setAvatar(map.get(createBy).getAvatar());
+            //被回复者
+            Long toCommentUserId = commentVo.getToCommentUserId();
+            commentVo.setToCommentUserName(map.get(toCommentUserId).getUserName());
         }
         return commentVos;
     }
@@ -117,13 +123,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public ResponseResult deleteComment(DeleteCommentDto dto) {
         //检查评论所属人
         Comment byId = getById(dto.getCommentId());
-        if(Objects.isNull(byId) || !byId.getCreateBy().equals(SecurityUtils.getUserId())){
+        if (Objects.isNull(byId) || !byId.getCreateBy().equals(SecurityUtils.getUserId())) {
             throw new RuntimeException(AppHttpCodeEnum.NO_OPERATOR_AUTH.getMsg());
         }
         //逻辑删除评论
         LambdaUpdateWrapper<Comment> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(Comment::getId ,dto.getCommentId())
-                .set(Comment::getDelFlag ,COMMENT_DELETE);
+        wrapper.eq(Comment::getId, dto.getCommentId())
+                .set(Comment::getDelFlag, COMMENT_DELETE);
 
         update(wrapper);
         return ResponseResult.okResult();
@@ -133,26 +139,30 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public ResponseResult showChildCommentById(Long commentId, Integer pageSize, Integer pageNum) {
         //根据commentID获取子评论
         LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Objects.nonNull(commentId) ,Comment::getRootId ,commentId)
+        wrapper.eq(Objects.nonNull(commentId), Comment::getRootId, commentId)
                 .orderByAsc(Comment::getCreateTime);
         //进行分页
-        Page<Comment> commentPage = new Page<>(pageNum ,pageSize);
-        page(commentPage ,wrapper);
+        Page<Comment> commentPage = new Page<>(pageNum, pageSize);
+        page(commentPage, wrapper);
         List<Long> ids = commentPage.getRecords().stream()
-                .map(Comment::getCreateBy)
+                .flatMap(commentVo -> Stream.of(commentVo.getCreateBy(), commentVo.getToCommentUserId()))
+                .distinct()
                 .collect(Collectors.toList());
         //调用feign获取用户信息
         Map<Long, PosterBo> map = userFeignClient.getBatchUserByUserIds(ids).getData();
         //封装vo
-        List<ShowCommentVo> commentVos = new ArrayList<>();
+        List<ShowChildCommentVo> commentVos = new ArrayList<>();
         for (Comment record : commentPage.getRecords()) {
+            //回复者
             PosterBo user = map.get(record.getCreateBy());
-            ShowCommentVo vo = BeanCopyUtils.copyBean(record, ShowCommentVo.class);
+            ShowChildCommentVo vo = BeanCopyUtils.copyBean(record, ShowChildCommentVo.class);
             vo.setAvatar(user.getAvatar());
-            vo.setUsername(user.getUsername());
+            vo.setUsername(user.getUserName());
+            //被回复者
+            vo.setToCommentUserName(map.get(record.getToCommentUserId()).getUserName());
             commentVos.add(vo);
         }
-        return ResponseResult.okResult(new PageVo(commentVos ,commentPage.getTotal()));
+        return ResponseResult.okResult(new PageVo(commentVos, commentPage.getTotal()));
     }
 }
 
