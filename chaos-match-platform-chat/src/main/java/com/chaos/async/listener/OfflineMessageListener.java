@@ -36,6 +36,7 @@ public class OfflineMessageListener implements ApplicationListener<OfflineMessag
     @Async
     @Override
     public void onApplicationEvent(OfflineMessageEvent event) {
+        //获取离线消息的内容
         MessageBo messageBo = event.getOfflineMessage();
         Long sendTo = messageBo.getMessage().getSendTo();
         String userKey = MessageConstants.OFFLINE_MESSAGE_REDIS_KEY + sendTo;

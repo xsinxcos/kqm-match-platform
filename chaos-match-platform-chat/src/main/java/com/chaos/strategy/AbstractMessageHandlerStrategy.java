@@ -62,7 +62,7 @@ public abstract class AbstractMessageHandlerStrategy implements MessageHandlerSt
         if (Objects.nonNull(to)) {
             to.sendMessage(JSON.toJSONString(messageBo));
         }
-        //转为离线消息异步存入Redis，防止消息丢失
+        //转为离线消息异步存入Redis和数据库，防止消息丢失
         messageEventPublisher.publishEvent(new OfflineMessageEvent(messageBo));
     }
 }

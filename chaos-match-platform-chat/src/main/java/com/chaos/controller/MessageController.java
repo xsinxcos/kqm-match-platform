@@ -32,17 +32,18 @@ public class MessageController {
      * @return
      */
     @GetMapping("/history")
-    public ResponseResult showHistoryMessage(Integer pageNum, Integer pageSize, Long userId) {
-        return messageService.showHistoryMessage(pageNum, pageSize, userId);
+    public ResponseResult showHistoryMessage(Integer offset, Integer limit, Long userId) {
+        return messageService.showHistoryMessage(offset, limit, userId);
     }
 
 
     /**
      * 获取用户历史聊天对象
+     *
      * @return
      */
     @GetMapping("/history/user")
-    public ResponseResult showHistoryChatUser(){
+    public ResponseResult showHistoryChatUser() {
         return messageService.showHistoryChatUser();
     }
 

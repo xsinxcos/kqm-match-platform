@@ -7,14 +7,10 @@ import com.chaos.utils.XfGPTUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Getter
@@ -32,7 +28,8 @@ public class XfModelServerListener extends WebSocketListener {
     }
 
     @Override
-    public void onOpen(WebSocket webSocket, Response response) {;
+    public void onOpen(WebSocket webSocket, Response response) {
+        ;
         super.onOpen(webSocket, response);
     }
 
@@ -94,7 +91,7 @@ public class XfModelServerListener extends WebSocketListener {
     }
 
     public void onClosed() {
-        nowWebSocket.close(1000 ,"");
+        nowWebSocket.close(1000, "");
     }
 
 }

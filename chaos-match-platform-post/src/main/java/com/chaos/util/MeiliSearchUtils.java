@@ -60,7 +60,7 @@ public class MeiliSearchUtils {
      */
     public void addDocumentByIndex(Object source, String uid) {
         Index index = client.index(uid);
-        index.addDocuments(JSON.toJSONStringWithDateFormat(source ,"yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
+        index.addDocuments(JSON.toJSONStringWithDateFormat(source, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
     }
 
     /**
@@ -103,7 +103,7 @@ public class MeiliSearchUtils {
 
     public void updateDocumentByIndex(Object source, String uid) {
         Index index = client.index(uid);
-        index.addDocuments(JSON.toJSONStringWithDateFormat(source ,"yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
+        index.addDocuments(JSON.toJSONStringWithDateFormat(source, "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
     }
 
     /**

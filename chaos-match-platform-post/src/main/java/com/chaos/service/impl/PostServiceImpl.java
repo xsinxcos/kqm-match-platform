@@ -104,7 +104,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         //通过MeiliSearch查找
         MeiliSearchUtils.SearchDocumentBo<PostBo> post =
-                postdocByCondArrToList(con.toArray(new String[0][]), listPostDto.getPageSize(), listPostDto.getPageNum() ,q);
+                postdocByCondArrToList(con.toArray(new String[0][]), listPostDto.getPageSize(), listPostDto.getPageNum(), q);
 
         //转化vos
         List<PostListVo> vos = BeanCopyUtils.copyBeanList(post.getData(), PostListVo.class);
@@ -135,7 +135,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         Long userId = SecurityUtils.getUserId();
         //通过MeiliSearch筛选出用户的帖子
         MeiliSearchUtils.SearchDocumentBo<PostBo> documentBo = postdocByCondArrToList(new String[][]{new String[]{"posterId = " + userId}},
-                pageSize, pageNum ,null);
+                pageSize, pageNum, null);
         //获取发帖人信息
         AuthUserBo authUserBo = userFeignClient.getUserById(userId).getData();
         //将帖子与贴主信息进行对应并封装到vo
@@ -297,7 +297,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return ResponseResult.okResult();
     }
 
-    private MeiliSearchUtils.SearchDocumentBo<PostBo> postdocByCondArrToList(String[][] condition, Integer pageSize, Integer pageNum ,String q) {
+    private MeiliSearchUtils.SearchDocumentBo<PostBo> postdocByCondArrToList(String[][] condition, Integer pageSize, Integer pageNum, String q) {
         //筛选出满足条件的doc，根据id排序
         SearchRequest searchRequest = SearchRequest.builder()
                 .q(q)

@@ -36,14 +36,16 @@ public class UserController {
 
     /**
      * 获取其他用户个人信息
+     *
      * @param userId
      * @return
      */
 
     @GetMapping("/userInfoById")
-    public ResponseResult getUserInfoById(@NonNull Long userId){
+    public ResponseResult getUserInfoById(@NonNull Long userId) {
         return authUserService.getUserInfoById(userId);
     }
+
     //todo 注册
     @PostMapping("/register")
     public ResponseResult register() {
