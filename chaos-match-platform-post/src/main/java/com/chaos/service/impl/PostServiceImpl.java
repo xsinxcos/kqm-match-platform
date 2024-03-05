@@ -33,7 +33,6 @@ import com.meilisearch.sdk.SearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.LinkOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -248,6 +247,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .map(o -> meiliSearchUtils.searchDocumentById(POST_INDEX_UID, o.toString(), PostBo.class))
                 .collect(Collectors.toList());
 
+        //截取部分内容
+        postBos.forEach(o -> o.setContent(o.getContent().substring(0 ,LIST_CONTENT_CORP_LENGTH) + "..."));
+
         List<PostListVo> vos = BeanCopyUtils.copyBeanList(postBos, PostListVo.class);
 
         //查询并设置每个帖子贴主的头像及其昵称
@@ -302,6 +304,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResponseResult getMatchRelationByPostId(Long postId) {
+        //获取帖子与用户的关系
         LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Objects.nonNull(postId) ,PostUser::getPostId ,postId)
                 .eq(PostUser::getStatus ,USER_POST_MATCH_STATUS);
@@ -309,16 +312,59 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .map(PostUser::getUserId)
                 .collect(Collectors.toList());
 
+        //获取用户信息
         Map<Long, PosterBo> posterBoMap = userFeignClient.getBatchUserByUserIds(matchedUserIds).getData();
 
         List<MatchedUserVo> matchedUserVos = new ArrayList<>();
 
+        //包装成Vo，并返回
         for(Map.Entry<Long ,PosterBo> posterBoEntry : posterBoMap.entrySet()) {
             MatchedUserVo vo = BeanCopyUtils.copyBean(posterBoEntry, MatchedUserVo.class);
             matchedUserVos.add(vo);
         }
 
         return ResponseResult.okResult(new GetMatchRelationByPostId(matchedUserVos));
+    }
+
+    @Override
+    public ResponseResult cancelMatchByPostId(Long postId) {
+        LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(PostUser::getPostId, postId)
+                .eq(PostUser::getUserId, SecurityUtils.getUserId())
+                .eq(PostUser::getStatus, USER_POST_MATCH_STATUS);
+        postUserService.getBaseMapper().delete(wrapper);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getMeMatchedPost(Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
+        //查询用户收藏的帖子
+        wrapper.eq(PostUser::getUserId, SecurityUtils.getUserId())
+                .eq(PostUser::getStatus, USER_POST_MATCH_STATUS);
+        Page<PostUser> postUserPage = new Page<>(pageNum, pageSize);
+        postUserService.page(postUserPage, wrapper);
+        //查出对应帖子的id
+        List<Long> postIds = postUserPage.getRecords().stream()
+                .map(PostUser::getPostId)
+                .collect(Collectors.toList());
+
+        //分页获取相应的帖子
+        if (postIds.isEmpty()) return ResponseResult.okResult(new PageVo(new ArrayList(), 0L));
+        //通过MeiliSearch查找相应的帖子并封装VO
+        List<PostBo> postBos = postIds.stream()
+                .map(o -> meiliSearchUtils.searchDocumentById(POST_INDEX_UID, o.toString(), PostBo.class))
+                .collect(Collectors.toList());
+
+        //截取post内容的部分内容
+        postBos.forEach(o -> o.setContent(o.getContent().substring(0 ,LIST_CONTENT_CORP_LENGTH) + "..."));
+
+        List<PostListVo> vos = BeanCopyUtils.copyBeanList(postBos, PostListVo.class);
+
+        //查询并设置每个帖子贴主的头像及其昵称
+        setPosterDetail(vos);
+
+        return ResponseResult.okResult(new PageVo(vos, postUserPage.getTotal()));
     }
 
     private MeiliSearchUtils.SearchDocumentBo<PostBo> postdocByCondArrToList(String[][] condition, Integer pageSize, Integer pageNum, String q) {

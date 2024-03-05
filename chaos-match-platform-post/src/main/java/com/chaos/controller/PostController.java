@@ -136,10 +136,38 @@ public class PostController {
         return postService.modifyPostStatus(modifyPostStatusDto);
     }
 
+    /**
+     * 获取帖子所对应的匹配用户
+     * @param postId
+     * @return
+     */
 
     @GetMapping("/matched")
     public ResponseResult getMatchRelationByPostId(Long postId){
         return postService.getMatchRelationByPostId(postId);
     }
 
+
+
+    /**
+     * 用户主动取消匹配状态
+     * @param postId
+     * @return
+     */
+
+    @DeleteMapping("/matched/cancel")
+    public ResponseResult cancelMatchByPostId(Long postId){
+        return postService.cancelMatchByPostId(postId);
+    }
+
+    /**
+     * 用于获取本人的匹配历史
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/getme/matched")
+    public ResponseResult getMeMatchedPost(Integer pageNum ,Integer pageSize){
+        return postService.getMeMatchedPost(pageNum ,pageSize);
+    }
 }

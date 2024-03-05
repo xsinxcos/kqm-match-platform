@@ -38,6 +38,10 @@ public class MatchSuccessMessageListener implements ApplicationListener<MatchSuc
         String key = "USER:" + matchFrom + " invited USER:" + matchTo + "with " + "POST:" + matchPost;
         //进行feign调用持久化消息（帖子与用户匹配关系表）
         List<Long> userIDs = new ArrayList<>();
+
+        userIDs.add(matchFrom);
+        userIDs.add(matchTo);
+
         postFeignClient.addPostUserMatchRelation(
                 new AddPostUserMatchRelationBo(
                         matchPost,

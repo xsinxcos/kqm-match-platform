@@ -39,5 +39,9 @@ public interface PostService extends IService<Post> {
     ResponseResult addPostUserMatchRelation(AddPostUserMatchRelationBo addPostUserMatchRelationBo);
 
     ResponseResult getMatchRelationByPostId(Long postId);
+
+    ResponseResult cancelMatchByPostId(Long postId);
+
+    ResponseResult getMeMatchedPost(Integer pageNum, Integer pageSize);
 }
 
