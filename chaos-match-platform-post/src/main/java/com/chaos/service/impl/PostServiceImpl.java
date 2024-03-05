@@ -13,6 +13,8 @@ import com.chaos.domain.dto.*;
 import com.chaos.domain.entity.Post;
 import com.chaos.domain.entity.PostTag;
 import com.chaos.domain.entity.PostUser;
+import com.chaos.domain.vo.GetMatchRelationByPostId;
+import com.chaos.domain.vo.MatchedUserVo;
 import com.chaos.domain.vo.PostListVo;
 import com.chaos.domain.vo.PostShowVo;
 import com.chaos.feign.UserFeignClient;
@@ -31,6 +33,7 @@ import com.meilisearch.sdk.SearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.LinkOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -295,6 +298,27 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             );
         }
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getMatchRelationByPostId(Long postId) {
+        LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Objects.nonNull(postId) ,PostUser::getPostId ,postId)
+                .eq(PostUser::getStatus ,USER_POST_MATCH_STATUS);
+        List<Long> matchedUserIds = postUserService.list(wrapper).stream()
+                .map(PostUser::getUserId)
+                .collect(Collectors.toList());
+
+        Map<Long, PosterBo> posterBoMap = userFeignClient.getBatchUserByUserIds(matchedUserIds).getData();
+
+        List<MatchedUserVo> matchedUserVos = new ArrayList<>();
+
+        for(Map.Entry<Long ,PosterBo> posterBoEntry : posterBoMap.entrySet()) {
+            MatchedUserVo vo = BeanCopyUtils.copyBean(posterBoEntry, MatchedUserVo.class);
+            matchedUserVos.add(vo);
+        }
+
+        return ResponseResult.okResult(new GetMatchRelationByPostId(matchedUserVos));
     }
 
     private MeiliSearchUtils.SearchDocumentBo<PostBo> postdocByCondArrToList(String[][] condition, Integer pageSize, Integer pageNum, String q) {

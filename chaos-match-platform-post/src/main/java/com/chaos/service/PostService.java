@@ -37,5 +37,7 @@ public interface PostService extends IService<Post> {
     ResponseResult modifyPostStatus(ModifyPostStatusDto modifyPostStatusDto);
 
     ResponseResult addPostUserMatchRelation(AddPostUserMatchRelationBo addPostUserMatchRelationBo);
+
+    ResponseResult getMatchRelationByPostId(Long postId);
 }
 

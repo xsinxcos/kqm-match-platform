@@ -135,4 +135,11 @@ public class PostController {
     public ResponseResult modifyPostStatus(@RequestBody ModifyPostStatusDto modifyPostStatusDto) {
         return postService.modifyPostStatus(modifyPostStatusDto);
     }
+
+
+    @GetMapping("/matched")
+    public ResponseResult getMatchRelationByPostId(Long postId){
+        return postService.getMatchRelationByPostId(postId);
+    }
+
 }
