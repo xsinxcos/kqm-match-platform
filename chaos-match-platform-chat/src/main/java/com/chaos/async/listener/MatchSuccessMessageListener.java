@@ -26,7 +26,7 @@ public class MatchSuccessMessageListener implements ApplicationListener<MatchSuc
     private final RedisCache redisCache;
     private final PostFeignClient postFeignClient;
 
-    @Async
+    @Async("asyncExecutor")
     @Override
     public void onApplicationEvent(MatchSuccessMessageEvent event) {
         MessageBo matchResultMessage = event.getMatchResultMessage();

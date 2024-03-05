@@ -24,7 +24,7 @@ import java.util.Date;
 public class MessageListener implements ApplicationListener<MessageEvent> {
     private final MessageService messageService;
 
-    @Async
+    @Async("asyncExecutor")
     @Override
     public void onApplicationEvent(MessageEvent event) {
         MessageBo messageSend = event.getMessageSend();

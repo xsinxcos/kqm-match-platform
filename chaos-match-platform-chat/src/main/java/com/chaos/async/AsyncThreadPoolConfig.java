@@ -1,5 +1,6 @@
 package com.chaos.async;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 
@@ -32,10 +33,11 @@ public class AsyncThreadPoolConfig {
      * 有界阻塞队列容量上限
      */
     private static final int QUEUE_SIZE = 10000;
+    @Bean("asyncExecutor")
     public Executor asyncThreadPool(){
         ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(
-                Math.max(1 ,CPU_COUNT / 5),
-                CPU_COUNT + 1,
+                Math.max(1, IO_MAX / 5),
+                IO_MAX,
                 KEEP_ALIVE_SECOND,
                 TimeUnit.SECONDS,
                 new LinkedBlockingDeque<>(QUEUE_SIZE),

@@ -33,7 +33,7 @@ public class OfflineMessageListener implements ApplicationListener<OfflineMessag
      *
      * @param event 离线消息
      */
-    @Async
+    @Async("asyncExecutor")
     @Override
     public void onApplicationEvent(OfflineMessageEvent event) {
         //获取离线消息的内容

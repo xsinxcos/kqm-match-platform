@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class MatchFailMessageListener implements ApplicationListener<MatchFailMessageEvent> {
     private final RedisCache redisCache;
 
-    @Async
+    @Async("asyncExecutor")
     @Override
     public void onApplicationEvent(MatchFailMessageEvent event) {
         MessageBo matchResultMessage = event.getMatchResultMessage();

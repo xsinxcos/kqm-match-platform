@@ -24,7 +24,7 @@ public class MatchRequestMessageListener implements ApplicationListener<MatchReq
     //匹配消息有效
     private final Integer MATCH_EXPIRED_TIME = 60 * 60 * 24 * 3;
 
-    @Async
+    @Async("asyncExecutor")
     @Override
     public void onApplicationEvent(MatchRequestMessageEvent event) {
         MessageBo matchMessage = event.getMatchMessage();
