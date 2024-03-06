@@ -2,14 +2,14 @@ package com.chaos.controller;
 
 import com.chaos.bo.WxLoginUserDetailBo;
 import com.chaos.constant.AppHttpCodeEnum;
+import com.chaos.entity.vo.PasswordLoginVo;
+import com.chaos.exception.SystemException;
 import com.chaos.feign.WeiXinFeignClient;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -36,6 +36,21 @@ public class LoginController {
             ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR);
         }
         return authService.wxlogin(detailBo.getOpenid());
+    }
+
+    /**
+     * 用户名密码登录
+     * @param passwordLoginVo
+     * @return token
+     */
+
+    @PostMapping("/passwordLogin")
+    public ResponseResult passwordLogin(@RequestBody PasswordLoginVo passwordLoginVo){
+        if(!StringUtils.hasText(passwordLoginVo.getUid())){
+            //提示 必须要传UID
+            throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
+        }
+        return authService.passwordLogin(passwordLoginVo);
     }
 
     /**

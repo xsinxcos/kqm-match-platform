@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AuthParam {
+    //UID
+    private Long uid;
     //用户名
     private String username;
     //密码

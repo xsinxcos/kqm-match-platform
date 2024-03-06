@@ -1,5 +1,6 @@
 package com.chaos.service;
 
+import com.chaos.entity.vo.PasswordLoginVo;
 import com.chaos.response.ResponseResult;
 
 
@@ -16,5 +17,7 @@ public interface AuthService {
     ResponseResult logout();
 
     ResponseResult refreshAccessToken(String refreshToken);
+
+    ResponseResult passwordLogin(PasswordLoginVo passwordLoginVo);
 }
 

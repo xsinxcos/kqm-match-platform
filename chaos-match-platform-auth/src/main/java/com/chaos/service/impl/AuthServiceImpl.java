@@ -5,6 +5,7 @@ import com.chaos.constant.LoginConstant;
 import com.chaos.entity.AuthParam;
 import com.chaos.entity.LoginUser;
 import com.chaos.entity.TokenInfo;
+import com.chaos.entity.vo.PasswordLoginVo;
 import com.chaos.enums.GrantTypeEnum;
 import com.chaos.factory.AuthFactory;
 import com.chaos.feign.UserFeignClient;
@@ -80,6 +81,21 @@ public class AuthServiceImpl implements AuthService {
         redisCache.expire(LoginConstant.USER_REDIS_PREFIX + userId,
                 LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
         TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
+        return ResponseResult.okResult(tokenInfo);
+    }
+
+    @Override
+    public ResponseResult passwordLogin(PasswordLoginVo passwordLoginVo) {
+        //包装成统一登录类型
+        AuthParam authParam = AuthParam.builder()
+                .uid(Long.valueOf(passwordLoginVo.getUid()))
+                .password(passwordLoginVo.getPassword())
+                .build();
+        //找到相应策略的类型
+        String grantType = GrantTypeEnum.getValueByType("password");
+        AuthGranterStrategy granterStrategy = authFactory.getGranter(grantType);
+        //调用策略
+        TokenInfo tokenInfo = granterStrategy.grant(authParam);
         return ResponseResult.okResult(tokenInfo);
     }
 }

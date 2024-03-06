@@ -16,7 +16,7 @@ public enum AppHttpCodeEnum {
     FILE_TYPE_ERROR(502, "文件类型错误"),
     MESSAGE_SEND_FAIL(505, "消息发送失败"),
     ERROR(500, "操作失败"),
-    CONTENT_NOT_NULL(504, "评论内容不能为空");
+    CONTENT_NOT_NULL(504, "评论内容不能为空"),REQUIRE_USERNAME(506, "必需填写用户名");
 
     int code;
     String msg;

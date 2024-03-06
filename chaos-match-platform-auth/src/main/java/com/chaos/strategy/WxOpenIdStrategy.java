@@ -13,6 +13,10 @@ import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +40,8 @@ public class WxOpenIdStrategy extends AbstractAuthGranter {
         if (Objects.isNull(authUserBo)) {
             authUserBo = new AuthUserBo();
             authUserBo.setOpenid(openid);
+            //随机生成密码
+            authUserBo.setPassword(createRandomPassword());
             authUserBo = userFeignClient.addUserByOpenId(openid).getData();
         }
         //根据openID 生成token
@@ -47,5 +53,30 @@ public class WxOpenIdStrategy extends AbstractAuthGranter {
         redisCache.setCacheObject(LoginConstant.USER_REDIS_PREFIX + userid, JSON.toJSONString(loginUser),
                 LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
         return tokenInfo;
+    }
+
+    private String createRandomPassword() {
+        try {
+            // 获取当前日期
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date = sdf.format(new Date());
+
+            // 使用SHA-256算法加密日期
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(date.getBytes());
+
+            // 将加密结果转换为十六进制字符串
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+            String encryptedDate = sb.toString();
+
+            // 输出加密结果的前8个字符
+            return encryptedDate.substring(0, 8);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("注册失败");
+        }
+
     }
 }

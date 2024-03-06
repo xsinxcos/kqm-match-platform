@@ -1,5 +1,6 @@
 package com.chaos.controller;
 
+import com.chaos.annotation.AuthAdminCheck;
 import com.chaos.domain.dto.AddCommentDto;
 import com.chaos.domain.dto.DeleteCommentDto;
 import com.chaos.response.ResponseResult;
