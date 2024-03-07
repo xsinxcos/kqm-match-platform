@@ -37,9 +37,8 @@ public class LoginController {
         }
         return authService.wxlogin(detailBo.getOpenid());
     }
-
     /**
-     * 用户名密码登录
+     * UID密码登录
      * @param passwordLoginVo
      * @return token
      */

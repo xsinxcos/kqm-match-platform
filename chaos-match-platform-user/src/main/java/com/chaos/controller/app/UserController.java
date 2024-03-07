@@ -1,4 +1,4 @@
-package com.chaos.controller;
+package com.chaos.controller.app;
 
 import com.chaos.model.dto.UserInfoDto;
 import com.chaos.response.ResponseResult;

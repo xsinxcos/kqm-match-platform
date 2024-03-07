@@ -21,7 +21,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //根据用户名查询用户信息
-        AuthUserBo user = userFeignClient.getUserByUsername(username).getData();
+        AuthUserBo user = userFeignClient.getUserById(Long.valueOf(username)).getData();
         //判断是否查到用户，如果没有查到抛出异常
         if (Objects.isNull(user)) {
             throw new RuntimeException("用户不存在");

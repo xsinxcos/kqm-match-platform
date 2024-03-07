@@ -40,10 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
                 .antMatchers("/auth/wxLogin").anonymous()
+                .antMatchers("/auth/passwordLogin").anonymous()
                 .antMatchers("/auth/refresh").anonymous()
                 .antMatchers("/feign/*").anonymous()
-                .antMatchers("/tag/list").anonymous()
-                .antMatchers("/post/list/**").anonymous()
+                .antMatchers("/tag/list").permitAll()
+                .antMatchers("/post/list/**").permitAll()
                 .antMatchers("/comment/list").anonymous()
                 .antMatchers("/comment/get").anonymous()
                 // 除上面外的所有请求全部需要认证即可访问

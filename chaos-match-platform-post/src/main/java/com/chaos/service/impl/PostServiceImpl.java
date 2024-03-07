@@ -17,6 +17,7 @@ import com.chaos.domain.vo.GetMatchRelationByPostId;
 import com.chaos.domain.vo.MatchedUserVo;
 import com.chaos.domain.vo.PostListVo;
 import com.chaos.domain.vo.PostShowVo;
+import com.chaos.entity.User;
 import com.chaos.feign.UserFeignClient;
 import com.chaos.feign.bo.AddPostUserMatchRelationBo;
 import com.chaos.feign.bo.AuthUserBo;
@@ -127,7 +128,19 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         postShowVo.setTags(byId.getTags());
         postShowVo.setPosterUsername(authUserBo.getUserName());
         postShowVo.setPosterAvatar(authUserBo.getAvatar());
-
+        postShowVo.setIsKeep(false);
+        //若登录则获取用户信息
+        User user = SecurityUtils.getLoginUser().getUser();
+        if(Objects.nonNull(user)){
+            //查询用户是否收藏
+            LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(PostUser::getPostId ,postId)
+                    .eq(PostUser::getUserId ,user.getId())
+                    .eq(PostUser::getStatus ,FAVORITE_STATUS);
+            PostUser one = postUserService.getOne(wrapper);
+            //若收藏则将vo中isKeep修改成true
+            if(Objects.nonNull(one)) postShowVo.setIsKeep(true);
+        }
         return ResponseResult.okResult(postShowVo);
     }
 

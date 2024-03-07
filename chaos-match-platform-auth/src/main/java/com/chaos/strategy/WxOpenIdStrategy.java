@@ -77,6 +77,5 @@ public class WxOpenIdStrategy extends AbstractAuthGranter {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("注册失败");
         }
-
     }
 }

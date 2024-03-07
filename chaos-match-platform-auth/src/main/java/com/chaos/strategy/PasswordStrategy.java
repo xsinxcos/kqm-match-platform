@@ -11,8 +11,12 @@ import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -27,14 +31,18 @@ public class PasswordStrategy extends AbstractAuthGranter {
     private final UserFeignClient userFeignClient;
 
     private final RedisCache redisCache;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public TokenInfo grant(AuthParam authParam) {
-        //根据username获取信息
-        AuthUserBo authUserBo = userFeignClient.getUserByUsername(authParam.getUsername()).getData();
-        Optional.ofNullable(authUserBo).orElseThrow(() -> new RuntimeException("账号不存在"));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authParam.getUid().toString(), authParam.getPassword());
+        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        //判断是否认证通过
+        if(Objects.isNull(authenticate)){
+            throw new RuntimeException("密码错误");
+        }
         //根据userId生成token
-        LoginUser loginUser = new LoginUser(BeanCopyUtils.copyBean(authUserBo, User.class));
+        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         long userid = loginUser.getUser().getId();
         //生成TokenInfo
         TokenInfo tokenInfo = createTokenInfoByUserId(String.valueOf(userid));

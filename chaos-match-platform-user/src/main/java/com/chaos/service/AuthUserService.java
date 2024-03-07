@@ -19,5 +19,7 @@ public interface AuthUserService extends IService<AuthUser> {
     ResponseResult updateUserInfo(UserInfoDto userInfoDto);
 
     ResponseResult getUserInfoById(Long userId);
+
+    ResponseResult resetPasswordById(String uid);
 }
 

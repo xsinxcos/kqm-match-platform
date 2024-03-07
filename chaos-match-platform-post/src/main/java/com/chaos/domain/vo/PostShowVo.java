@@ -44,4 +44,6 @@ public class PostShowVo {
     private Integer status;
     //帖子的标签
     private List<TagBo> tags;
+    //用户是否收藏
+    private Boolean isKeep;
 }
