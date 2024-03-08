@@ -18,6 +18,10 @@ public interface AuthService {
 
     ResponseResult refreshAccessToken(String refreshToken);
 
-    ResponseResult passwordLogin(PasswordLoginVo passwordLoginVo);
+    ResponseResult adminPasswordLogin(PasswordLoginVo passwordLoginVo);
+
+    ResponseResult adminLogout();
+
+    ResponseResult adminRefreshAccessToken(String refreshToken);
 }
 

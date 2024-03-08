@@ -1,4 +1,4 @@
-package com.chaos.strategy;
+package com.chaos.strategy.app;
 
 import com.alibaba.fastjson.JSON;
 import com.chaos.constant.LoginConstant;
@@ -8,6 +8,7 @@ import com.chaos.entity.TokenInfo;
 import com.chaos.entity.User;
 import com.chaos.feign.UserFeignClient;
 import com.chaos.feign.bo.AuthUserBo;
+import com.chaos.strategy.AbstractAuthGranter;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +49,7 @@ public class WxOpenIdStrategy extends AbstractAuthGranter {
         LoginUser loginUser = new LoginUser(BeanCopyUtils.copyBean(authUserBo, User.class));
         long userid = loginUser.getUser().getId();
         //生成TokenInfo
-        TokenInfo tokenInfo = createTokenInfoByUserId(String.valueOf(userid));
+        TokenInfo tokenInfo = createAppTokenInfoByUserId(String.valueOf(userid));
         //将用户信息存入redis
         redisCache.setCacheObject(LoginConstant.USER_REDIS_PREFIX + userid, JSON.toJSONString(loginUser),
                 LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);

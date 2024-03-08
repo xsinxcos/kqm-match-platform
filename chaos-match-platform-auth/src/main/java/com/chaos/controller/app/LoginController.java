@@ -1,4 +1,4 @@
-package com.chaos.controller;
+package com.chaos.controller.app;
 
 import com.chaos.bo.WxLoginUserDetailBo;
 import com.chaos.constant.AppHttpCodeEnum;
@@ -37,20 +37,7 @@ public class LoginController {
         }
         return authService.wxlogin(detailBo.getOpenid());
     }
-    /**
-     * UID密码登录
-     * @param passwordLoginVo
-     * @return token
-     */
 
-    @PostMapping("/passwordLogin")
-    public ResponseResult passwordLogin(@RequestBody PasswordLoginVo passwordLoginVo){
-        if(!StringUtils.hasText(passwordLoginVo.getUid())){
-            //提示 必须要传UID
-            throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
-        }
-        return authService.passwordLogin(passwordLoginVo);
-    }
 
     /**
      * 退出登录

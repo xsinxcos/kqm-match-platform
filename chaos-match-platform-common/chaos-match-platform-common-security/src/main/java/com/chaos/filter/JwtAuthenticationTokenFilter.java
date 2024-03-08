@@ -49,10 +49,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             WebUtils.renderString(response, JSON.toJSONString(result));
             return;
         }
-        String userId = claims.getSubject();
+        String userKey = claims.getSubject();
         //从redis中获取用户信息
         LoginUser loginUser = JSON.parseObject(redisCache.getCacheObject(
-                LoginConstant.USER_REDIS_PREFIX + userId), LoginUser.class);
+                userKey), LoginUser.class);
         //如果获取不到
         if (Objects.isNull(loginUser)) {
             //说明登录过期  提示重新登录

@@ -79,18 +79,6 @@ services:
     networks:
       - KQM
 
-  zinc:
-    image: public.ecr.aws/zinclabs/zinc:latest
-    container_name: zinc
-    restart: unless-stopped
-    ports:
-      - 4080:4080
-    volumes:
-      - ./data:/data
-    environment:
-      - ZINC_DATA_PATH="/data"
-      - ZINC_FIRST_ADMIN_USER=admin
-      - ZINC_FIRST_ADMIN_PASSWORD=Complexpass#123
 
 networks:
   KQM:

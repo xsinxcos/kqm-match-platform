@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
                 .openid(openid)
                 .build();
         //找到相应策略的类型
-        String grantType = GrantTypeEnum.getValueByType("openId");
+        String grantType = GrantTypeEnum.getValueByType("app_openId");
         AuthGranterStrategy granterStrategy = authFactory.getGranter(grantType);
         //调用策略
         TokenInfo tokenInfo = granterStrategy.grant(authParam);
@@ -74,28 +74,60 @@ public class AuthServiceImpl implements AuthService {
             //refreshToken超时重新登录
             return ResponseResult.errorResult(AppHttpCodeEnum.TOKEN_REFRESH_FAIL);
         }
-        String userId = claims.getSubject();
+        String userKey = claims.getSubject();
         //利用userId重新生成access_token 和 refresh_token
-        String accessToken = JwtUtil.createShortToken(userId);
-        refreshToken = JwtUtil.createLongToken(userId);
-        redisCache.expire(LoginConstant.USER_REDIS_PREFIX + userId,
+        String accessToken = JwtUtil.createShortToken(userKey);
+        refreshToken = JwtUtil.createLongToken(userKey);
+        redisCache.expire(userKey,
                 LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
         TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
         return ResponseResult.okResult(tokenInfo);
     }
 
     @Override
-    public ResponseResult passwordLogin(PasswordLoginVo passwordLoginVo) {
+    public ResponseResult adminPasswordLogin(PasswordLoginVo passwordLoginVo) {
         //包装成统一登录类型
         AuthParam authParam = AuthParam.builder()
                 .uid(Long.valueOf(passwordLoginVo.getUid()))
                 .password(passwordLoginVo.getPassword())
                 .build();
         //找到相应策略的类型
-        String grantType = GrantTypeEnum.getValueByType("password");
+        String grantType = GrantTypeEnum.getValueByType("admin_password");
         AuthGranterStrategy granterStrategy = authFactory.getGranter(grantType);
         //调用策略
         TokenInfo tokenInfo = granterStrategy.grant(authParam);
+        return ResponseResult.okResult(tokenInfo);
+    }
+
+    @Override
+    public ResponseResult adminLogout() {
+        //获取token 解析获取userId
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        //获取userId
+        long userid = loginUser.getUser().getId();
+        //删除redis中的用户信息
+        redisCache.deleteObject(LoginConstant.ADMIN_REDIS_PREFIX + userid);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult adminRefreshAccessToken(String refreshToken) {
+        Claims claims = null;
+        //解析获取userId用于续签
+        try {
+            claims = JwtUtil.parseLongToken(refreshToken);
+        } catch (Exception e) {
+            //refreshToken超时重新登录
+            return ResponseResult.errorResult(AppHttpCodeEnum.TOKEN_REFRESH_FAIL);
+        }
+        String userKey = claims.getSubject();
+        //利用userId重新生成access_token 和 refresh_token
+        String accessToken = JwtUtil.createShortToken(userKey);
+        refreshToken = JwtUtil.createLongToken(userKey);
+        redisCache.expire(userKey,
+                LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
+        TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
         return ResponseResult.okResult(tokenInfo);
     }
 }

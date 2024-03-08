@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @create: 2024-03-07 17:11
  **/
 @RestController
-@RequestMapping("/manage")
+@RequestMapping("/user/manage")
 @RequiredArgsConstructor
 public class AdminUserController {
     private final AuthUserService authUserService;
