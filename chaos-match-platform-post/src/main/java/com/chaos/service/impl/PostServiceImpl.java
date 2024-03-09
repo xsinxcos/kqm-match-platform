@@ -34,6 +34,7 @@ import com.chaos.util.SecurityUtils;
 import com.meilisearch.sdk.SearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -66,6 +67,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     private final MeiliSearchUtils meiliSearchUtils;
 
     @Override
+    @Transactional
     public ResponseResult addPost(AddPostDto addPostDto) {
         Post post = BeanCopyUtils.copyBean(addPostDto, Post.class);
         post.setPosterId(SecurityUtils.getUserId());
@@ -165,6 +167,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
+    @Transactional
     public ResponseResult modifyMyPost(ModifyMyPostDto modifyMyPostDto) {
         Post byId = getById(modifyMyPostDto.getId());
         //检验帖子是否属于该用户
@@ -205,6 +208,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
+    @Transactional
     public ResponseResult deleteMyPost(String id) {
         //检查帖子所属人
         Post byId = getById(id);
@@ -216,6 +220,11 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .set(Post::getDelFlag, POST_DELETE);
 
         update(wrapper);
+
+        //删除帖子与用户的一切关系
+        LambdaQueryWrapper<PostUser> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(PostUser::getPostId ,id);
+        postUserService.getBaseMapper().delete(wrapper1);
 
         //删除相应的document
         meiliSearchUtils.deleteDocumentByIndex("post", byId.getId().toString());
@@ -263,7 +272,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .collect(Collectors.toList());
 
         //截取部分内容
-        postBos.forEach(o -> o.setContent(o.getContent().substring(0 ,LIST_CONTENT_CORP_LENGTH) + "..."));
+        postBos.forEach(o -> o.setContent(o.getContent().substring(0 ,
+                Math.min(o.getContent().length() ,LIST_CONTENT_CORP_LENGTH)) + "..."));
 
         List<PostListVo> vos = BeanCopyUtils.copyBeanList(postBos, PostListVo.class);
 
