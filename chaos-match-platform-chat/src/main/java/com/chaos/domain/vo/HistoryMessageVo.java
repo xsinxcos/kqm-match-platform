@@ -15,6 +15,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoryMessageVo {
+    //uuid
+    private Long uuid;
     //消息内容
     private String content;
     //发送者

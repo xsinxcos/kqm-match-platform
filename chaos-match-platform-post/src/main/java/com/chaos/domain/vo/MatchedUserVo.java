@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MatchedUserVo {
+    private Long id;
     private String userName;
-    private Integer sex;
     private String avatar;
 }
