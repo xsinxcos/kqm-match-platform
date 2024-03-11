@@ -29,4 +29,10 @@ public class AdminUserController {
     public ResponseResult resetPassword(String uid){
         return authUserService.resetPasswordById(uid);
     }
+
+    @AuthAdminCheck
+    @PostMapping("userList")
+    public ResponseResult userList(Integer pageSize ,Integer pageNum){
+        return authUserService.userList(pageSize ,pageNum);
+    }
 }

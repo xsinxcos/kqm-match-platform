@@ -1,6 +1,9 @@
 package com.chaos.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chaos.config.vo.PageVo;
 import com.chaos.mapper.AuthUserMapper;
 import com.chaos.model.dto.UserInfoDto;
 import com.chaos.model.entity.AuthUser;
@@ -74,6 +77,15 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         map.put("resetPassword" ,randomPassword);
 
         return ResponseResult.okResult(map);
+    }
+
+    @Override
+    public ResponseResult userList(Integer pageSize, Integer pageNum) {
+        LambdaQueryWrapper<AuthUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByAsc(AuthUser::getId);
+        Page<AuthUser> page = new Page<>(pageNum, pageSize);
+        page(page ,wrapper);
+        return ResponseResult.okResult(new PageVo(page.getRecords() ,page.getTotal()));
     }
 
 
