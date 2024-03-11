@@ -32,6 +32,7 @@ import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.MeiliSearchUtils;
 import com.chaos.util.SecurityUtils;
 import com.meilisearch.sdk.SearchRequest;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,6 +116,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         //转化vos
         List<PostListVo> vos = BeanCopyUtils.copyBeanList(post.getData(), PostListVo.class);
 
+        //截取文字，但保留图片
+        vos.forEach(o -> o.setContent(OmitContentKeepPic(o.getContent())));
+
         //查询每个帖子贴主的头像及其昵称
         setPosterDetail(vos);
         return ResponseResult.okResult(new PageVo(vos, (long) post.getTotal()));
@@ -160,6 +164,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         //将帖子与贴主信息进行对应并封装到vo
         List<PostListVo> vos = BeanCopyUtils.copyBeanList(documentBo.getData(), PostListVo.class);
         vos.forEach(o -> {
+            o.setContent(omitContent(o.getContent()));
             o.setPosterUsername(authUserBo.getUserName());
             o.setPosterAvatar(authUserBo.getAvatar());
         });
@@ -272,8 +277,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .collect(Collectors.toList());
 
         //截取部分内容
-        postBos.forEach(o -> o.setContent(o.getContent().substring(0 ,
-                Math.min(o.getContent().length() ,LIST_CONTENT_CORP_LENGTH)) + "..."));
+        postBos.forEach(o -> o.setContent(omitContent(o.getContent())));
 
         List<PostListVo> vos = BeanCopyUtils.copyBeanList(postBos, PostListVo.class);
 
@@ -344,7 +348,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         //包装成Vo，并返回
         for(Map.Entry<Long ,PosterBo> posterBoEntry : posterBoMap.entrySet()) {
-            MatchedUserVo vo = BeanCopyUtils.copyBean(posterBoEntry, MatchedUserVo.class);
+            MatchedUserVo vo = BeanCopyUtils.copyBean(posterBoEntry.getValue(), MatchedUserVo.class);
             matchedUserVos.add(vo);
         }
 
@@ -382,7 +386,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .collect(Collectors.toList());
 
         //截取post内容的部分内容
-        postBos.forEach(o -> o.setContent(o.getContent().substring(0 ,LIST_CONTENT_CORP_LENGTH) + "..."));
+        postBos.forEach(o -> o.setContent(omitContent(o.getContent())));
 
         List<PostListVo> vos = BeanCopyUtils.copyBeanList(postBos, PostListVo.class);
 
@@ -398,8 +402,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .q(q)
                 .filterArray(condition)
                 .sort(new String[]{"id:desc"})
-                .attributesToCrop(new String[]{"content"})
-                .cropLength(LIST_CONTENT_CORP_LENGTH)
                 .limit(pageSize)
                 .offset((pageNum - 1) * pageSize)
                 .build();
@@ -407,6 +409,21 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return meiliSearchUtils.searchDocumentArrByIndex(POST_INDEX_UID, searchRequest, PostBo.class);
     }
 
+    //截取文章部分内容并且不省略图片链接
+    private String OmitContentKeepPic(@NonNull String content){
+        String[] split = content.split("\\*\\*/img/\\*\\*");
+        if(split.length == 1){
+            return omitContent(split[0]);
+        }else if(split.length == 0)
+            return "";
+        String s = omitContent(split[0]);
+        return s + "**/img/**" + split[1];
+    }
 
+    //截取文章部分内容
+    private String omitContent(@NonNull String content){
+        return content.substring(0 ,
+                Math.min(content.length() ,LIST_CONTENT_CORP_LENGTH)) + "...";
+    }
 }
 

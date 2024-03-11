@@ -155,8 +155,8 @@ public class PostController {
      * @return
      */
 
-    @DeleteMapping("/matched/cancel")
-    public ResponseResult cancelMatchByPostId(Long postId){
+    @DeleteMapping("/matched/cancel/{postId}")
+    public ResponseResult cancelMatchByPostId(@PathVariable Long postId){
         return postService.cancelMatchByPostId(postId);
     }
 
