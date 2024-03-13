@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @description: 发送消息监听
@@ -29,6 +30,11 @@ public class MessageListener implements ApplicationListener<MessageEvent> {
     public void onApplicationEvent(MessageEvent event) {
         MessageBo messageSend = event.getMessageSend();
         MessageInfo messageInfo = messageSend.getMessage();
+        //如果是匹配消息
+        if(Objects.nonNull(messageInfo.getPostId()) && messageInfo.getPostId() != 0)
+            messageInfo.setContent(messageInfo.getContent() + "**/postId/**" + messageInfo.getPostId());
+
+        //构建message
         Message message = Message.builder()
                 .type(messageSend.getType())
                 .msgTo(messageInfo.getSendTo())
@@ -36,6 +42,7 @@ public class MessageListener implements ApplicationListener<MessageEvent> {
                 .content(messageInfo.getContent())
                 .sendTime(new Date(messageInfo.getTimestamp()))
                 .uuid(messageInfo.getUuid()).build();
+
         //异步实现将数据持久到数据库
         messageService.save(message);
         log.info("发送消息持久化成功");

@@ -50,6 +50,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         user.setUserName(userInfoDto.getUserName());
         user.setAvatar(userInfoDto.getAvatar());
         user.setPhoneNumber(userInfoDto.getPhoneNumber());
+        user.setSex(userInfoDto.getSex());
         updateById(user);
         return ResponseResult.okResult();
     }

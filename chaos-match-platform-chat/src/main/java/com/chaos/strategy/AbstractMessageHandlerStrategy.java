@@ -41,7 +41,7 @@ public abstract class AbstractMessageHandlerStrategy implements MessageHandlerSt
             from.sendMessage(JSON.toJSONString(
                     MessageBo.builder()
                             .type(MessageTypeEnum.MESSAGE_SEND_ACK.getType())
-                            .message(new MessageInfo(null, null, null,
+                            .message(new MessageInfo(messageInfo.getUuid(), null, null,
                                     MessageConstants.MessageStatusConstants.MESSAGE_SEND_SUCCESS, null,
                                     messageInfo.getTimestamp()))
                             .build())

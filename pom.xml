@@ -55,6 +55,7 @@
         <weixin-java-miniapp.version>4.6.0</weixin-java-miniapp.version>
         <hutool.version>5.8.11</hutool.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
+        <mahout.version>0.11.1</mahout.version>
         <!--        <spring-security.version>2.6.11</spring-security.version>-->
     </properties>
     <dependencies>
@@ -212,6 +213,20 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${javax-servlet.version}</version>
             </dependency>
+
+            <!-->推荐算法模型<-->
+            <dependency>
+                <groupId>org.apache.mahout</groupId>
+                <artifactId>mahout-examples</artifactId>
+                <version>${mahout.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.mahout</groupId>
+                <artifactId>mahout</artifactId>
+                <version>${mahout.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
