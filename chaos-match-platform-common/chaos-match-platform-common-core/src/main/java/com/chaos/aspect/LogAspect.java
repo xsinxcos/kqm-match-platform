@@ -53,7 +53,7 @@ public class LogAspect {
         // 打印调用 controller 的全路径以及执行方法
         log.info("Class Method   : {}.{}", joinPoint.getSignature().getDeclaringType(), joinPoint.getSignature().getName());
         // 打印请求的 IP
-        log.info("IP             : {}", request.getRemoteHost());
+        log.info("IP             : {}", request.getHeader("X-Real-IP"));
         // 打印请求入参
         log.info("Request Args   : {}", JSON.toJSON(joinPoint.getArgs()));
     }

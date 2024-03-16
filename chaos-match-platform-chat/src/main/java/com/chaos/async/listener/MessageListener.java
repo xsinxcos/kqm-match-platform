@@ -30,9 +30,6 @@ public class MessageListener implements ApplicationListener<MessageEvent> {
     public void onApplicationEvent(MessageEvent event) {
         MessageBo messageSend = event.getMessageSend();
         MessageInfo messageInfo = messageSend.getMessage();
-        //如果是匹配消息
-        if(Objects.nonNull(messageInfo.getPostId()) && messageInfo.getPostId() != 0)
-            messageInfo.setContent(messageInfo.getContent() + "**/postId/**" + messageInfo.getPostId());
 
         //构建message
         Message message = Message.builder()

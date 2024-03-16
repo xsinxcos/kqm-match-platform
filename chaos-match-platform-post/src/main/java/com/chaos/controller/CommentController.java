@@ -1,6 +1,7 @@
 package com.chaos.controller;
 
 import com.chaos.annotation.AuthAdminCheck;
+import com.chaos.annotation.SystemLog;
 import com.chaos.domain.dto.AddCommentDto;
 import com.chaos.domain.dto.DeleteCommentDto;
 import com.chaos.response.ResponseResult;
@@ -29,6 +30,7 @@ public class CommentController {
      * @return
      */
     @PostMapping("/add")
+    @SystemLog(BusinessName = "addComment")
     public ResponseResult addComment(@RequestBody AddCommentDto addCommentDto) {
         return commentService.addComment(addCommentDto);
     }
@@ -42,6 +44,7 @@ public class CommentController {
      * @return
      */
     @PostMapping("/list")
+    @SystemLog(BusinessName = "listCommentByPostId")
     public ResponseResult listCommentByPostId(Long postId, Integer pageNum, Integer pageSize) {
         return commentService.listCommentByPostId(postId, pageNum, pageSize);
     }
@@ -53,6 +56,7 @@ public class CommentController {
      * @return
      */
     @PostMapping("/delete")
+    @SystemLog(BusinessName = "deleteComment")
     public ResponseResult deleteComment(@RequestBody DeleteCommentDto dto) {
         return commentService.deleteComment(dto);
     }
@@ -66,6 +70,7 @@ public class CommentController {
      * @return
      */
     @PostMapping("/get")
+    @SystemLog(BusinessName = "showChildCommentById")
     public ResponseResult showChildCommentById(Long commentId, Integer pageSize, Integer pageNum) {
         return commentService.showChildCommentById(commentId, pageSize, pageNum);
     }

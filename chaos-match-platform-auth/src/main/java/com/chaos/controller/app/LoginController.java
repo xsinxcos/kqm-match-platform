@@ -1,5 +1,6 @@
 package com.chaos.controller.app;
 
+import com.chaos.annotation.SystemLog;
 import com.chaos.bo.WxLoginUserDetailBo;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.entity.vo.PasswordLoginVo;
@@ -30,6 +31,7 @@ public class LoginController {
      * @return token
      */
     @GetMapping("/wxLogin")
+    @SystemLog(BusinessName = "Wxlogin")
     public ResponseResult wxlogin(String code) {
         WxLoginUserDetailBo detailBo = weiXinFeignClient.wxLoginUserDetail(code).getData();
         if (Objects.isNull(detailBo.getOpenid())) {
@@ -45,6 +47,7 @@ public class LoginController {
      * @return void
      */
     @PostMapping("/logout")
+    @SystemLog(BusinessName = "logout")
     public ResponseResult logout() {
         return authService.logout();
     }
@@ -56,6 +59,7 @@ public class LoginController {
      * @return
      */
     @GetMapping("/refresh")
+    @SystemLog(BusinessName = "refreshToken")
     public ResponseResult refreshToken(HttpServletRequest request) {
         String refreshToken = request.getHeader("refresh_token");
         return authService.refreshAccessToken(refreshToken);

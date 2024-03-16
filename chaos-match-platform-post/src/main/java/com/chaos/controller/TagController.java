@@ -1,6 +1,7 @@
 package com.chaos.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.chaos.annotation.SystemLog;
 import com.chaos.domain.entity.Tag;
 import com.chaos.domain.vo.TagListVo;
 import com.chaos.response.ResponseResult;
@@ -30,6 +31,7 @@ public class TagController {
      * @return
      */
     @GetMapping("/list")
+    @SystemLog(BusinessName = "listTags")
     public ResponseResult listTags() {
         List<Tag> list = tagService.list(new LambdaQueryWrapper<>());
         List<TagListVo> tagListVos = BeanCopyUtils.copyBeanList(list, TagListVo.class);

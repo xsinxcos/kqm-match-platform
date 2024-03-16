@@ -1,5 +1,6 @@
 package com.chaos.controller.admin;
 
+import com.chaos.annotation.SystemLog;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.entity.vo.PasswordLoginVo;
 import com.chaos.exception.SystemException;
@@ -29,6 +30,7 @@ public class AdminLoginController {
      */
 
     @PostMapping("/passwordLogin")
+    @SystemLog(BusinessName = "adminPasswordLogin")
     public ResponseResult adminPasswordLogin(@RequestBody PasswordLoginVo passwordLoginVo){
         if(!StringUtils.hasText(passwordLoginVo.getUid())){
             //提示 必须要传UID
@@ -43,6 +45,7 @@ public class AdminLoginController {
      * @return void
      */
     @PostMapping("/logout")
+    @SystemLog(BusinessName = "adminLogout")
     public ResponseResult adminLogout() {
         return authService.adminLogout();
     }
@@ -55,6 +58,7 @@ public class AdminLoginController {
      * @return
      */
     @GetMapping("/refresh")
+    @SystemLog(BusinessName = "adminRefreshToken")
     public ResponseResult adminRefreshToken(HttpServletRequest request) {
         String refreshToken = request.getHeader("refresh_token");
         return authService.adminRefreshAccessToken(refreshToken);

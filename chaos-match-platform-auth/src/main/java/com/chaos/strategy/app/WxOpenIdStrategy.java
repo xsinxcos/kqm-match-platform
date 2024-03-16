@@ -12,6 +12,7 @@ import com.chaos.strategy.AbstractAuthGranter;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.security.MessageDigest;
@@ -29,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class WxOpenIdStrategy extends AbstractAuthGranter {
+    private final PasswordEncoder passwordEncoder;
 
     private final UserFeignClient userFeignClient;
     private final RedisCache redisCache;
@@ -73,8 +75,8 @@ public class WxOpenIdStrategy extends AbstractAuthGranter {
             }
             String encryptedDate = sb.toString();
 
-            // 输出加密结果的前8个字符
-            return encryptedDate.substring(0, 8);
+            // 输出加密结果的前8个字符，密码进行加密
+            return passwordEncoder.encode(encryptedDate.substring(0, 8));
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("注册失败");
         }

@@ -1,5 +1,6 @@
 package com.chaos.controller;
 
+import com.chaos.annotation.SystemLog;
 import com.chaos.domain.dto.*;
 import com.chaos.domain.entity.Post;
 import com.chaos.response.ResponseResult;
@@ -27,6 +28,7 @@ public class PostController {
      * @return
      */
     @PostMapping("/edit")
+    @SystemLog(BusinessName = "addPost")
     public ResponseResult addPost(@RequestBody AddPostDto addPostDto) {
         return postService.addPost(addPostDto);
     }
@@ -39,6 +41,7 @@ public class PostController {
      * @return
      */
     @PostMapping("/list")
+    @SystemLog(BusinessName = "listPost")
     public ResponseResult listPost(@RequestBody ListPostDto listPostDto) {
         return postService.listPost(listPostDto);
     }
@@ -50,6 +53,7 @@ public class PostController {
      * @return
      */
     @GetMapping("/list/{id}")
+    @SystemLog(BusinessName = "showPost")
     public ResponseResult showPost(@PathVariable Long id) {
         return postService.showPost(id);
     }
@@ -62,6 +66,7 @@ public class PostController {
      * @return
      */
     @GetMapping("/getme")
+    @SystemLog(BusinessName = "getMyPost")
     public ResponseResult getMyPost(Integer pageNum, Integer pageSize) {
         return postService.getMyPost(pageNum, pageSize);
     }
@@ -73,6 +78,7 @@ public class PostController {
      * @return
      */
     @PutMapping("/getme")
+    @SystemLog(BusinessName = "modifyMyPost")
     public ResponseResult modifyMyPost(@RequestBody ModifyMyPostDto modifyMyPostDto) {
         return postService.modifyMyPost(modifyMyPostDto);
     }
@@ -84,6 +90,7 @@ public class PostController {
      * @return
      */
     @DeleteMapping("/getme/{id}")
+    @SystemLog(BusinessName = "deleteMyPost")
     public ResponseResult deleteMyPost(@PathVariable String id) {
         return postService.deleteMyPost(id);
     }
@@ -95,6 +102,7 @@ public class PostController {
      * @return
      */
     @PostMapping("/favorite")
+    @SystemLog(BusinessName = "addFavoritePost")
     public ResponseResult addFavoritePost(@RequestBody AddFavoritePostDto addFavoritePostDto) {
         return postService.addFavoritePost(addFavoritePostDto);
     }
@@ -107,6 +115,7 @@ public class PostController {
      */
 
     @DeleteMapping("/favorite")
+    @SystemLog(BusinessName = "deleteFavoritePost")
     public ResponseResult deleteFavoritePost(@RequestBody DeleteFavoritePostDto dto) {
         Post byId = postService.getById(dto.getId());
         Optional.ofNullable(byId).orElseThrow(() -> (new RuntimeException("操作失败")));
@@ -121,6 +130,7 @@ public class PostController {
      * @return
      */
     @GetMapping("/favorite")
+    @SystemLog(BusinessName = "listFavoritePost")
     public ResponseResult listFavoritePost(Integer pageNum, Integer pageSize) {
         return postService.listFavoritePost(pageNum, pageSize);
     }
@@ -132,6 +142,7 @@ public class PostController {
      * @return
      */
     @PostMapping("/modify")
+    @SystemLog(BusinessName = "modifyPostStatus")
     public ResponseResult modifyPostStatus(@RequestBody ModifyPostStatusDto modifyPostStatusDto) {
         return postService.modifyPostStatus(modifyPostStatusDto);
     }
@@ -143,6 +154,7 @@ public class PostController {
      */
 
     @GetMapping("/matched")
+    @SystemLog(BusinessName = "getMatchRelationByPostId")
     public ResponseResult getMatchRelationByPostId(Long postId){
         return postService.getMatchRelationByPostId(postId);
     }
@@ -156,6 +168,7 @@ public class PostController {
      */
 
     @DeleteMapping("/matched/cancel/{postId}")
+    @SystemLog(BusinessName = "cancelMatchByPostId")
     public ResponseResult cancelMatchByPostId(@PathVariable Long postId){
         return postService.cancelMatchByPostId(postId);
     }
@@ -167,6 +180,7 @@ public class PostController {
      * @return
      */
     @GetMapping("/getme/matched")
+    @SystemLog(BusinessName = "getMeMatchedPost")
     public ResponseResult getMeMatchedPost(Integer pageNum ,Integer pageSize){
         return postService.getMeMatchedPost(pageNum ,pageSize);
     }

@@ -34,6 +34,8 @@ import com.chaos.util.SecurityUtils;
 import com.meilisearch.sdk.SearchRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,7 @@ import java.util.stream.Collectors;
  * @since 2024-02-01 07:56:43
  */
 @Service("postService")
+@Slf4j
 @RequiredArgsConstructor
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
     private static final int FAVORITE_STATUS = 1;
@@ -322,11 +325,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public ResponseResult addPostUserMatchRelation(AddPostUserMatchRelationBo addPostUserMatchRelationBo) {
         for (Long userId : addPostUserMatchRelationBo.getUserIds()) {
-            postUserService.getBaseMapper().insert(new PostUser(
-                    addPostUserMatchRelationBo.getPostId(),
-                    userId,
-                    USER_POST_MATCH_STATUS)
-            );
+            try {
+                postUserService.getBaseMapper().insert(new PostUser(
+                        addPostUserMatchRelationBo.getPostId(),
+                        userId,
+                        USER_POST_MATCH_STATUS)
+                );
+            }catch (Exception e) {
+                log.warn("帖子ID为{}与用户ID{}为的匹配关系不可重复添加", addPostUserMatchRelationBo.getPostId() ,userId);
+            }
         }
         return ResponseResult.okResult();
     }
