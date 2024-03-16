@@ -1,4 +1,4 @@
-package com.chaos.vo.admin;
+package com.chaos.model.dto.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,14 +13,14 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserListVo {
+public class UserListDto {
     @NonNull
     private Integer pageNum;
 
     @NonNull
     private Integer pageSize;
 
-    private Boolean type;
+    private Integer type;
 
     private String userName;
 }

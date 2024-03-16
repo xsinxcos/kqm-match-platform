@@ -6,15 +6,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
 import com.chaos.mapper.AuthUserMapper;
 import com.chaos.model.dto.UserInfoDto;
+import com.chaos.model.vo.admin.UserListVo;
 import com.chaos.model.entity.AuthUser;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
-import com.chaos.vo.UserInfoVo;
-import com.chaos.vo.admin.EditAccessRightsVo;
-import com.chaos.vo.admin.UserListVo;
-import com.chaos.vo.admin.UserStatusChangeVo;
+import com.chaos.model.vo.UserInfoVo;
+import com.chaos.model.dto.admin.EditAccessRightsDto;
+import com.chaos.model.dto.admin.UserListDto;
+import com.chaos.model.dto.admin.UserStatusChangeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -82,31 +83,46 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
     }
 
     @Override
-    public ResponseResult userList(UserListVo userListVo) {
+    public ResponseResult userList(UserListDto userListDto) {
         LambdaQueryWrapper<AuthUser> wrapper = new LambdaQueryWrapper<>();
         //条件筛选
-        wrapper.like(Objects.nonNull(userListVo.getUserName()) ,AuthUser::getUserName ,userListVo.getUserName())
-                .eq(Objects.nonNull(userListVo.getType()) ,AuthUser::getType ,userListVo.getType())
+        wrapper.like(Objects.nonNull(userListDto.getUserName()) ,AuthUser::getUserName ,userListDto.getUserName())
+                .eq(Objects.nonNull(userListDto.getType()) ,AuthUser::getType ,userListDto.getType())
                 .orderByAsc(AuthUser::getId);
         //分页
-        Page<AuthUser> page = new Page<>(userListVo.getPageNum(), userListVo.getPageSize());
+        Page<AuthUser> page = new Page<>(userListDto.getPageNum(), userListDto.getPageSize());
         page(page ,wrapper);
 
-        return ResponseResult.okResult(new PageVo(page.getRecords() ,page.getTotal()));
+        //包装VOS
+        List<UserListVo> vos = new ArrayList<>();
+        for (AuthUser record : page.getRecords()) {
+            UserListVo vo = UserListVo.builder()
+                    .uid(record.getId())
+                    .sex(record.getSex())
+                    .userName(record.getUserName())
+                    .avatar(record.getAvatar())
+                    .type(record.getType())
+                    .phoneNumber(record.getPhoneNumber())
+                    .status(record.getStatus())
+                    .build();
+            vos.add(vo);
+        }
+
+        return ResponseResult.okResult(new PageVo(vos ,page.getTotal()));
     }
 
     @Override
-    public ResponseResult ChangeUserStatus(UserStatusChangeVo userStatusChangeVo) {
-        AuthUser byId = getById(userStatusChangeVo.getUid());
-        byId.setStatus(userStatusChangeVo.getStatus());
+    public ResponseResult ChangeUserStatus(UserStatusChangeDto userStatusChangeDto) {
+        AuthUser byId = getById(userStatusChangeDto.getUid());
+        byId.setStatus(userStatusChangeDto.getStatus());
         updateById(byId);
         return ResponseResult.okResult();
     }
 
     @Override
-    public ResponseResult editAccessRights(EditAccessRightsVo vo) {
-        AuthUser byId = getById(vo.getUid());
-        byId.setType(vo.getType());
+    public ResponseResult editAccessRights(EditAccessRightsDto editAccessRightsDto) {
+        AuthUser byId = getById(editAccessRightsDto.getUid());
+        byId.setType(editAccessRightsDto.getType());
         updateById(byId);
         return ResponseResult.okResult();
     }

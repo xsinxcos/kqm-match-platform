@@ -4,10 +4,10 @@ import com.chaos.annotation.AuthAdminCheck;
 import com.chaos.annotation.SystemLog;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
-import com.chaos.vo.admin.EditAccessRightsVo;
-import com.chaos.vo.admin.ResetPasswordVo;
-import com.chaos.vo.admin.UserListVo;
-import com.chaos.vo.admin.UserStatusChangeVo;
+import com.chaos.model.dto.admin.EditAccessRightsDto;
+import com.chaos.model.dto.admin.ResetPasswordDto;
+import com.chaos.model.dto.admin.UserListDto;
+import com.chaos.model.dto.admin.UserStatusChangeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,50 +27,50 @@ public class AdminUserController {
 
     /**
      * 管理端重置新密码
-     * @param vo
+     * @param dto
      * @return
      */
     @AuthAdminCheck
     @PostMapping("/resetPassword")
     @SystemLog(BusinessName = "resetPassword")
-    public ResponseResult resetPassword(@RequestBody ResetPasswordVo vo){
-        return authUserService.resetPasswordById(vo.getUid());
+    public ResponseResult resetPassword(@RequestBody ResetPasswordDto dto){
+        return authUserService.resetPasswordById(dto.getUid());
     }
 
     /**
      * 根据条件罗列用户
-     * @param userListVo
+     * @param userListDto
      * @return
      */
     @AuthAdminCheck
     @PostMapping("/userList")
     @SystemLog(BusinessName = "userList")
-    public ResponseResult userList(@RequestBody UserListVo userListVo){
-        return authUserService.userList(userListVo);
+    public ResponseResult userList(@RequestBody UserListDto userListDto){
+        return authUserService.userList(userListDto);
     }
 
     /**
      * 修改用户状态
-     * @param userStatusChangeVo
+     * @param userStatusChangeDto
      * @return
      */
     @AuthAdminCheck
     @PostMapping("/status/change")
     @SystemLog(BusinessName = "changeUserStatus")
-    public ResponseResult changeUserStatus(@RequestBody UserStatusChangeVo userStatusChangeVo){
-        return authUserService.ChangeUserStatus(userStatusChangeVo);
+    public ResponseResult changeUserStatus(@RequestBody UserStatusChangeDto userStatusChangeDto){
+        return authUserService.ChangeUserStatus(userStatusChangeDto);
     }
 
     /**
      * 修改管理员权限
-     * @param vo
+     * @param editAccessRightsDto
      * @return
      */
 
     @AuthAdminCheck
     @PostMapping("/user/manage/administrator")
     @SystemLog(BusinessName = "editAccessRights")
-    public ResponseResult editAccessRights(@RequestBody EditAccessRightsVo vo){
-        return authUserService.editAccessRights(vo);
+    public ResponseResult editAccessRights(@RequestBody EditAccessRightsDto editAccessRightsDto){
+        return authUserService.editAccessRights(editAccessRightsDto);
     }
 }

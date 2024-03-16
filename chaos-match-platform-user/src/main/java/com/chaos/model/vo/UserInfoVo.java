@@ -1,4 +1,4 @@
-package com.chaos.vo;
+package com.chaos.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
