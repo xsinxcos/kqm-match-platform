@@ -1,18 +1,17 @@
-package com.chaos.domain.dto;
+package com.chaos.domain.dto.app;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @description:
+ * @description: addFavoritePostDto
  * @author: xsinxcos
- * @create: 2024-02-19 16:40
+ * @create: 2024-02-12 00:06
  **/
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TagDto {
+@Data
+public class AddFavoritePostDto {
     private Long id;
-    private String name;
 }

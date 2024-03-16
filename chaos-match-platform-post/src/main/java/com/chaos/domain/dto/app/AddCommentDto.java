@@ -1,4 +1,4 @@
-package com.chaos.domain.dto;
+package com.chaos.domain.dto.app;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

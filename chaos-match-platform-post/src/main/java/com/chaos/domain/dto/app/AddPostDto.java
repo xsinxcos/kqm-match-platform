@@ -1,4 +1,4 @@
-package com.chaos.domain.dto;
+package com.chaos.domain.dto.app;
 
 import com.chaos.domain.bo.TagBo;
 import com.fasterxml.jackson.annotation.JsonFormat;

@@ -1,7 +1,7 @@
-package com.chaos.controller;
+package com.chaos.controller.app;
 
 import com.chaos.annotation.SystemLog;
-import com.chaos.domain.dto.*;
+import com.chaos.domain.dto.app.*;
 import com.chaos.domain.entity.Post;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.PostService;
@@ -91,7 +91,7 @@ public class PostController {
      */
     @DeleteMapping("/getme/{id}")
     @SystemLog(BusinessName = "deleteMyPost")
-    public ResponseResult deleteMyPost(@PathVariable String id) {
+    public ResponseResult deleteMyPost(@PathVariable Long id) {
         return postService.deleteMyPost(id);
     }
 

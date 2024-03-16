@@ -1,32 +1,26 @@
-package com.chaos.domain.vo;
+package com.chaos.domain.dto.app;
 
 import com.chaos.domain.bo.TagBo;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * @description: PostShowVo
+ * @description: ModifyMyPostDto
  * @author: xsinxcos
- * @create: 2024-02-06 05:31
+ * @create: 2024-02-06 06:46
  **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class PostShowVo {
+public class ModifyMyPostDto {
     private Long id;
-    //贴主ID
-    private Long posterId;
-    //贴主用户名
-    private String posterUsername;
-    //贴主头像
-    private String posterAvatar;
-    //贴子标题
+    //标题
     private String title;
     //帖子内容
     private String content;
@@ -37,13 +31,12 @@ public class PostShowVo {
     //经度
     private String longitude;
     //开始时间
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private Date beginTime;
     //结束时间
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private Date endTime;
-    //状态（0待匹配，1匹配完成）
-    private Integer status;
-    //帖子的标签
+    //标签
+    @NonNull
     private List<TagBo> tags;
-    //用户是否收藏
-    private Boolean isKeep;
 }

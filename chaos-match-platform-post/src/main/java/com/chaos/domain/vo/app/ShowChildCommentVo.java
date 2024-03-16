@@ -1,4 +1,4 @@
-package com.chaos.domain.vo;
+package com.chaos.domain.vo.app;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

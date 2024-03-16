@@ -1,6 +1,5 @@
-package com.chaos.domain.vo;
+package com.chaos.domain.vo.app;
 
-import com.chaos.feign.bo.AuthUserBo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,8 @@
-package com.chaos.controller;
+package com.chaos.controller.app;
 
-import com.chaos.annotation.AuthAdminCheck;
 import com.chaos.annotation.SystemLog;
-import com.chaos.domain.dto.AddCommentDto;
-import com.chaos.domain.dto.DeleteCommentDto;
+import com.chaos.domain.dto.app.AddCommentDto;
+import com.chaos.domain.dto.app.DeleteCommentDto;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.CommentService;
 import lombok.RequiredArgsConstructor;

@@ -1,17 +1,17 @@
-package com.chaos.domain.dto;
+package com.chaos.domain.dto.app;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @description: DeleteCommentDto
+ * @description: DeleteFavoritePostDto
  * @author: xsinxcos
- * @create: 2024-02-16 04:18
+ * @create: 2024-02-12 00:36
  **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeleteCommentDto {
-    private Long commentId;
+public class DeleteFavoritePostDto {
+    private Long id;
 }

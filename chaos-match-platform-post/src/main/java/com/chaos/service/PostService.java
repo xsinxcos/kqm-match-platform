@@ -1,7 +1,9 @@
 package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chaos.domain.dto.*;
+import com.chaos.domain.dto.admin.AdminDeletePostDto;
+import com.chaos.domain.dto.admin.AdminListPostDto;
+import com.chaos.domain.dto.app.*;
 import com.chaos.domain.entity.Post;
 import com.chaos.feign.bo.AddPostUserMatchRelationBo;
 import com.chaos.response.ResponseResult;
@@ -26,7 +28,7 @@ public interface PostService extends IService<Post> {
 
     ResponseResult modifyMyPost(ModifyMyPostDto modifyMyPostDto);
 
-    ResponseResult deleteMyPost(String id);
+    ResponseResult deleteMyPost(Long id);
 
     ResponseResult addFavoritePost(AddFavoritePostDto addFavoritePostDto);
 
@@ -43,5 +45,9 @@ public interface PostService extends IService<Post> {
     ResponseResult cancelMatchByPostId(Long postId);
 
     ResponseResult getMeMatchedPost(Integer pageNum, Integer pageSize);
+
+    ResponseResult adminListPost(AdminListPostDto adminListPostDto);
+
+    ResponseResult adminDeletePost(AdminDeletePostDto adminDeletePostDto);
 }
 

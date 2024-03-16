@@ -1,8 +1,8 @@
 package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chaos.domain.dto.AddCommentDto;
-import com.chaos.domain.dto.DeleteCommentDto;
+import com.chaos.domain.dto.app.AddCommentDto;
+import com.chaos.domain.dto.app.DeleteCommentDto;
 import com.chaos.domain.entity.Comment;
 import com.chaos.response.ResponseResult;
 

@@ -1,17 +1,19 @@
-package com.chaos.domain.dto;
+package com.chaos.domain.vo.app;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @description: addFavoritePostDto
+ * @description:
  * @author: xsinxcos
- * @create: 2024-02-12 00:06
+ * @create: 2024-03-05 21:03
  **/
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class AddFavoritePostDto {
+public class MatchedUserVo {
     private Long id;
+    private String userName;
+    private String avatar;
 }

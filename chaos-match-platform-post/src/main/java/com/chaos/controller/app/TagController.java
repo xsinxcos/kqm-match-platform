@@ -1,9 +1,9 @@
-package com.chaos.controller;
+package com.chaos.controller.app;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chaos.annotation.SystemLog;
 import com.chaos.domain.entity.Tag;
-import com.chaos.domain.vo.TagListVo;
+import com.chaos.domain.vo.app.TagListVo;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.TagService;
 import com.chaos.util.BeanCopyUtils;

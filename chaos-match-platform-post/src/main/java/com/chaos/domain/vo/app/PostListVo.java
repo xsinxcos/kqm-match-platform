@@ -1,4 +1,4 @@
-package com.chaos.domain.vo;
+package com.chaos.domain.vo.app;
 
 import com.chaos.domain.bo.TagBo;
 import lombok.AllArgsConstructor;

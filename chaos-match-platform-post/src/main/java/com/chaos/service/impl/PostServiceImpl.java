@@ -8,15 +8,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.domain.bo.PostBo;
+import com.chaos.domain.bo.SearchPostBo;
 import com.chaos.domain.bo.TagBo;
-import com.chaos.domain.dto.*;
+import com.chaos.domain.dto.admin.AdminDeletePostDto;
+import com.chaos.domain.dto.admin.AdminListPostDto;
+import com.chaos.domain.dto.app.*;
 import com.chaos.domain.entity.Post;
 import com.chaos.domain.entity.PostTag;
 import com.chaos.domain.entity.PostUser;
-import com.chaos.domain.vo.GetMatchRelationByPostId;
-import com.chaos.domain.vo.MatchedUserVo;
-import com.chaos.domain.vo.PostListVo;
-import com.chaos.domain.vo.PostShowVo;
+import com.chaos.domain.vo.app.GetMatchRelationByPostId;
+import com.chaos.domain.vo.app.MatchedUserVo;
+import com.chaos.domain.vo.app.PostListVo;
+import com.chaos.domain.vo.app.PostShowVo;
 import com.chaos.entity.LoginUser;
 import com.chaos.entity.User;
 import com.chaos.feign.UserFeignClient;
@@ -35,7 +38,6 @@ import com.meilisearch.sdk.SearchRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,35 +98,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResponseResult listPost(ListPostDto listPostDto) {
-        //获取筛选条件
-        Long tagId = listPostDto.getTagId();
-        String q = listPostDto.getQ();
-        Date beginTime = listPostDto.getBeginTime();
-        Date endTime = listPostDto.getEndTime();
-
-        //设置筛选条件
-        List<String[]> con = new ArrayList<>();
-        con.add(new String[]{"status = " + POST_STATUS_MATCHING});
-
-        if (Objects.nonNull(tagId) && tagId > 0)
-            con.add(new String[]{"tags.id = " + tagId});
-        if (Objects.nonNull(beginTime) && Objects.nonNull(endTime))
-            con.add(new String[]{"beginTimeStamp >= " + beginTime.getTime() +
-                    " AND " + "endTimeStamp <= " + endTime.getTime()});
-
-        //通过MeiliSearch查找
-        MeiliSearchUtils.SearchDocumentBo<PostBo> post =
-                postdocByCondArrToList(con.toArray(new String[0][]), listPostDto.getPageSize(), listPostDto.getPageNum(), q);
-
-        //转化vos
-        List<PostListVo> vos = BeanCopyUtils.copyBeanList(post.getData(), PostListVo.class);
-
-        //截取文字，但保留图片
-        vos.forEach(o -> o.setContent(OmitContentKeepPic(o.getContent())));
-
-        //查询每个帖子贴主的头像及其昵称
-        setPosterDetail(vos);
-        return ResponseResult.okResult(new PageVo(vos, (long) post.getTotal()));
+        SearchPostBo searchPostBo = BeanCopyUtils.copyBean(listPostDto, SearchPostBo.class);
+        searchPostBo.setStatus(POST_STATUS_MATCH_COMPLETE);
+        return searchPost(searchPostBo);
     }
 
     @Override
@@ -217,25 +193,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     @Transactional
-    public ResponseResult deleteMyPost(String id) {
+    public ResponseResult deleteMyPost(Long id) {
         //检查帖子所属人
         Post byId = getById(id);
         if (Objects.isNull(byId) || !byId.getPosterId().equals(SecurityUtils.getUserId()))
             throw new RuntimeException(AppHttpCodeEnum.NO_OPERATOR_AUTH.getMsg());
-        //删除帖子
-        LambdaUpdateWrapper<Post> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(Post::getId, id)
-                .set(Post::getDelFlag, POST_DELETE);
-
-        update(wrapper);
-
-        //删除帖子与用户的一切关系
-        LambdaQueryWrapper<PostUser> wrapper1 = new LambdaQueryWrapper<>();
-        wrapper1.eq(PostUser::getPostId ,id);
-        postUserService.getBaseMapper().delete(wrapper1);
-
-        //删除相应的document
-        meiliSearchUtils.deleteDocumentByIndex("post", byId.getId().toString());
+        deletePostById(id);
         return ResponseResult.okResult();
     }
 
@@ -403,6 +366,39 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return ResponseResult.okResult(new PageVo(vos, postUserPage.getTotal()));
     }
 
+    @Override
+    public ResponseResult adminListPost(AdminListPostDto adminListPostDto) {
+        SearchPostBo searchPostBo = BeanCopyUtils.copyBean(adminListPostDto, SearchPostBo.class);
+        return searchPost(searchPostBo);
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult adminDeletePost(AdminDeletePostDto adminDeletePostDto) {
+        deletePostById(adminDeletePostDto.getId());
+        return ResponseResult.okResult();
+    }
+
+
+
+    private void deletePostById(Long id){
+        //删除帖子
+        LambdaUpdateWrapper<Post> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Post::getId, id)
+                .set(Post::getDelFlag, POST_DELETE);
+
+        update(wrapper);
+
+        //删除帖子与用户的一切关系
+        LambdaQueryWrapper<PostUser> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(PostUser::getPostId ,id);
+        postUserService.getBaseMapper().delete(wrapper1);
+
+        //删除相应的document
+        meiliSearchUtils.deleteDocumentByIndex("post", id.toString());
+    }
+
+
     private MeiliSearchUtils.SearchDocumentBo<PostBo> postdocByCondArrToList(String[][] condition, Integer pageSize, Integer pageNum, String q) {
         //筛选出满足条件的doc，根据id排序
         SearchRequest searchRequest = SearchRequest.builder()
@@ -431,6 +427,41 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     private String omitContent(@NonNull String content){
         return content.substring(0 ,
                 Math.min(content.length() ,LIST_CONTENT_CORP_LENGTH)) + "...";
+    }
+
+    //搜索帖子
+    private ResponseResult searchPost(SearchPostBo searchPostBo){
+        //获取筛选条件
+        Long tagId = searchPostBo.getTagId();
+        String q = searchPostBo.getQ();
+        Date beginTime = searchPostBo.getBeginTime();
+        Date endTime = searchPostBo.getEndTime();
+        Integer status = searchPostBo.getStatus();
+
+        //设置筛选条件
+        List<String[]> con = new ArrayList<>();
+        con.add(new String[]{"status = " + status});
+
+        if (Objects.nonNull(tagId) && tagId > 0)
+            con.add(new String[]{"tags.id = " + tagId});
+        if (Objects.nonNull(beginTime) && Objects.nonNull(endTime))
+            con.add(new String[]{"beginTimeStamp >= " + beginTime.getTime() +
+                    " AND " + "endTimeStamp <= " + endTime.getTime()});
+
+        //通过MeiliSearch查找
+        MeiliSearchUtils.SearchDocumentBo<PostBo> post =
+                postdocByCondArrToList(con.toArray(new String[0][]), searchPostBo.getPageSize(), searchPostBo.getPageNum(), q);
+
+        //转化vos
+        List<PostListVo> vos = BeanCopyUtils.copyBeanList(post.getData(), PostListVo.class);
+
+        //截取文字，但保留图片
+        vos.forEach(o -> o.setContent(OmitContentKeepPic(o.getContent())));
+
+        //查询每个帖子贴主的头像及其昵称
+        setPosterDetail(vos);
+
+        return ResponseResult.okResult(new PageVo(vos, (long) post.getTotal()));
     }
 }
 
