@@ -38,7 +38,7 @@ public class AuthUser {
     private Integer type;
     //性别 0为未知 1为男 2为女
     private Integer sex;
-    //状态 1:启用 0:禁用
+    //状态 0:启用 1:禁用
     private Integer status;
     //创建者
     @TableField(fill = FieldFill.INSERT)
