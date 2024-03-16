@@ -12,6 +12,9 @@ import com.chaos.service.AuthUserService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
 import com.chaos.vo.UserInfoVo;
+import com.chaos.vo.admin.EditAccessRightsVo;
+import com.chaos.vo.admin.UserListVo;
+import com.chaos.vo.admin.UserStatusChangeVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,9 +22,7 @@ import org.springframework.stereotype.Service;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户表(AuthUser)表服务实现类
@@ -81,12 +82,33 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
     }
 
     @Override
-    public ResponseResult userList(Integer pageSize, Integer pageNum) {
+    public ResponseResult userList(UserListVo userListVo) {
         LambdaQueryWrapper<AuthUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByAsc(AuthUser::getId);
-        Page<AuthUser> page = new Page<>(pageNum, pageSize);
+        //条件筛选
+        wrapper.like(Objects.nonNull(userListVo.getUserName()) ,AuthUser::getUserName ,userListVo.getUserName())
+                .eq(Objects.nonNull(userListVo.getType()) ,AuthUser::getType ,userListVo.getType())
+                .orderByAsc(AuthUser::getId);
+        //分页
+        Page<AuthUser> page = new Page<>(userListVo.getPageNum(), userListVo.getPageSize());
         page(page ,wrapper);
+
         return ResponseResult.okResult(new PageVo(page.getRecords() ,page.getTotal()));
+    }
+
+    @Override
+    public ResponseResult ChangeUserStatus(UserStatusChangeVo userStatusChangeVo) {
+        AuthUser byId = getById(userStatusChangeVo.getUid());
+        byId.setStatus(userStatusChangeVo.getStatus());
+        updateById(byId);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult editAccessRights(EditAccessRightsVo vo) {
+        AuthUser byId = getById(vo.getUid());
+        byId.setType(vo.getType());
+        updateById(byId);
+        return ResponseResult.okResult();
     }
 
 

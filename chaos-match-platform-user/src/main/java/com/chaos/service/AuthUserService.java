@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.chaos.model.dto.UserInfoDto;
 import com.chaos.model.entity.AuthUser;
 import com.chaos.response.ResponseResult;
+import com.chaos.vo.admin.EditAccessRightsVo;
+import com.chaos.vo.admin.UserListVo;
+import com.chaos.vo.admin.UserStatusChangeVo;
 
 
 /**
@@ -22,6 +25,10 @@ public interface AuthUserService extends IService<AuthUser> {
 
     ResponseResult resetPasswordById(String uid);
 
-    ResponseResult userList(Integer pageSize, Integer pageNum);
+    ResponseResult userList(UserListVo userListVo);
+
+    ResponseResult ChangeUserStatus(UserStatusChangeVo userStatusChangeVo);
+
+    ResponseResult editAccessRights(EditAccessRightsVo vo);
 }
 

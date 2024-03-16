@@ -1,5 +1,6 @@
 package com.chaos.controller.app;
 
+import com.chaos.annotation.SystemLog;
 import com.chaos.model.dto.UserInfoDto;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
@@ -19,6 +20,7 @@ public class UserController {
      * @return UserInfoVo
      */
     @GetMapping("/userInfo")
+    @SystemLog(BusinessName = "getUserInfo")
     public ResponseResult getUserInfo() {
         return authUserService.getUserInfo();
     }
@@ -30,6 +32,7 @@ public class UserController {
      * @return
      */
     @PutMapping("/userInfo")
+    @SystemLog(BusinessName = "updateUserInfo")
     public ResponseResult updateUserInfo(@RequestBody UserInfoDto userInfoDto) {
         return authUserService.updateUserInfo(userInfoDto);
     }
@@ -42,12 +45,14 @@ public class UserController {
      */
 
     @GetMapping("/userInfoById")
+    @SystemLog(BusinessName = "getUserInfoById")
     public ResponseResult getUserInfoById(@NonNull Long userId) {
         return authUserService.getUserInfoById(userId);
     }
 
     //todo 注册
     @PostMapping("/register")
+    @SystemLog(BusinessName = "register")
     public ResponseResult register() {
         return ResponseResult.okResult();
     }
