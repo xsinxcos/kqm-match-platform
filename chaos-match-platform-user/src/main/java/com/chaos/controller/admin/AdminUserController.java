@@ -1,6 +1,7 @@
 package com.chaos.controller.admin;
 
 import com.chaos.annotation.AuthAdminCheck;
+import com.chaos.annotation.SystemLog;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
 import com.chaos.vo.admin.EditAccessRightsVo;
@@ -31,6 +32,7 @@ public class AdminUserController {
      */
     @AuthAdminCheck
     @PostMapping("/resetPassword")
+    @SystemLog(BusinessName = "resetPassword")
     public ResponseResult resetPassword(@RequestBody ResetPasswordVo vo){
         return authUserService.resetPasswordById(vo.getUid());
     }
@@ -42,6 +44,7 @@ public class AdminUserController {
      */
     @AuthAdminCheck
     @PostMapping("/userList")
+    @SystemLog(BusinessName = "userList")
     public ResponseResult userList(@RequestBody UserListVo userListVo){
         return authUserService.userList(userListVo);
     }
@@ -53,6 +56,7 @@ public class AdminUserController {
      */
     @AuthAdminCheck
     @PostMapping("/status/change")
+    @SystemLog(BusinessName = "changeUserStatus")
     public ResponseResult changeUserStatus(@RequestBody UserStatusChangeVo userStatusChangeVo){
         return authUserService.ChangeUserStatus(userStatusChangeVo);
     }
@@ -65,6 +69,7 @@ public class AdminUserController {
 
     @AuthAdminCheck
     @PostMapping("/user/manage/administrator")
+    @SystemLog(BusinessName = "editAccessRights")
     public ResponseResult editAccessRights(@RequestBody EditAccessRightsVo vo){
         return authUserService.editAccessRights(vo);
     }
