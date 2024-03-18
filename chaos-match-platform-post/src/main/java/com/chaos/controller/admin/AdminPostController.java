@@ -25,25 +25,27 @@ public class AdminPostController {
 
     /**
      * 管理端罗列帖子
+     *
      * @param adminListPostDto
      * @return
      */
     @AuthAdminCheck
     @PostMapping("/list")
     @SystemLog(BusinessName = "adminListPost")
-    public ResponseResult adminListPost(@RequestBody AdminListPostDto adminListPostDto){
+    public ResponseResult adminListPost(@RequestBody AdminListPostDto adminListPostDto) {
         return postService.adminListPost(adminListPostDto);
     }
 
     /**
      * 管理端删除帖子
+     *
      * @param adminDeletePostDto
      * @return
      */
     @AuthAdminCheck
     @PostMapping("/delete")
     @SystemLog(BusinessName = "adminDeletePost")
-    public ResponseResult adminDeletePost(@RequestBody AdminDeletePostDto adminDeletePostDto){
+    public ResponseResult adminDeletePost(@RequestBody AdminDeletePostDto adminDeletePostDto) {
         return postService.adminDeletePost(adminDeletePostDto);
     }
 }

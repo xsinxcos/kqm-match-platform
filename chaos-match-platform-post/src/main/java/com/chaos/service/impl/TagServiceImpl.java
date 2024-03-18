@@ -1,6 +1,5 @@
 package com.chaos.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.domain.dto.admin.AdminAddTagDto;
@@ -35,11 +34,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     public ResponseResult adminDeleteTag(AdminDeleteTagDto dto) {
         //防御性编程
-        Optional.ofNullable(dto.getId()).orElseThrow(() -> new RuntimeException("TagID不能为空"));
+        Optional.ofNullable(dto.getId()).orElseThrow(() -> new RuntimeException("ID不能为空"));
 
         LambdaUpdateWrapper<Tag> wrapper = new LambdaUpdateWrapper<>();
-        wrapper.eq(Objects.nonNull(dto.getId()) ,Tag::getId ,dto.getId())
-                .set(Tag::getDelFlag ,TAG_DELETE);
+        wrapper.eq(Objects.nonNull(dto.getId()), Tag::getId, dto.getId())
+                .set(Tag::getDelFlag, TAG_DELETE);
         update(wrapper);
         return ResponseResult.okResult();
     }

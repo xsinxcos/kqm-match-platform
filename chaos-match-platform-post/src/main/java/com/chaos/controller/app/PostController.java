@@ -149,39 +149,41 @@ public class PostController {
 
     /**
      * 获取帖子所对应的匹配用户
+     *
      * @param postId
      * @return
      */
 
     @GetMapping("/matched")
     @SystemLog(BusinessName = "getMatchRelationByPostId")
-    public ResponseResult getMatchRelationByPostId(Long postId){
+    public ResponseResult getMatchRelationByPostId(Long postId) {
         return postService.getMatchRelationByPostId(postId);
     }
 
 
-
     /**
      * 用户主动取消匹配状态
+     *
      * @param postId
      * @return
      */
 
     @DeleteMapping("/matched/cancel/{postId}")
     @SystemLog(BusinessName = "cancelMatchByPostId")
-    public ResponseResult cancelMatchByPostId(@PathVariable Long postId){
+    public ResponseResult cancelMatchByPostId(@PathVariable Long postId) {
         return postService.cancelMatchByPostId(postId);
     }
 
     /**
      * 用于获取本人的匹配历史
+     *
      * @param pageNum
      * @param pageSize
      * @return
      */
     @GetMapping("/getme/matched")
     @SystemLog(BusinessName = "getMeMatchedPost")
-    public ResponseResult getMeMatchedPost(Integer pageNum ,Integer pageSize){
-        return postService.getMeMatchedPost(pageNum ,pageSize);
+    public ResponseResult getMeMatchedPost(Integer pageNum, Integer pageSize) {
+        return postService.getMeMatchedPost(pageNum, pageSize);
     }
 }

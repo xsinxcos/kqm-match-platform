@@ -25,13 +25,14 @@ public class AdminTagController {
 
     /**
      * 管理员添加TAG
+     *
      * @param adminAddTagDto
      * @return
      */
     @AuthAdminCheck
     @PostMapping("/add")
     @SystemLog(BusinessName = "adminAddTag")
-    public ResponseResult adminAddTag(@RequestBody AdminAddTagDto adminAddTagDto){
+    public ResponseResult adminAddTag(@RequestBody AdminAddTagDto adminAddTagDto) {
         return tagService.adminAddTag(adminAddTagDto);
     }
 
@@ -39,7 +40,7 @@ public class AdminTagController {
     @AuthAdminCheck
     @PostMapping("/delete")
     @SystemLog(BusinessName = "adminDeleteTag")
-    public ResponseResult adminDeleteTag(@RequestBody AdminDeleteTagDto dto){
+    public ResponseResult adminDeleteTag(@RequestBody AdminDeleteTagDto dto) {
         return tagService.adminDeleteTag(dto);
     }
 

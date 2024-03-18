@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/manage/passwordLogin").anonymous()
                 .antMatchers("/auth/refresh").anonymous()
                 .antMatchers("/auth/manage/refresh").anonymous()
+                .antMatchers("/static/rotatingPic").anonymous()
                 .antMatchers("/feign/*").anonymous()
                 .antMatchers("/tag/list").permitAll()
                 .antMatchers("/post/list/**").permitAll()

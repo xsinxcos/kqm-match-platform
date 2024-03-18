@@ -117,16 +117,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         postShowVo.setIsKeep(false);
         //若登录则获取用户信息
         LoginUser loginUser = SecurityUtils.getLoginUser();
-        if(Objects.nonNull(loginUser)){
+        if (Objects.nonNull(loginUser)) {
             User user = loginUser.getUser();
             //查询用户是否收藏
             LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(PostUser::getPostId ,postId)
-                    .eq(PostUser::getUserId ,user.getId())
-                    .eq(PostUser::getStatus ,FAVORITE_STATUS);
+            wrapper.eq(PostUser::getPostId, postId)
+                    .eq(PostUser::getUserId, user.getId())
+                    .eq(PostUser::getStatus, FAVORITE_STATUS);
             PostUser one = postUserService.getOne(wrapper);
             //若收藏则将vo中isKeep修改成true
-            if(Objects.nonNull(one)) postShowVo.setIsKeep(true);
+            if (Objects.nonNull(one)) postShowVo.setIsKeep(true);
         }
         return ResponseResult.okResult(postShowVo);
     }
@@ -294,8 +294,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                         userId,
                         USER_POST_MATCH_STATUS)
                 );
-            }catch (Exception e) {
-                log.warn("帖子ID为{}与用户ID{}为的匹配关系不可重复添加", addPostUserMatchRelationBo.getPostId() ,userId);
+            } catch (Exception e) {
+                log.warn("帖子ID为{}与用户ID{}为的匹配关系不可重复添加", addPostUserMatchRelationBo.getPostId(), userId);
             }
         }
         return ResponseResult.okResult();
@@ -305,8 +305,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult getMatchRelationByPostId(Long postId) {
         //获取帖子与用户的关系
         LambdaQueryWrapper<PostUser> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Objects.nonNull(postId) ,PostUser::getPostId ,postId)
-                .eq(PostUser::getStatus ,USER_POST_MATCH_STATUS);
+        wrapper.eq(Objects.nonNull(postId), PostUser::getPostId, postId)
+                .eq(PostUser::getStatus, USER_POST_MATCH_STATUS);
         List<Long> matchedUserIds = postUserService.list(wrapper).stream()
                 .map(PostUser::getUserId)
                 .collect(Collectors.toList());
@@ -317,7 +317,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         List<MatchedUserVo> matchedUserVos = new ArrayList<>();
 
         //包装成Vo，并返回
-        for(Map.Entry<Long ,PosterBo> posterBoEntry : posterBoMap.entrySet()) {
+        for (Map.Entry<Long, PosterBo> posterBoEntry : posterBoMap.entrySet()) {
             MatchedUserVo vo = BeanCopyUtils.copyBean(posterBoEntry.getValue(), MatchedUserVo.class);
             matchedUserVos.add(vo);
         }
@@ -380,8 +380,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
 
-
-    private void deletePostById(Long id){
+    private void deletePostById(Long id) {
         //删除帖子
         LambdaUpdateWrapper<Post> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(Post::getId, id)
@@ -391,7 +390,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         //删除帖子与用户的一切关系
         LambdaQueryWrapper<PostUser> wrapper1 = new LambdaQueryWrapper<>();
-        wrapper1.eq(PostUser::getPostId ,id);
+        wrapper1.eq(PostUser::getPostId, id);
         postUserService.getBaseMapper().delete(wrapper1);
 
         //删除相应的document
@@ -413,24 +412,24 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     //截取文章部分内容并且不省略图片链接
-    private String OmitContentKeepPic(@NonNull String content){
+    private String OmitContentKeepPic(@NonNull String content) {
         String[] split = content.split("\\*\\*/img/\\*\\*");
-        if(split.length == 1){
+        if (split.length == 1) {
             return omitContent(split[0]);
-        }else if(split.length == 0)
+        } else if (split.length == 0)
             return "";
         String s = omitContent(split[0]);
         return s + "**/img/**" + split[1];
     }
 
     //截取文章部分内容
-    private String omitContent(@NonNull String content){
-        return content.substring(0 ,
-                Math.min(content.length() ,LIST_CONTENT_CORP_LENGTH)) + "...";
+    private String omitContent(@NonNull String content) {
+        return content.substring(0,
+                Math.min(content.length(), LIST_CONTENT_CORP_LENGTH)) + "...";
     }
 
     //搜索帖子
-    private ResponseResult searchPost(SearchPostBo searchPostBo){
+    private ResponseResult searchPost(SearchPostBo searchPostBo) {
         //获取筛选条件
         Long tagId = searchPostBo.getTagId();
         String q = searchPostBo.getQ();
@@ -440,7 +439,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         //设置筛选条件
         List<String[]> con = new ArrayList<>();
-        if(Objects.nonNull(status)) {
+        if (Objects.nonNull(status)) {
             con.add(new String[]{"status = " + status});
         }
         if (Objects.nonNull(tagId) && tagId > 0)
