@@ -99,7 +99,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public ResponseResult listPost(ListPostDto listPostDto) {
         SearchPostBo searchPostBo = BeanCopyUtils.copyBean(listPostDto, SearchPostBo.class);
-        searchPostBo.setStatus(POST_STATUS_MATCH_COMPLETE);
+        searchPostBo.setStatus(POST_STATUS_MATCHING);
         return searchPost(searchPostBo);
     }
 
@@ -440,8 +440,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         //设置筛选条件
         List<String[]> con = new ArrayList<>();
-        con.add(new String[]{"status = " + status});
-
+        if(Objects.nonNull(status)) {
+            con.add(new String[]{"status = " + status});
+        }
         if (Objects.nonNull(tagId) && tagId > 0)
             con.add(new String[]{"tags.id = " + tagId});
         if (Objects.nonNull(beginTime) && Objects.nonNull(endTime))

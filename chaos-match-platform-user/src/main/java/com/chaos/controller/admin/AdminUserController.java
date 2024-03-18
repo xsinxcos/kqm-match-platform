@@ -68,7 +68,7 @@ public class AdminUserController {
      */
 
     @AuthAdminCheck
-    @PostMapping("/user/manage/administrator")
+    @PostMapping("/administrator")
     @SystemLog(BusinessName = "editAccessRights")
     public ResponseResult editAccessRights(@RequestBody EditAccessRightsDto editAccessRightsDto){
         return authUserService.editAccessRights(editAccessRightsDto);

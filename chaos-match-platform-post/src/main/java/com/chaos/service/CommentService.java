@@ -1,6 +1,7 @@
 package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.chaos.domain.dto.admin.AdminDeleteCommentDto;
 import com.chaos.domain.dto.app.AddCommentDto;
 import com.chaos.domain.dto.app.DeleteCommentDto;
 import com.chaos.domain.entity.Comment;
@@ -22,5 +23,7 @@ public interface CommentService extends IService<Comment> {
     ResponseResult deleteComment(DeleteCommentDto dto);
 
     ResponseResult showChildCommentById(Long commentId, Integer pageSize, Integer pageNum);
+
+    ResponseResult adminDeleteComment(AdminDeleteCommentDto dto);
 }
 

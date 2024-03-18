@@ -58,7 +58,7 @@ public class LoginController {
      * @param request 用于获取请求头中的refresh_token
      * @return
      */
-    @GetMapping("/refresh")
+    @PostMapping("/refresh")
     @SystemLog(BusinessName = "refreshToken")
     public ResponseResult refreshToken(HttpServletRequest request) {
         String refreshToken = request.getHeader("refresh_token");

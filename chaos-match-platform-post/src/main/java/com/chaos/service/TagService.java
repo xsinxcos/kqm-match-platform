@@ -1,7 +1,10 @@
 package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.chaos.domain.dto.admin.AdminAddTagDto;
+import com.chaos.domain.dto.admin.AdminDeleteTagDto;
 import com.chaos.domain.entity.Tag;
+import com.chaos.response.ResponseResult;
 
 
 /**
@@ -12,5 +15,8 @@ import com.chaos.domain.entity.Tag;
  */
 public interface TagService extends IService<Tag> {
 
+    ResponseResult adminAddTag(AdminAddTagDto adminAddTagDto);
+
+    ResponseResult adminDeleteTag(AdminDeleteTagDto dto);
 }
 

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
 import com.chaos.constant.AppHttpCodeEnum;
+import com.chaos.domain.dto.admin.AdminDeleteCommentDto;
 import com.chaos.domain.dto.app.AddCommentDto;
 import com.chaos.domain.dto.app.DeleteCommentDto;
 import com.chaos.domain.entity.Comment;
@@ -163,6 +164,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             commentVos.add(vo);
         }
         return ResponseResult.okResult(new PageVo(commentVos, commentPage.getTotal()));
+    }
+
+    @Override
+    public ResponseResult adminDeleteComment(AdminDeleteCommentDto dto) {
+        //逻辑删除评论
+        LambdaUpdateWrapper<Comment> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(Comment::getId, dto.getCommentId())
+                .set(Comment::getDelFlag, COMMENT_DELETE);
+
+        update(wrapper);
+        return ResponseResult.okResult();
     }
 }
 

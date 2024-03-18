@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/wxLogin").anonymous()
                 .antMatchers("/auth/manage/passwordLogin").anonymous()
                 .antMatchers("/auth/refresh").anonymous()
+                .antMatchers("/auth/manage/refresh").anonymous()
                 .antMatchers("/feign/*").anonymous()
                 .antMatchers("/tag/list").permitAll()
                 .antMatchers("/post/list/**").permitAll()

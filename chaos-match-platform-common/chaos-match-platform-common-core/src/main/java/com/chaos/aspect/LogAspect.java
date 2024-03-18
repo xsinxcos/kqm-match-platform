@@ -13,6 +13,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Aspect
@@ -55,7 +58,10 @@ public class LogAspect {
         // 打印请求的 IP
         log.info("IP             : {}", request.getHeader("X-Real-IP"));
         // 打印请求入参
-        log.info("Request Args   : {}", JSON.toJSON(joinPoint.getArgs()));
+        List<Object> collect = Arrays.stream(joinPoint.getArgs()).filter(o -> !(o instanceof HttpServletRequest))
+                .collect(Collectors.toList());
+
+        log.info("Request Args   : {}", JSON.toJSON(collect));
     }
 
     private SystemLog getSystemLog(ProceedingJoinPoint joinPoint) {

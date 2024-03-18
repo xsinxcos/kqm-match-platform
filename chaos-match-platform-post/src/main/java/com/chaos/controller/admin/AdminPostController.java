@@ -41,8 +41,8 @@ public class AdminPostController {
      * @return
      */
     @AuthAdminCheck
-    @PostMapping("/list")
-    @SystemLog(BusinessName = "adminListPost")
+    @PostMapping("/delete")
+    @SystemLog(BusinessName = "adminDeletePost")
     public ResponseResult adminDeletePost(@RequestBody AdminDeletePostDto adminDeletePostDto){
         return postService.adminDeletePost(adminDeletePostDto);
     }

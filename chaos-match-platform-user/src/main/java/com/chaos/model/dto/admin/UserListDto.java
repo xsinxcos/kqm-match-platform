@@ -23,4 +23,6 @@ public class UserListDto {
     private Integer type;
 
     private String userName;
+
+    private Long uid;
 }

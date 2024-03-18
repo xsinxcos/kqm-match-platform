@@ -88,6 +88,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         //条件筛选
         wrapper.like(Objects.nonNull(userListDto.getUserName()) ,AuthUser::getUserName ,userListDto.getUserName())
                 .eq(Objects.nonNull(userListDto.getType()) ,AuthUser::getType ,userListDto.getType())
+                .eq(Objects.nonNull(userListDto.getUid()) ,AuthUser::getId ,userListDto.getUid())
                 .orderByAsc(AuthUser::getId);
         //分页
         Page<AuthUser> page = new Page<>(userListDto.getPageNum(), userListDto.getPageSize());
