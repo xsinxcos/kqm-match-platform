@@ -24,7 +24,7 @@ public class AdminTagController {
     private final TagService tagService;
 
     /**
-     * 管理员添加TAG
+     * 管理端添加标签
      *
      * @param adminAddTagDto
      * @return
@@ -36,7 +36,11 @@ public class AdminTagController {
         return tagService.adminAddTag(adminAddTagDto);
     }
 
-
+    /**
+     * 管理端删除标签
+     * @param dto
+     * @return
+     */
     @AuthAdminCheck
     @PostMapping("/delete")
     @SystemLog(BusinessName = "adminDeleteTag")
@@ -44,4 +48,14 @@ public class AdminTagController {
         return tagService.adminDeleteTag(dto);
     }
 
+    /**
+     * 统计每种TAG对应的帖子的数量
+     * @return
+     */
+    @AuthAdminCheck
+    @PostMapping("/count")
+    @SystemLog(BusinessName = "adminPostTagCount")
+    public ResponseResult adminPostTagCount(){
+        return tagService.adminPostTagCount();
+    }
 }

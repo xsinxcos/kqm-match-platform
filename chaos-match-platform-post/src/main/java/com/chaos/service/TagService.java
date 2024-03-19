@@ -18,5 +18,7 @@ public interface TagService extends IService<Tag> {
     ResponseResult adminAddTag(AdminAddTagDto adminAddTagDto);
 
     ResponseResult adminDeleteTag(AdminDeleteTagDto dto);
+
+    ResponseResult adminPostTagCount();
 }
 
