@@ -1,0 +1,58 @@
+server:
+  port: 8073
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: UserService
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 5MB
+  datasource:
+    url: jdbc:mysql://localhost:3306/kuangquanmiao
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  feign:
+    client:
+      config:
+        default:
+          loggerLevel: BASIC
+    httpclient:
+      enabled: true
+      max-connections: 200
+      max-connections-per-route: 50
+  rabbitmq:
+    host: host.docker.internal
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+  redis:
+    database: 0
+    host: 172.17.0.6
+    port: 6379
+
+mybatis-plus:
+  configuration:
+    # 日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: delFlag
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: auto
+
+#logging:
+#  level:
+#    com.baomidou: warn
+
+UserService:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #负均衡规则
