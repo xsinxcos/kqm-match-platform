@@ -8,7 +8,7 @@ spring:
       discovery:
         server-addr: localhost:8848
     gateway:
-      globalcors: # 全局的跨域配置
+      global cors: # 全局的跨域配置
         add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
         # options请求 就是一种询问服务器是否浏览器可以跨域的请求
         # 如果每次跨域都有询问服务器是否浏览器可以跨域对性能也是损耗
