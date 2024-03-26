@@ -27,6 +27,7 @@ import com.chaos.feign.bo.AddPostUserMatchRelationBo;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.feign.bo.PosterBo;
 import com.chaos.mapper.PostMapper;
+import com.chaos.model.word.WordFilterDataModel;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.PostService;
 import com.chaos.service.PostTagService;
@@ -72,11 +73,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     private final MeiliSearchUtils meiliSearchUtils;
 
+    private final WordFilterDataModel wordFilterDataModel;
+
     @Override
     @Transactional
     public ResponseResult addPost(AddPostDto addPostDto) {
         Post post = BeanCopyUtils.copyBean(addPostDto, Post.class);
         post.setPosterId(SecurityUtils.getUserId());
+        //对帖子标题和内容进行审查屏蔽
+        post.setTitle(wordFilterDataModel.replaceText(post.getTitle() ,'*'));
+        post.setContent(wordFilterDataModel.replaceText(post.getContent() ,'*'));
         //保存帖子内容
         save(post);
         //保存标签与帖子得对应关系

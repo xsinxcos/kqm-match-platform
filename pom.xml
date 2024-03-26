@@ -55,7 +55,8 @@
         <weixin-java-miniapp.version>4.6.0</weixin-java-miniapp.version>
         <hutool.version>5.8.11</hutool.version>
         <javax-servlet.version>3.1.0</javax-servlet.version>
-        <mahout.version>0.11.1</mahout.version>
+        <mahout.version>0.12.2</mahout.version>
+        <toolgood-words.version>3.0.3.1</toolgood-words.version>
         <!--        <spring-security.version>2.6.11</spring-security.version>-->
     </properties>
     <dependencies>
@@ -217,14 +218,15 @@
             <!-->推荐算法模型<-->
             <dependency>
                 <groupId>org.apache.mahout</groupId>
-                <artifactId>mahout-examples</artifactId>
+                <artifactId>mahout-mr</artifactId>
                 <version>${mahout.version}</version>
             </dependency>
 
+            <!-->敏感词过滤<-->
             <dependency>
-                <groupId>org.apache.mahout</groupId>
-                <artifactId>mahout</artifactId>
-                <version>${mahout.version}</version>
+                <groupId>io.github.toolgood</groupId>
+                <artifactId>toolgood-words</artifactId>
+                <version>${toolgood-words.version}</version>
             </dependency>
 
         </dependencies>

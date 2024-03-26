@@ -1,11 +1,14 @@
-package com.chaos.model;
+package com.chaos.model.recommend;
 
+import cn.hutool.core.io.IoUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chaos.domain.bo.RecommendBo;
 import com.chaos.domain.entity.PostUser;
+import com.chaos.model.AbstractModel;
 import com.chaos.service.PostUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.model.GenericDataModel;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
 import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
 import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
@@ -19,9 +22,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +35,7 @@ import java.util.stream.Collectors;
  **/
 @Component
 @Slf4j
-public class RecommendDataModel {
+public class RecommendDataModel extends AbstractModel {
     private static Recommender recommender;
 
     private final PostUserService postUserService;
@@ -46,7 +48,7 @@ public class RecommendDataModel {
 
     private static final float USER_POST_MATCH_STATUS_VALUE = 5.0F;
 
-    private final static String DATA_PATH = "recommend.csv";
+    private static File recommendTempFile;
 
     public RecommendDataModel(PostUserService postUserService) {
         this.postUserService = postUserService;
@@ -58,10 +60,17 @@ public class RecommendDataModel {
      * 构筑模型，定时构筑模型
      */
     @Scheduled(cron = "0 0 00 * * ? ")
-    public void init(){
-        List<RecommendBo> dataInDatabase = getDataInDatabase();
-        setFileRecommendCsv(dataInDatabase);
-        setRecommender();
+    public void init() {
+        try {
+            recommendTempFile = File.createTempFile("temp", ".csv");
+            List<RecommendBo> dataInDatabase = getDataInDatabase();
+            setFileRecommendCsv(dataInDatabase);
+            setRecommender();
+        } catch (IOException e) {
+            log.error("临时文件创建失败");
+        } finally {
+            recommendTempFile.deleteOnExit();
+        }
     }
 
     /**
@@ -81,17 +90,17 @@ public class RecommendDataModel {
      * 重新构筑推荐模型
      */
     public void setRecommender() {
-        ClassPathResource classPathResource = new ClassPathResource("recommend.csv");
         try {
-            File file = classPathResource.getFile();
             //构筑模型
-            DataModel dataModel = new FileDataModel(file);
+            DataModel dataModel = new FileDataModel(recommendTempFile);
             //计算相似度，相似度算法有很多种，欧几里得、皮尔逊等等。
             UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
             //计算最近邻域，邻居有两种算法，基于固定数量的邻居和基于相似度的邻居，这里使用基于固定数量的邻居
             UserNeighborhood userNeighborhood = new NearestNUserNeighborhood(100, similarity, dataModel);
             //构建推荐器，协同过滤推荐有两种，分别是基于用户的和基于物品的，这里使用基于用户的协同过滤推荐
             recommender = new GenericUserBasedRecommender(dataModel, userNeighborhood, similarity);
+
+            log.info("推荐模型构筑成功");
         } catch (IOException | TasteException e) {
             log.error("推荐模型构筑失败");
         }
@@ -104,12 +113,12 @@ public class RecommendDataModel {
      * @param recommendBos
      */
     public void setFileRecommendCsv(List<RecommendBo> recommendBos) {
-        ClassPathResource classPathResource = new ClassPathResource("recommend.csv");
         try {
-            File file = classPathResource.getFile();
-            //以重写的形式打开文件
-            FileWriter fileWriter = new FileWriter(file);
-            //构造写入文件的内容
+            // 以覆盖的形式打开文件输出流
+            FileOutputStream fileOutputStream = new FileOutputStream(recommendTempFile, false);
+            // 使用 OutputStreamWriter 将文件输出流转换为 Writer
+            Writer writer = new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8);
+            // 构造写入文件的内容
             StringBuilder sb = new StringBuilder();
             recommendBos.forEach(o -> sb.append(o.getFirstElement())
                     .append(",")
@@ -117,9 +126,13 @@ public class RecommendDataModel {
                     .append(",")
                     .append(o.getValue())
                     .append("\n"));
-            //写入文件
-            fileWriter.write(sb.toString());
-            fileWriter.close();
+            // 写入文件
+            writer.write(sb.toString());
+            // 关闭 Writer 和文件输出流
+            IoUtil.close(writer);
+            IoUtil.close(fileOutputStream);
+
+            log.info("训练集写入成功");
         } catch (IOException e) {
             log.error("训练集写入失败");
         }

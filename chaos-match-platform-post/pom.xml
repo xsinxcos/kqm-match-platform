@@ -78,7 +78,6 @@
         <dependency>
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-mr</artifactId>
-            <version>0.12.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.servlet</groupId>
@@ -141,6 +140,18 @@
                     <groupId>com.google.protobuf</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.6.1</version>
+        </dependency>
+
+        <!--敏感词过滤-->
+        <dependency>
+            <groupId>io.github.toolgood</groupId>
+            <artifactId>toolgood-words</artifactId>
         </dependency>
     </dependencies>
 
