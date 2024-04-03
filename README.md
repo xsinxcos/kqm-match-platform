@@ -1,6 +1,6 @@
 # Kqm-Match-Platform
 
-**Kqm-match-platform（搭子匹配系统）**是基于Spring-Cloud的分布式微服务的社交小程序项目
+Kqm-Match-Platform（搭子匹配系统）是基于Spring-Cloud的分布式微服务的社交小程序项目
 
 ## 介绍
 
