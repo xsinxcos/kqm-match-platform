@@ -1,11 +1,14 @@
 package com.chaos.service.impl;
 
+import cn.hutool.crypto.asymmetric.RSA;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.constant.LoginConstant;
+import com.chaos.emtity.RSAKey;
 import com.chaos.entity.AuthParam;
 import com.chaos.entity.LoginUser;
 import com.chaos.entity.TokenInfo;
-import com.chaos.entity.vo.PasswordLoginVo;
+import com.chaos.entity.dto.PasswordLoginDto;
+import com.chaos.entity.vo.RsaKeyVo;
 import com.chaos.enums.GrantTypeEnum;
 import com.chaos.factory.AuthFactory;
 import com.chaos.feign.UserFeignClient;
@@ -13,13 +16,16 @@ import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthService;
 import com.chaos.strategy.AuthGranterStrategy;
 import com.chaos.util.JwtUtil;
+import com.chaos.util.RSAUtils;
 import com.chaos.util.RedisCache;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,6 +35,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2024-01-10 21:58:52
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final RedisCache redisCache;
@@ -85,17 +92,28 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseResult adminPasswordLogin(PasswordLoginVo passwordLoginVo) {
+    public ResponseResult adminPasswordLogin(PasswordLoginDto passwordLoginDto) {
+        //获取私钥
+        String publicKey = passwordLoginDto.getPublicKey();
+        String privateKey = redisCache.getCacheObject(publicKey);
+        //解密
+        RSA rsa = new RSA(privateKey, publicKey);
+        String decryptUid = RSAUtils.getDecryptString(passwordLoginDto.getUid(), rsa);
+        String decryptPassword = RSAUtils.getDecryptString(passwordLoginDto.getPassword(), rsa);
+
         //包装成统一登录类型
         AuthParam authParam = AuthParam.builder()
-                .uid(Long.valueOf(passwordLoginVo.getUid()))
-                .password(passwordLoginVo.getPassword())
+                .uid(Long.valueOf(decryptUid))
+                .password(decryptPassword)
                 .build();
         //找到相应策略的类型
         String grantType = GrantTypeEnum.getValueByType("admin_password");
         AuthGranterStrategy granterStrategy = authFactory.getGranter(grantType);
         //调用策略
         TokenInfo tokenInfo = granterStrategy.grant(authParam);
+
+        //登录成功，清除RSA密钥对
+        redisCache.deleteObject(publicKey);
         return ResponseResult.okResult(tokenInfo);
     }
 
@@ -129,6 +147,27 @@ public class AuthServiceImpl implements AuthService {
                 LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
         TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
         return ResponseResult.okResult(tokenInfo);
+    }
+
+    @Override
+    public ResponseResult adminCreateRSAKey() {
+        //获取RSA密钥对
+        RSAKey keyPair = RSAUtils.getKeyPair(new RSA());
+        //时间戳
+        long timeStamp = new Date().getTime();
+        RsaKeyVo vo = RsaKeyVo.builder()
+                .publicKey(keyPair.getPublicKey())
+                .timeStamp(timeStamp)
+                .build();
+
+        //存入Redis
+        redisCache.setCacheObject(keyPair.getPublicKey() ,keyPair.getPrivateKey() ,RSAUtils.KEY_TTL ,RSAUtils.TIME_UNIT);
+
+        return ResponseResult.okResult(vo);
+    }
+
+    public static void main(String[] args) {
+
     }
 }
 

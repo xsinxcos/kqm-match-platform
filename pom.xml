@@ -60,6 +60,11 @@
         <!--        <spring-security.version>2.6.11</spring-security.version>-->
     </properties>
     <dependencies>
+        <!--参数检验-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <!--日志处理包-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,6 +1,6 @@
 package com.chaos.service;
 
-import com.chaos.entity.vo.PasswordLoginVo;
+import com.chaos.entity.dto.PasswordLoginDto;
 import com.chaos.response.ResponseResult;
 
 
@@ -18,10 +18,12 @@ public interface AuthService {
 
     ResponseResult refreshAccessToken(String refreshToken);
 
-    ResponseResult adminPasswordLogin(PasswordLoginVo passwordLoginVo);
+    ResponseResult adminPasswordLogin(PasswordLoginDto passwordLoginDto);
 
     ResponseResult adminLogout();
 
     ResponseResult adminRefreshAccessToken(String refreshToken);
+
+    ResponseResult adminCreateRSAKey();
 }
 

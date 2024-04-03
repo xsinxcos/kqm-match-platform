@@ -12,6 +12,8 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginUser implements UserDetails {
+    private final Integer USER_STATUS_IS_LOCK = 1;
+
     User user;
 
     @Override
@@ -36,7 +38,7 @@ public class LoginUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getStatus().equals(USER_STATUS_IS_LOCK);
     }
 
     @Override

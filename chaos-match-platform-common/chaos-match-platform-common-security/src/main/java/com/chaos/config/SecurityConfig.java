@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 对于登录接口 允许匿名访问
                 .antMatchers("/auth/wxLogin").anonymous()
                 .antMatchers("/auth/manage/passwordLogin").anonymous()
+                .antMatchers("/auth/manage/getKey").anonymous()
                 .antMatchers("/auth/refresh").permitAll()
                 .antMatchers("/auth/manage/refresh").permitAll()
                 .antMatchers("/static/rotatingPic").permitAll()
