@@ -72,7 +72,8 @@ public class WebSocketServer {
 
         this.sid = SecurityUtils.getUserId().toString();
         //将webSocket加入其中
-        webSocketMap.put(sid, this);     //加入set中
+        //加入set中
+        webSocketMap.put(sid, this);
 
 
         try {
@@ -91,7 +92,8 @@ public class WebSocketServer {
      */
     @OnClose
     public void onClose() {
-        webSocketMap.remove(sid);  //从map中删除
+        //从map中删除
+        webSocketMap.remove(sid);
 
         //断开连接情况下，更新主板占用情况为释放
         log.info("释放的sid为：" + sid);
@@ -111,8 +113,9 @@ public class WebSocketServer {
         parseMessageBo.getMessage().setSendFrom(Long.parseLong(sid));
         WebSocketServer server = null;
 
-        if (Objects.nonNull(messageInfo.getSendTo()))
+        if (Objects.nonNull(messageInfo.getSendTo())){
             server = webSocketMap.get(messageInfo.getSendTo().toString());
+        }
 
         try {
             MessageHandlerStrategy.handleMessage(parseMessageBo, this, server);
@@ -146,7 +149,9 @@ public class WebSocketServer {
         String key = MessageConstants.OFFLINE_MESSAGE_REDIS_KEY + sid;
         ZSetOperations<String, String> cacheZSet = redisCache.getCacheZSet();
         Set<String> message = cacheZSet.range(key, 0, -1);
-        if (Objects.isNull(message)) return;
+        if (Objects.isNull(message)) {
+            return;
+        }
 
         message.forEach(t -> {
             try {

@@ -27,8 +27,9 @@ public class UserFeignController implements UserFeignClient {
 
         AuthUser authUser = authUserMapper.selectOne(wrapper);
 
-        if (Objects.isNull(authUser))
+        if (Objects.isNull(authUser)) {
             return ResponseResult.okResult();
+        }
 
         AuthUserBo bo = BeanCopyUtils.copyBean(authUser, AuthUserBo.class);
         return ResponseResult.okResult(bo);

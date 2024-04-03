@@ -74,10 +74,10 @@ public class XfGPTUtils {
         // 拼接
         String authorization = String.format("api_key=\"%s\", algorithm=\"%s\", headers=\"%s\", signature=\"%s\"", apiKey, "hmac-sha256", "host date request-line", sha);
         // 拼接地址
-        HttpUrl httpUrl = Objects.requireNonNull(HttpUrl.parse("https://" + url.getHost() + url.getPath())).newBuilder().//
-                addQueryParameter("authorization", Base64.getEncoder().encodeToString(authorization.getBytes(StandardCharsets.UTF_8))).//
-                addQueryParameter("date", date).//
-                addQueryParameter("host", url.getHost()).//
+        HttpUrl httpUrl = Objects.requireNonNull(HttpUrl.parse("https://" + url.getHost() + url.getPath())).newBuilder().
+                addQueryParameter("authorization", Base64.getEncoder().encodeToString(authorization.getBytes(StandardCharsets.UTF_8))).
+                addQueryParameter("date", date).
+                addQueryParameter("host", url.getHost()).
                 build();
 
         // System.err.println(httpUrl.toString());

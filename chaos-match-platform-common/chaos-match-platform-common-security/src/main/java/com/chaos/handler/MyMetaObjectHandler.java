@@ -16,7 +16,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         try {
             userId = SecurityUtils.getLoginUser().getUser().getId();
         } catch (Exception e) {
-            userId = -1L;//表示是自己创建
+            //表示是自己创建
+            userId = -1L;
         }
         this.setFieldValByName("createTime", new Date(), metaObject);
         this.setFieldValByName("createBy", userId, metaObject);

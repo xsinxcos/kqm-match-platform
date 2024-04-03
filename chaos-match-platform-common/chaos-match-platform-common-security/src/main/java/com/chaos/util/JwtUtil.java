@@ -18,7 +18,8 @@ import java.util.UUID;
 public class JwtUtil {
 
     //有效期为
-    public static final Long JWT_TTL = 24 * 60 * 60 * 1000L;// 60 * 60 *1000  一个小时
+    // 60 * 60 *1000  一个小时
+    public static final Long JWT_TTL = 24 * 60 * 60 * 1000L;
     //设置长token密钥明文
     public static final String JWT_LONG_KEY = "LOONGKEY";
     //设置短token秘钥明文
@@ -42,7 +43,8 @@ public class JwtUtil {
      * @return
      */
     public static String createJWT(String subject, Long ttlMillis, SecretKey secretKey) {
-        JwtBuilder builder = getJwtBuilder(subject, ttlMillis, getUUID(), secretKey);// 设置过期时间
+        // 设置过期时间
+        JwtBuilder builder = getJwtBuilder(subject, ttlMillis, getUUID(), secretKey);
         return builder.compact();
     }
 
@@ -56,11 +58,16 @@ public class JwtUtil {
         long expMillis = nowMillis + ttlMillis;
         Date expDate = new Date(expMillis);
         return Jwts.builder()
-                .setId(uuid)              //唯一的ID
-                .setSubject(subject)   // 主题  可以是JSON数据
-                .setIssuer("xsinxcos")     // 签发者
-                .setIssuedAt(now)      // 签发时间
-                .signWith(signatureAlgorithm, secretKey) //使用HS256对称加密算法签名, 第二个参数为秘钥
+                //唯一的ID
+                .setId(uuid)
+                //主题  可以是JSON数据
+                .setSubject(subject)
+                // 签发者
+                .setIssuer("xsinxcos")
+                // 签发时间
+                .setIssuedAt(now)
+                //使用HS256对称加密算法签名, 第二个参数为秘钥
+                .signWith(signatureAlgorithm, secretKey)
                 .setExpiration(expDate);
     }
 

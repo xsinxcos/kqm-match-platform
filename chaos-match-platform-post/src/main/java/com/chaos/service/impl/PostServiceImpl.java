@@ -132,7 +132,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                     .eq(PostUser::getStatus, FAVORITE_STATUS);
             PostUser one = postUserService.getOne(wrapper);
             //若收藏则将vo中isKeep修改成true
-            if (Objects.nonNull(one)) postShowVo.setIsKeep(true);
+            if (Objects.nonNull(one)) {
+                postShowVo.setIsKeep(true);
+            }
         }
         return ResponseResult.okResult(postShowVo);
     }
@@ -161,8 +163,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult modifyMyPost(ModifyMyPostDto modifyMyPostDto) {
         Post byId = getById(modifyMyPostDto.getId());
         //检验帖子是否属于该用户
-        if (!byId.getPosterId().equals(SecurityUtils.getUserId()))
+        if (!byId.getPosterId().equals(SecurityUtils.getUserId())) {
             return ResponseResult.errorResult(AppHttpCodeEnum.ERROR);
+        }
 
         //更新帖子信息
         byId.setTitle(modifyMyPostDto.getTitle());
@@ -202,8 +205,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult deleteMyPost(Long id) {
         //检查帖子所属人
         Post byId = getById(id);
-        if (Objects.isNull(byId) || !byId.getPosterId().equals(SecurityUtils.getUserId()))
+        if (Objects.isNull(byId) || !byId.getPosterId().equals(SecurityUtils.getUserId())) {
             throw new RuntimeException(AppHttpCodeEnum.NO_OPERATOR_AUTH.getMsg());
+        }
         deletePostById(id);
         return ResponseResult.okResult();
     }
@@ -213,7 +217,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         Long userId = SecurityUtils.getUserId();
         Long id = addFavoritePostDto.getId();
         Post byId = getById(id);
-        if (Objects.isNull(byId)) throw new RuntimeException("帖子不存在");
+        if (Objects.isNull(byId)) {
+            throw new RuntimeException("帖子不存在");
+        }
         postUserService.getBaseMapper().insert(new PostUser(addFavoritePostDto.getId(), userId, FAVORITE_STATUS));
         return ResponseResult.okResult();
     }
@@ -242,7 +248,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .collect(Collectors.toList());
 
         //分页获取相应的帖子
-        if (postIds.isEmpty()) return ResponseResult.okResult(new PageVo(new ArrayList(), 0L));
+        if (postIds.isEmpty()) {
+            return ResponseResult.okResult(new PageVo(new ArrayList(), 0L));
+        }
         //通过MeiliSearch查找相应的帖子并封装VO
         List<PostBo> postBos = postIds.stream()
                 .map(o -> meiliSearchUtils.searchDocumentById(POST_INDEX_UID, o.toString(), PostBo.class))
@@ -277,8 +285,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public ResponseResult modifyPostStatus(ModifyPostStatusDto modifyPostStatusDto) {
         Post byId = getById(modifyPostStatusDto.getPostId());
-        if (Objects.isNull(byId) || !(SecurityUtils.getUserId().equals(byId.getPosterId())))
+        if (Objects.isNull(byId) || !(SecurityUtils.getUserId().equals(byId.getPosterId()))) {
             throw new RuntimeException("操作失败");
+        }
 
         byId.setStatus(modifyPostStatusDto.getStatus());
         updateById(byId);
@@ -355,7 +364,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 .collect(Collectors.toList());
 
         //分页获取相应的帖子
-        if (postIds.isEmpty()) return ResponseResult.okResult(new PageVo(new ArrayList(), 0L));
+        if (postIds.isEmpty()) {
+            return ResponseResult.okResult(new PageVo(new ArrayList(), 0L));
+        }
         //通过MeiliSearch查找相应的帖子并封装VO
         List<PostBo> postBos = postIds.stream()
                 .map(o -> meiliSearchUtils.searchDocumentById(POST_INDEX_UID, o.toString(), PostBo.class))
@@ -422,8 +433,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         String[] split = content.split("\\*\\*/img/\\*\\*");
         if (split.length == 1) {
             return omitContent(split[0]);
-        } else if (split.length == 0)
+        } else if (split.length == 0) {
             return "";
+        }
         String s = omitContent(split[0]);
         return s + "**/img/**" + split[1];
     }
@@ -448,11 +460,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         if (Objects.nonNull(status)) {
             con.add(new String[]{"status = " + status});
         }
-        if (Objects.nonNull(tagId) && tagId > 0)
+        if (Objects.nonNull(tagId) && tagId > 0) {
             con.add(new String[]{"tags.id = " + tagId});
-        if (Objects.nonNull(beginTime) && Objects.nonNull(endTime))
+        }
+        if (Objects.nonNull(beginTime) && Objects.nonNull(endTime)) {
             con.add(new String[]{"beginTimeStamp >= " + beginTime.getTime() +
                     " AND " + "endTimeStamp <= " + endTime.getTime()});
+        }
 
         //通过MeiliSearch查找
         MeiliSearchUtils.SearchDocumentBo<PostBo> post =
