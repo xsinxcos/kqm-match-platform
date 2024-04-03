@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * @description:
  * @author: xsinxcos
@@ -32,7 +34,7 @@ public class AdminCommentController {
     @AuthAdminCheck
     @PostMapping("/delete")
     @SystemLog(BusinessName = "adminDeleteComment")
-    public ResponseResult adminDeleteComment(@RequestBody AdminDeleteCommentDto dto) {
+    public ResponseResult adminDeleteComment(@RequestBody @Valid AdminDeleteCommentDto dto) {
         return commentService.adminDeleteComment(dto);
     }
 

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 /**
  * @description: CommentController
  * @author: xsinxcos
@@ -30,7 +33,7 @@ public class CommentController {
      */
     @PostMapping("/add")
     @SystemLog(BusinessName = "addComment")
-    public ResponseResult addComment(@RequestBody AddCommentDto addCommentDto) {
+    public ResponseResult addComment(@RequestBody @Valid AddCommentDto addCommentDto) {
         return commentService.addComment(addCommentDto);
     }
 
@@ -44,7 +47,7 @@ public class CommentController {
      */
     @PostMapping("/list")
     @SystemLog(BusinessName = "listCommentByPostId")
-    public ResponseResult listCommentByPostId(Long postId, Integer pageNum, Integer pageSize) {
+    public ResponseResult listCommentByPostId(@NotNull Long postId, @NotNull Integer pageNum, @NotNull Integer pageSize) {
         return commentService.listCommentByPostId(postId, pageNum, pageSize);
     }
 
@@ -56,7 +59,7 @@ public class CommentController {
      */
     @PostMapping("/delete")
     @SystemLog(BusinessName = "deleteComment")
-    public ResponseResult deleteComment(@RequestBody DeleteCommentDto dto) {
+    public ResponseResult deleteComment(@RequestBody @Valid DeleteCommentDto dto) {
         return commentService.deleteComment(dto);
     }
 
@@ -70,7 +73,7 @@ public class CommentController {
      */
     @PostMapping("/get")
     @SystemLog(BusinessName = "showChildCommentById")
-    public ResponseResult showChildCommentById(Long commentId, Integer pageSize, Integer pageNum) {
+    public ResponseResult showChildCommentById(@NotNull Long commentId, @NotNull Integer pageSize, @NotNull Integer pageNum) {
         return commentService.showChildCommentById(commentId, pageSize, pageNum);
     }
 }

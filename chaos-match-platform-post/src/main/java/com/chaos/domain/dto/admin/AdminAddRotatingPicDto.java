@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * @description:
  * @author: xsinxcos
@@ -13,6 +15,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminAddRotatingPicDto {
+    @NotBlank(message = "轮播图不能为空")
     private String name;
+
+    @NotBlank(message = "轮播图URL不能为空")
     private String url;
 }

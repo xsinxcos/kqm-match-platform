@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * @description:
  * @author: xsinxcos
@@ -32,7 +34,7 @@ public class AdminPostController {
     @AuthAdminCheck
     @PostMapping("/list")
     @SystemLog(BusinessName = "adminListPost")
-    public ResponseResult adminListPost(@RequestBody AdminListPostDto adminListPostDto) {
+    public ResponseResult adminListPost(@RequestBody @Valid AdminListPostDto adminListPostDto) {
         return postService.adminListPost(adminListPostDto);
     }
 
@@ -45,7 +47,7 @@ public class AdminPostController {
     @AuthAdminCheck
     @PostMapping("/delete")
     @SystemLog(BusinessName = "adminDeletePost")
-    public ResponseResult adminDeletePost(@RequestBody AdminDeletePostDto adminDeletePostDto) {
+    public ResponseResult adminDeletePost(@RequestBody @Valid AdminDeletePostDto adminDeletePostDto) {
         return postService.adminDeletePost(adminDeletePostDto);
     }
 }

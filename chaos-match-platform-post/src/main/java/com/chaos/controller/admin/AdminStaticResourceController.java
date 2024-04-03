@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * @description:
  * @author: xsinxcos
@@ -32,7 +34,7 @@ public class AdminStaticResourceController {
     @AuthAdminCheck
     @PostMapping("/rotatingPic/add")
     @SystemLog(BusinessName = "adminAddRotatingPic")
-    public ResponseResult adminAddRotatingPic(@RequestBody AdminAddRotatingPicDto dto) {
+    public ResponseResult adminAddRotatingPic(@RequestBody @Valid AdminAddRotatingPicDto dto) {
         return resourceService.adminAddRotatingPic(dto);
     }
 

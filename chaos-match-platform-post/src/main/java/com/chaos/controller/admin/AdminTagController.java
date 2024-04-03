@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * @description:
  * @author: xsinxcos
@@ -32,7 +34,7 @@ public class AdminTagController {
     @AuthAdminCheck
     @PostMapping("/add")
     @SystemLog(BusinessName = "adminAddTag")
-    public ResponseResult adminAddTag(@RequestBody AdminAddTagDto adminAddTagDto) {
+    public ResponseResult adminAddTag(@RequestBody @Valid AdminAddTagDto adminAddTagDto) {
         return tagService.adminAddTag(adminAddTagDto);
     }
 
@@ -44,7 +46,7 @@ public class AdminTagController {
     @AuthAdminCheck
     @PostMapping("/delete")
     @SystemLog(BusinessName = "adminDeleteTag")
-    public ResponseResult adminDeleteTag(@RequestBody AdminDeleteTagDto dto) {
+    public ResponseResult adminDeleteTag(@RequestBody @Valid AdminDeleteTagDto dto) {
         return tagService.adminDeleteTag(dto);
     }
 

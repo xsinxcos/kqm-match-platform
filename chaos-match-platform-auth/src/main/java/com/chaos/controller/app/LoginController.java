@@ -3,16 +3,14 @@ package com.chaos.controller.app;
 import com.chaos.annotation.SystemLog;
 import com.chaos.bo.WxLoginUserDetailBo;
 import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.entity.vo.PasswordLoginVo;
-import com.chaos.exception.SystemException;
 import com.chaos.feign.WeiXinFeignClient;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @RestController
@@ -32,7 +30,7 @@ public class LoginController {
      */
     @GetMapping("/wxLogin")
     @SystemLog(BusinessName = "Wxlogin")
-    public ResponseResult wxlogin(String code) {
+    public ResponseResult wxlogin(@NotBlank String code) {
         WxLoginUserDetailBo detailBo = weiXinFeignClient.wxLoginUserDetail(code).getData();
         if (Objects.isNull(detailBo.getOpenid())) {
             ResponseResult.errorResult(AppHttpCodeEnum.LOGIN_ERROR);

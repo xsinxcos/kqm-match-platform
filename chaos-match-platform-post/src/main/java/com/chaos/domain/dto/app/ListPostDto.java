@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -17,8 +18,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class ListPostDto {
     //页码
+    @NotNull(message = "pageNum不能为null")
     private Integer pageNum;
     //每页条数
+    @NotNull(message = "pageSize不能为null")
     private Integer pageSize;
     //标签ID
     private Long tagId;

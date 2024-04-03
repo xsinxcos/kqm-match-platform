@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @description:
  * @author: xsinxcos
@@ -14,10 +16,10 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserListDto {
-    @NonNull
+    @NotNull
     private Integer pageNum;
 
-    @NonNull
+    @NotNull
     private Integer pageSize;
 
     private Integer type;

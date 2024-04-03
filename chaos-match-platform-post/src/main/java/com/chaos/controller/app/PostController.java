@@ -8,6 +8,8 @@ import com.chaos.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 /**
@@ -29,7 +31,7 @@ public class PostController {
      */
     @PostMapping("/edit")
     @SystemLog(BusinessName = "addPost")
-    public ResponseResult addPost(@RequestBody AddPostDto addPostDto) {
+    public ResponseResult addPost(@RequestBody @Valid AddPostDto addPostDto) {
         return postService.addPost(addPostDto);
     }
 
@@ -42,7 +44,7 @@ public class PostController {
      */
     @PostMapping("/list")
     @SystemLog(BusinessName = "listPost")
-    public ResponseResult listPost(@RequestBody ListPostDto listPostDto) {
+    public ResponseResult listPost(@RequestBody @Valid ListPostDto listPostDto) {
         return postService.listPost(listPostDto);
     }
 
@@ -54,7 +56,7 @@ public class PostController {
      */
     @GetMapping("/list/{id}")
     @SystemLog(BusinessName = "showPost")
-    public ResponseResult showPost(@PathVariable Long id) {
+    public ResponseResult showPost(@PathVariable @NotNull Long id) {
         return postService.showPost(id);
     }
 
@@ -67,7 +69,7 @@ public class PostController {
      */
     @GetMapping("/getme")
     @SystemLog(BusinessName = "getMyPost")
-    public ResponseResult getMyPost(Integer pageNum, Integer pageSize) {
+    public ResponseResult getMyPost(@NotNull Integer pageNum, @NotNull Integer pageSize) {
         return postService.getMyPost(pageNum, pageSize);
     }
 
@@ -79,7 +81,7 @@ public class PostController {
      */
     @PutMapping("/getme")
     @SystemLog(BusinessName = "modifyMyPost")
-    public ResponseResult modifyMyPost(@RequestBody ModifyMyPostDto modifyMyPostDto) {
+    public ResponseResult modifyMyPost(@RequestBody @Valid ModifyMyPostDto modifyMyPostDto) {
         return postService.modifyMyPost(modifyMyPostDto);
     }
 
@@ -91,7 +93,7 @@ public class PostController {
      */
     @DeleteMapping("/getme/{id}")
     @SystemLog(BusinessName = "deleteMyPost")
-    public ResponseResult deleteMyPost(@PathVariable Long id) {
+    public ResponseResult deleteMyPost(@PathVariable @NotNull Long id) {
         return postService.deleteMyPost(id);
     }
 
@@ -103,7 +105,7 @@ public class PostController {
      */
     @PostMapping("/favorite")
     @SystemLog(BusinessName = "addFavoritePost")
-    public ResponseResult addFavoritePost(@RequestBody AddFavoritePostDto addFavoritePostDto) {
+    public ResponseResult addFavoritePost(@RequestBody @Valid AddFavoritePostDto addFavoritePostDto) {
         return postService.addFavoritePost(addFavoritePostDto);
     }
 
@@ -116,7 +118,7 @@ public class PostController {
 
     @DeleteMapping("/favorite")
     @SystemLog(BusinessName = "deleteFavoritePost")
-    public ResponseResult deleteFavoritePost(@RequestBody DeleteFavoritePostDto dto) {
+    public ResponseResult deleteFavoritePost(@RequestBody @Valid DeleteFavoritePostDto dto) {
         Post byId = postService.getById(dto.getId());
         Optional.ofNullable(byId).orElseThrow(() -> (new RuntimeException("操作失败")));
         return postService.deleteFavoritePost(dto);
@@ -131,7 +133,7 @@ public class PostController {
      */
     @GetMapping("/favorite")
     @SystemLog(BusinessName = "listFavoritePost")
-    public ResponseResult listFavoritePost(Integer pageNum, Integer pageSize) {
+    public ResponseResult listFavoritePost(@NotNull Integer pageNum, @NotNull Integer pageSize) {
         return postService.listFavoritePost(pageNum, pageSize);
     }
 
@@ -143,7 +145,7 @@ public class PostController {
      */
     @PostMapping("/modify")
     @SystemLog(BusinessName = "modifyPostStatus")
-    public ResponseResult modifyPostStatus(@RequestBody ModifyPostStatusDto modifyPostStatusDto) {
+    public ResponseResult modifyPostStatus(@RequestBody @Valid ModifyPostStatusDto modifyPostStatusDto) {
         return postService.modifyPostStatus(modifyPostStatusDto);
     }
 
@@ -156,7 +158,7 @@ public class PostController {
 
     @GetMapping("/matched")
     @SystemLog(BusinessName = "getMatchRelationByPostId")
-    public ResponseResult getMatchRelationByPostId(Long postId) {
+    public ResponseResult getMatchRelationByPostId(@NotNull Long postId) {
         return postService.getMatchRelationByPostId(postId);
     }
 
@@ -170,7 +172,7 @@ public class PostController {
 
     @DeleteMapping("/matched/cancel/{postId}")
     @SystemLog(BusinessName = "cancelMatchByPostId")
-    public ResponseResult cancelMatchByPostId(@PathVariable Long postId) {
+    public ResponseResult cancelMatchByPostId(@PathVariable @NotNull Long postId) {
         return postService.cancelMatchByPostId(postId);
     }
 
@@ -183,7 +185,7 @@ public class PostController {
      */
     @GetMapping("/getme/matched")
     @SystemLog(BusinessName = "getMeMatchedPost")
-    public ResponseResult getMeMatchedPost(Integer pageNum, Integer pageSize) {
+    public ResponseResult getMeMatchedPost(@NotNull Integer pageNum, @NotNull Integer pageSize) {
         return postService.getMeMatchedPost(pageNum, pageSize);
     }
 }

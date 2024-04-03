@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @description:
  * @author: xsinxcos
@@ -13,6 +15,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserStatusChangeDto {
+
+    @NotNull
     private Long uid;
+
+    @NotNull
     private Integer status;
 }

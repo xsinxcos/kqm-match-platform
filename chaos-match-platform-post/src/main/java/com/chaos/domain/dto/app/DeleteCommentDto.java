@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @description: DeleteCommentDto
  * @author: xsinxcos
@@ -13,5 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeleteCommentDto {
+    @NotNull(message = "Id不能为NULL")
     private Long commentId;
 }

@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +35,7 @@ public class MessageController {
      * @return
      */
     @GetMapping("/history")
-    public ResponseResult showHistoryMessage(Integer offset, Integer limit, Long userId) {
+    public ResponseResult showHistoryMessage(@NotNull Integer offset,@NotNull Integer limit, @NotNull Long userId) {
         return messageService.showHistoryMessage(offset, limit, userId);
     }
 
@@ -54,7 +57,7 @@ public class MessageController {
      * @return
      */
     @PostMapping("/gpt")
-    public ResponseResult chatWithGPT(@RequestBody ChatGPTMessageDto chatGPTMessageDto) {
+    public ResponseResult chatWithGPT(@RequestBody @Valid ChatGPTMessageDto chatGPTMessageDto) {
         String question = chatGPTMessageDto.getQuestion();
         long timeOut = 30;
         String answer = "";
