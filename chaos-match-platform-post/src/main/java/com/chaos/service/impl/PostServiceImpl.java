@@ -1,5 +1,6 @@
 package com.chaos.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -16,6 +17,7 @@ import com.chaos.domain.dto.app.*;
 import com.chaos.domain.entity.Post;
 import com.chaos.domain.entity.PostTag;
 import com.chaos.domain.entity.PostUser;
+import com.chaos.domain.entity.Tag;
 import com.chaos.domain.vo.app.GetMatchRelationByPostId;
 import com.chaos.domain.vo.app.MatchedUserVo;
 import com.chaos.domain.vo.app.PostListVo;
@@ -27,11 +29,15 @@ import com.chaos.feign.bo.AddPostUserMatchRelationBo;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.feign.bo.PosterBo;
 import com.chaos.mapper.PostMapper;
+import com.chaos.mapper.PostTagMapper;
+import com.chaos.mapper.TagMapper;
+import com.chaos.model.recommend.RecommendDataModel;
 import com.chaos.model.word.WordFilterDataModel;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.PostService;
 import com.chaos.service.PostTagService;
 import com.chaos.service.PostUserService;
+import com.chaos.service.TagService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.MeiliSearchUtils;
 import com.chaos.util.SecurityUtils;
@@ -39,10 +45,13 @@ import com.meilisearch.sdk.SearchRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.avro.data.Json;
+import org.junit.jupiter.api.Tags;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -69,11 +78,17 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     private final PostTagService postTagService;
 
+    private final TagService tagService;
+
     private final PostUserService postUserService;
 
     private final MeiliSearchUtils meiliSearchUtils;
 
     private final WordFilterDataModel wordFilterDataModel;
+
+    private final RecommendDataModel recommendDataModel;
+
+    private final PostTagMapper postTagMapper;
 
     @Override
     @Transactional
@@ -396,6 +411,66 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return ResponseResult.okResult();
     }
 
+    @Override
+    public ResponseResult getRecommendPost(Integer count) {
+        List<Post> posts = null;
+        try {
+            List<Long> recommendByUserid = recommendDataModel.getRecommendByUserid(20, count, SecurityUtils.getUserId());
+            //如果推荐为空则直接返回
+            if(recommendByUserid.isEmpty()) return ResponseResult.okResult(new ArrayList<>());
+            //数据库查询
+            posts = getBaseMapper().selectBatchIds(recommendByUserid);
+
+            //如果推荐为空则直接返回
+            if(posts.isEmpty()) return ResponseResult.okResult(new ArrayList<>());
+
+            List<Post> recommendPost = posts.stream().filter(post -> (post.getStatus().equals(POST_STATUS_MATCHING)))
+                    .collect(Collectors.toList());
+
+            List<Long> postIds = recommendPost.stream().map(Post::getId).collect(Collectors.toList());
+            List<Long> posterIds = recommendPost.stream().map(Post::getPosterId).collect(Collectors.toList());
+            //异步优化查询POST和TAG关系
+            CompletableFuture<List<PostTag>> postTagFuture = CompletableFuture.supplyAsync(() -> {
+                return postTagMapper.getPostTagsByPostIds(postIds);
+            });
+
+            //异步优化POST和USER关系
+            CompletableFuture<Map<Long ,PosterBo>> postUserFuture = CompletableFuture.supplyAsync(() -> {
+                return userFeignClient.getBatchUserByUserIds(posterIds).getData();
+            });
+
+            List<PostTag> postTagList = postTagFuture.get();
+            Map<Long, PosterBo> posterBoMap = postUserFuture.get();
+
+            Map<Long, Long> postTagMap = postTagList.stream().collect(Collectors.toMap(PostTag::getPostId, PostTag::getTagId));
+            //查询TAG
+            Map<Long , TagBo> tagMap = new HashMap<>();
+            List<Long> tagIds = postTagList.stream().map(PostTag::getTagId).collect(Collectors.toList());
+            List<Tag> tags = tagService.getBaseMapper().selectBatchIds(tagIds);
+            for (Tag tag : tags) {
+                TagBo tagBo = BeanCopyUtils.copyBean(tag, TagBo.class);
+                tagMap.put(tag.getId() ,tagBo);
+            }
+
+            //封装VO
+            List<PostListVo> vos = BeanCopyUtils.copyBeanList(recommendPost, PostListVo.class);
+
+            for (PostListVo vo : vos) {
+                PosterBo posterBo = posterBoMap.get(vo.getPosterId());
+                //获取TAG_ID
+                Long tagID = postTagMap.get(vo.getId());
+                //获取TAG
+                TagBo tagBo = tagMap.get(tagID);
+                vo.setContent(OmitContentKeepPic(vo.getContent()));
+                vo.setTags(Collections.singletonList(tagBo));
+                vo.setPosterUsername(posterBo.getUserName());
+            }
+            return ResponseResult.okResult(vos);
+        }catch (Exception e){
+            throw new RuntimeException("获取推荐失败");
+        }
+    }
+
 
     private void deletePostById(Long id) {
         //删除帖子
@@ -428,7 +503,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         return meiliSearchUtils.searchDocumentArrByIndex(POST_INDEX_UID, searchRequest, PostBo.class);
     }
 
-    //截取文章部分内容并且不省略图片链接
+    /**
+     *  截取文章部分内容并且不省略图片链接
+     */
     private String OmitContentKeepPic(@NonNull String content) {
         String[] split = content.split("\\*\\*/img/\\*\\*");
         if (split.length == 1) {

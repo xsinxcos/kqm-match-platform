@@ -49,5 +49,7 @@ public interface PostService extends IService<Post> {
     ResponseResult adminListPost(AdminListPostDto adminListPostDto);
 
     ResponseResult adminDeletePost(AdminDeletePostDto adminDeletePostDto);
+
+    ResponseResult getRecommendPost(Integer count);
 }
 

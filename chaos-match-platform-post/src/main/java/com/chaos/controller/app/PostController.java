@@ -188,4 +188,14 @@ public class PostController {
     public ResponseResult getMeMatchedPost(@NotNull Integer pageNum, @NotNull Integer pageSize) {
         return postService.getMeMatchedPost(pageNum, pageSize);
     }
+
+    /**
+     * 获取推荐帖子
+     * @return
+     */
+    @GetMapping("/recommend")
+    @SystemLog(BusinessName = "getRecommendPost")
+    public ResponseResult getRecommendPost(@NotNull Integer count){
+        return postService.getRecommendPost(count);
+    }
 }
