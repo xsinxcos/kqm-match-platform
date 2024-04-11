@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 public enum GrantTypeEnum {
     APP_WX_OPENID("app_openId", "wxOpenIdStrategy"),
+    APP_PASSWORD("app_password" ,"passwordStrategy"),
     ADMIN_PASSWORD("admin_password", "adminPasswordStrategy");
 
     private final String type;

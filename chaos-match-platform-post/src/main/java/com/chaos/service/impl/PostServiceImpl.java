@@ -464,6 +464,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 vo.setContent(OmitContentKeepPic(vo.getContent()));
                 vo.setTags(Collections.singletonList(tagBo));
                 vo.setPosterUsername(posterBo.getUserName());
+                vo.setPosterAvatar(posterBo.getAvatar());
             }
             return ResponseResult.okResult(vos);
         }catch (Exception e){

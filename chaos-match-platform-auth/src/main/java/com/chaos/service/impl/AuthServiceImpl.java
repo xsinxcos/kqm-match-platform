@@ -166,8 +166,30 @@ public class AuthServiceImpl implements AuthService {
         return ResponseResult.okResult(vo);
     }
 
-    public static void main(String[] args) {
+    @Override
+    public ResponseResult passwordLogin(PasswordLoginDto passwordLoginDto) {
+        //获取私钥
+        String publicKey = passwordLoginDto.getPublicKey();
+        String privateKey = redisCache.getCacheObject(publicKey);
+        //解密
+        RSA rsa = new RSA(privateKey, publicKey);
+        String decryptUid = RSAUtils.getDecryptString(passwordLoginDto.getUid(), rsa);
+        String decryptPassword = RSAUtils.getDecryptString(passwordLoginDto.getPassword(), rsa);
 
+        //包装成统一登录类型
+        AuthParam authParam = AuthParam.builder()
+                .uid(Long.valueOf(decryptUid))
+                .password(decryptPassword)
+                .build();
+        //找到相应策略的类型
+        String grantType = GrantTypeEnum.getValueByType("app_password");
+        AuthGranterStrategy granterStrategy = authFactory.getGranter(grantType);
+        //调用策略
+        TokenInfo tokenInfo = granterStrategy.grant(authParam);
+
+        //登录成功，清除RSA密钥对
+        redisCache.deleteObject(publicKey);
+        return ResponseResult.okResult(tokenInfo);
     }
 }
 
