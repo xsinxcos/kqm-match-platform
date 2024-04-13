@@ -24,7 +24,7 @@ public interface AuthService {
 
     ResponseResult adminRefreshAccessToken(String refreshToken);
 
-    ResponseResult adminCreateRSAKey();
+    ResponseResult createRSAKey();
 
     ResponseResult passwordLogin(PasswordLoginDto passwordLoginDto);
 }

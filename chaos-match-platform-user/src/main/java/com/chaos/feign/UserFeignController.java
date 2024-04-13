@@ -1,5 +1,6 @@
 package com.chaos.feign;
 
+import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.feign.bo.PosterBo;
@@ -68,6 +69,17 @@ public class UserFeignController implements UserFeignClient {
     @Override
     public ResponseResult getUserById(Long id) {
         AuthUser user = authUserMapper.selectById(id);
+        AuthUserBo bo = BeanCopyUtils.copyBean(user, AuthUserBo.class);
+        return ResponseResult.okResult(bo);
+    }
+
+    @Override
+    public ResponseResult getUserByEmail(String email) {
+        AuthUser user = authUserMapper.selectOne(new LambdaQueryWrapper<AuthUser>().eq(
+                Objects.nonNull(email),
+                AuthUser::getEmail,
+                email
+        ));
         AuthUserBo bo = BeanCopyUtils.copyBean(user, AuthUserBo.class);
         return ResponseResult.okResult(bo);
     }

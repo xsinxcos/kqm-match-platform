@@ -6,7 +6,6 @@ import com.chaos.entity.dto.PasswordLoginDto;
 import com.chaos.exception.SystemException;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthService;
-import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -72,8 +71,8 @@ public class AdminLoginController {
      * @return
      */
     @PostMapping("/getKey")
-    @SystemLog(BusinessName = "adminCreateRSAKey")
+    @SystemLog(BusinessName = "createRSAKey")
     public ResponseResult adminCreateRSAKey(){
-        return authService.adminCreateRSAKey();
+        return authService.createRSAKey();
     }
 }

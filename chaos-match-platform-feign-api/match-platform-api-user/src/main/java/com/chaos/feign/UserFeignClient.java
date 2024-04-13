@@ -27,4 +27,7 @@ public interface UserFeignClient {
 
     @GetMapping("/feign/getUserByUserId")
     ResponseResult<AuthUserBo> getUserById(@RequestParam("id") Long id);
+
+    @GetMapping("/feign/getUserByEmail")
+    ResponseResult<AuthUserBo> getUserByEmail(@RequestParam("email") String email);
 }

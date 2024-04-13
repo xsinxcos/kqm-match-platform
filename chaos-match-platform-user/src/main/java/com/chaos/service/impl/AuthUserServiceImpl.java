@@ -6,16 +6,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
 import com.chaos.mapper.AuthUserMapper;
 import com.chaos.model.dto.UserInfoDto;
-import com.chaos.model.vo.admin.UserListVo;
+import com.chaos.model.dto.admin.EditAccessRightsDto;
+import com.chaos.model.dto.admin.UserListDto;
+import com.chaos.model.dto.admin.UserStatusChangeDto;
+import com.chaos.model.dto.app.UserRegisterDto;
 import com.chaos.model.entity.AuthUser;
+import com.chaos.model.vo.UserInfoVo;
+import com.chaos.model.vo.admin.UserListVo;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
-import com.chaos.model.vo.UserInfoVo;
-import com.chaos.model.dto.admin.EditAccessRightsDto;
-import com.chaos.model.dto.admin.UserListDto;
-import com.chaos.model.dto.admin.UserStatusChangeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -68,7 +69,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
     public ResponseResult resetPasswordById(String uid) {
         //重置生成新密码
         String randomPassword = createRandomPassword();
-       //加密新密码
+        //加密新密码
         String encode = passwordEncoder.encode(randomPassword);
         //获取用户
         AuthUser byId = getById(uid);
@@ -76,8 +77,8 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         byId.setPassword(encode);
         updateById(byId);
         //返回响应
-        Map<String ,String> map = new HashMap<>();
-        map.put("resetPassword" ,randomPassword);
+        Map<String, String> map = new HashMap<>();
+        map.put("resetPassword", randomPassword);
 
         return ResponseResult.okResult(map);
     }
@@ -86,13 +87,13 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
     public ResponseResult userList(UserListDto userListDto) {
         LambdaQueryWrapper<AuthUser> wrapper = new LambdaQueryWrapper<>();
         //条件筛选
-        wrapper.like(Objects.nonNull(userListDto.getUserName()) ,AuthUser::getUserName ,userListDto.getUserName())
-                .eq(Objects.nonNull(userListDto.getType()) ,AuthUser::getType ,userListDto.getType())
-                .eq(Objects.nonNull(userListDto.getUid()) ,AuthUser::getId ,userListDto.getUid())
+        wrapper.like(Objects.nonNull(userListDto.getUserName()), AuthUser::getUserName, userListDto.getUserName())
+                .eq(Objects.nonNull(userListDto.getType()), AuthUser::getType, userListDto.getType())
+                .eq(Objects.nonNull(userListDto.getUid()), AuthUser::getId, userListDto.getUid())
                 .orderByAsc(AuthUser::getId);
         //分页
         Page<AuthUser> page = new Page<>(userListDto.getPageNum(), userListDto.getPageSize());
-        page(page ,wrapper);
+        page(page, wrapper);
 
         //包装VOS
         List<UserListVo> vos = new ArrayList<>();
@@ -109,7 +110,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
             vos.add(vo);
         }
 
-        return ResponseResult.okResult(new PageVo(vos ,page.getTotal()));
+        return ResponseResult.okResult(new PageVo(vos, page.getTotal()));
     }
 
     @Override
@@ -125,6 +126,30 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         AuthUser byId = getById(editAccessRightsDto.getUid());
         byId.setType(editAccessRightsDto.getType());
         updateById(byId);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult register(UserRegisterDto userRegisterDto) {
+        String email = userRegisterDto.getEmail();
+        AuthUser user = baseMapper.selectOne(new LambdaQueryWrapper<AuthUser>().eq(
+                Objects.nonNull(email),
+                AuthUser::getEmail,
+                email
+        ));
+        if (Objects.nonNull(email)) {
+            throw new RuntimeException("该邮箱已注册");
+        }
+
+        String encode = passwordEncoder.encode(userRegisterDto.getPassword());
+        AuthUser newUser = AuthUser.builder()
+                .userName(userRegisterDto.getUserName())
+                .email(userRegisterDto.getEmail())
+                .password(encode)
+                .build();
+
+        save(newUser);
+
         return ResponseResult.okResult();
     }
 

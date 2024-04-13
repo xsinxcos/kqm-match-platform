@@ -18,4 +18,6 @@ public class AuthParam {
     private String password;
     //openID
     private String openid;
+    //邮箱
+    private String email;
 }

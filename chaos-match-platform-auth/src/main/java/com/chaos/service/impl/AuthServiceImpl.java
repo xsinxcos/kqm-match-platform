@@ -11,7 +11,6 @@ import com.chaos.entity.dto.PasswordLoginDto;
 import com.chaos.entity.vo.RsaKeyVo;
 import com.chaos.enums.GrantTypeEnum;
 import com.chaos.factory.AuthFactory;
-import com.chaos.feign.UserFeignClient;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthService;
 import com.chaos.strategy.AuthGranterStrategy;
@@ -26,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,8 +39,6 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final RedisCache redisCache;
-
-    private final UserFeignClient userFeignClient;
 
     private final AuthFactory authFactory;
 
@@ -150,7 +148,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseResult adminCreateRSAKey() {
+    public ResponseResult createRSAKey() {
         //获取RSA密钥对
         RSAKey keyPair = RSAUtils.getKeyPair(new RSA());
         //时间戳
@@ -161,7 +159,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         //存入Redis
-        redisCache.setCacheObject(keyPair.getPublicKey() ,keyPair.getPrivateKey() ,RSAUtils.KEY_TTL ,RSAUtils.TIME_UNIT);
+        redisCache.setCacheObject(keyPair.getPublicKey(), keyPair.getPrivateKey(), RSAUtils.KEY_TTL, RSAUtils.TIME_UNIT);
 
         return ResponseResult.okResult(vo);
     }
@@ -173,14 +171,27 @@ public class AuthServiceImpl implements AuthService {
         String privateKey = redisCache.getCacheObject(publicKey);
         //解密
         RSA rsa = new RSA(privateKey, publicKey);
-        String decryptUid = RSAUtils.getDecryptString(passwordLoginDto.getUid(), rsa);
+
+        //UID
+        Long decryptUid = null;
+        if (Objects.nonNull(passwordLoginDto.getUid())) {
+            decryptUid = Long.valueOf(RSAUtils.getDecryptString(passwordLoginDto.getUid(), rsa));
+        }
+        //邮箱
+        String decryptEmail = null;
+        if (Objects.nonNull(passwordLoginDto.getEmail())) {
+            decryptEmail = RSAUtils.getDecryptString(passwordLoginDto.getEmail(), rsa);
+        }
+
         String decryptPassword = RSAUtils.getDecryptString(passwordLoginDto.getPassword(), rsa);
 
         //包装成统一登录类型
         AuthParam authParam = AuthParam.builder()
-                .uid(Long.valueOf(decryptUid))
+                .uid(decryptUid)
+                .email(decryptEmail)
                 .password(decryptPassword)
                 .build();
+
         //找到相应策略的类型
         String grantType = GrantTypeEnum.getValueByType("app_password");
         AuthGranterStrategy granterStrategy = authFactory.getGranter(grantType);

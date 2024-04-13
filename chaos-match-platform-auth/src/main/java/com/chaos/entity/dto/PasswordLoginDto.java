@@ -17,8 +17,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class PasswordLoginDto {
     //UID（RSA加密后）
-    @NotBlank(message = "uid不能为空")
     private String uid;
+    //邮箱（RSA加密后）
+    private String email;
+
     //密码（RSA加密后）
     @NotBlank(message = "密码不能为空")
     private String password;

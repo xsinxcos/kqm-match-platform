@@ -68,7 +68,7 @@ public class LoginController {
     }
 
     /**
-     * 用户端UID密码登录
+     * 用户端密码登录
      * @param passwordLoginDto
      * @return token
      */
@@ -76,10 +76,16 @@ public class LoginController {
     @SystemLog(BusinessName = "passwordLogin")
     public ResponseResult passwordLogin(@Valid @RequestBody PasswordLoginDto passwordLoginDto){
 
-        if(!StringUtils.hasText(passwordLoginDto.getUid())){
-            //提示 必须要传UID
-            throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
-        }
         return authService.passwordLogin(passwordLoginDto);
+    }
+
+    /**
+     * 获取RSA密钥对
+     * @return
+     */
+    @PostMapping("/getKey")
+    @SystemLog(BusinessName = "createRSAKey")
+    public ResponseResult createRSAKey(){
+        return authService.createRSAKey();
     }
 }

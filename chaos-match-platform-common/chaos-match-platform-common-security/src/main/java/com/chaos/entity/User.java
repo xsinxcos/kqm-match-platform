@@ -27,6 +27,9 @@ public class User implements Serializable {
     private String password;
 
     private String openid;
+
+    //邮箱
+    private String email;
     //手机号码
     private String phoneNumber;
     //地址
