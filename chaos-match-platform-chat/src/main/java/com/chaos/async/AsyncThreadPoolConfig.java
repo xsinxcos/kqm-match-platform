@@ -33,8 +33,9 @@ public class AsyncThreadPoolConfig {
      * 有界阻塞队列容量上限
      */
     private static final int QUEUE_SIZE = 10000;
+
     @Bean("asyncExecutor")
-    public Executor asyncThreadPool(){
+    public Executor asyncThreadPool() {
         ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(
                 Math.max(1, IO_MAX / 5),
                 IO_MAX,
@@ -43,6 +44,6 @@ public class AsyncThreadPoolConfig {
                 new LinkedBlockingDeque<>(QUEUE_SIZE),
                 new ThreadPoolExecutor.CallerRunsPolicy()
         );
-       return poolExecutor;
+        return poolExecutor;
     }
 }

@@ -10,12 +10,9 @@ import com.chaos.util.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -28,6 +25,7 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
     private final UserFeignClient userFeignClient;
 
     private final PasswordEncoder passwordEncoder;
+
     /**
      * 认证
      */
@@ -45,12 +43,12 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
 
         boolean matches = passwordEncoder.matches(token.getCredentials(), authUserBo.getPassword());
 
-        if(!matches){
+        if (!matches) {
             throw new RuntimeException("密码错误");
         }
         LoginUser loginUser = new LoginUser(BeanCopyUtils.copyBean(authUserBo, User.class));
 
-        EmailPasswordAuthenticationToken authenticationToken = new EmailPasswordAuthenticationToken(loginUser , token.getCredentials(), null);
+        EmailPasswordAuthenticationToken authenticationToken = new EmailPasswordAuthenticationToken(loginUser, token.getCredentials(), null);
 
         return authenticationToken;
     }

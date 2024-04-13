@@ -5,13 +5,9 @@ import com.chaos.constant.LoginConstant;
 import com.chaos.entity.AuthParam;
 import com.chaos.entity.LoginUser;
 import com.chaos.entity.TokenInfo;
-import com.chaos.entity.User;
 import com.chaos.feign.UserFeignClient;
-import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.handler.authenticationToken.EmailPasswordAuthenticationToken;
-import com.chaos.response.ResponseResult;
 import com.chaos.strategy.AbstractAuthGranter;
-import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,10 +41,10 @@ public class PasswordStrategy extends AbstractAuthGranter {
     public TokenInfo grant(AuthParam authParam) {
         LoginUser loginUser = null;
 
-        if(Objects.nonNull(authParam.getUid())){
-            loginUser = uidGrant(authParam.getUid() ,authParam.getPassword());
-        }else if(Objects.nonNull(authParam.getEmail())){
-            loginUser = emailGrant(authParam.getEmail() ,authParam.getPassword());
+        if (Objects.nonNull(authParam.getUid())) {
+            loginUser = uidGrant(authParam.getUid(), authParam.getPassword());
+        } else if (Objects.nonNull(authParam.getEmail())) {
+            loginUser = emailGrant(authParam.getEmail(), authParam.getPassword());
         }
 
         long userid = loginUser.getUser().getId();
@@ -63,7 +58,7 @@ public class PasswordStrategy extends AbstractAuthGranter {
         return tokenInfo;
     }
 
-    private LoginUser uidGrant(Long uid ,String password){
+    private LoginUser uidGrant(Long uid, String password) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(uid, password);
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         //判断是否认证通过
@@ -74,8 +69,8 @@ public class PasswordStrategy extends AbstractAuthGranter {
         return (LoginUser) authenticate.getPrincipal();
     }
 
-    private LoginUser emailGrant(String email ,String password){
-        EmailPasswordAuthenticationToken authenticationToken = new EmailPasswordAuthenticationToken(email ,password);
+    private LoginUser emailGrant(String email, String password) {
+        EmailPasswordAuthenticationToken authenticationToken = new EmailPasswordAuthenticationToken(email, password);
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         //判断是否认证通过
         if (Objects.isNull(authenticate)) {

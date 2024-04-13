@@ -1,6 +1,5 @@
 package com.chaos.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -30,7 +29,6 @@ import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.feign.bo.PosterBo;
 import com.chaos.mapper.PostMapper;
 import com.chaos.mapper.PostTagMapper;
-import com.chaos.mapper.TagMapper;
 import com.chaos.model.recommend.RecommendDataModel;
 import com.chaos.model.word.WordFilterDataModel;
 import com.chaos.response.ResponseResult;
@@ -45,8 +43,6 @@ import com.meilisearch.sdk.SearchRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.avro.data.Json;
-import org.junit.jupiter.api.Tags;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,8 +92,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         Post post = BeanCopyUtils.copyBean(addPostDto, Post.class);
         post.setPosterId(SecurityUtils.getUserId());
         //对帖子标题和内容进行审查屏蔽
-        post.setTitle(wordFilterDataModel.replaceText(post.getTitle() ,'*'));
-        post.setContent(wordFilterDataModel.replaceText(post.getContent() ,'*'));
+        post.setTitle(wordFilterDataModel.replaceText(post.getTitle(), '*'));
+        post.setContent(wordFilterDataModel.replaceText(post.getContent(), '*'));
         //保存帖子内容
         save(post);
         //保存标签与帖子得对应关系
@@ -417,12 +413,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         try {
             List<Long> recommendByUserid = recommendDataModel.getRecommendByUserid(20, count, SecurityUtils.getUserId());
             //如果推荐为空则直接返回
-            if(recommendByUserid.isEmpty()) return ResponseResult.okResult(new ArrayList<>());
+            if (recommendByUserid.isEmpty()) return ResponseResult.okResult(new ArrayList<>());
             //数据库查询
             posts = getBaseMapper().selectBatchIds(recommendByUserid);
 
             //如果推荐为空则直接返回
-            if(posts.isEmpty()) return ResponseResult.okResult(new ArrayList<>());
+            if (posts.isEmpty()) return ResponseResult.okResult(new ArrayList<>());
 
             List<Post> recommendPost = posts.stream().filter(post -> (post.getStatus().equals(POST_STATUS_MATCHING)))
                     .collect(Collectors.toList());
@@ -435,7 +431,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             });
 
             //异步优化POST和USER关系
-            CompletableFuture<Map<Long ,PosterBo>> postUserFuture = CompletableFuture.supplyAsync(() -> {
+            CompletableFuture<Map<Long, PosterBo>> postUserFuture = CompletableFuture.supplyAsync(() -> {
                 return userFeignClient.getBatchUserByUserIds(posterIds).getData();
             });
 
@@ -444,12 +440,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
             Map<Long, Long> postTagMap = postTagList.stream().collect(Collectors.toMap(PostTag::getPostId, PostTag::getTagId));
             //查询TAG
-            Map<Long , TagBo> tagMap = new HashMap<>();
+            Map<Long, TagBo> tagMap = new HashMap<>();
             List<Long> tagIds = postTagList.stream().map(PostTag::getTagId).collect(Collectors.toList());
             List<Tag> tags = tagService.getBaseMapper().selectBatchIds(tagIds);
             for (Tag tag : tags) {
                 TagBo tagBo = BeanCopyUtils.copyBean(tag, TagBo.class);
-                tagMap.put(tag.getId() ,tagBo);
+                tagMap.put(tag.getId(), tagBo);
             }
 
             //封装VO
@@ -467,7 +463,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 vo.setPosterAvatar(posterBo.getAvatar());
             }
             return ResponseResult.okResult(vos);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("获取推荐失败");
         }
     }
@@ -505,7 +501,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     /**
-     *  截取文章部分内容并且不省略图片链接
+     * 截取文章部分内容并且不省略图片链接
      */
     private String OmitContentKeepPic(@NonNull String content) {
         String[] split = content.split("\\*\\*/img/\\*\\*");

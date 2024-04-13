@@ -40,6 +40,7 @@ public class AdminTagController {
 
     /**
      * 管理端删除标签
+     *
      * @param dto
      * @return
      */
@@ -52,12 +53,13 @@ public class AdminTagController {
 
     /**
      * 统计每种TAG对应的帖子的数量
+     *
      * @return
      */
     @AuthAdminCheck
     @PostMapping("/count")
     @SystemLog(BusinessName = "adminPostTagCount")
-    public ResponseResult adminPostTagCount(){
+    public ResponseResult adminPostTagCount() {
         return tagService.adminPostTagCount();
     }
 }

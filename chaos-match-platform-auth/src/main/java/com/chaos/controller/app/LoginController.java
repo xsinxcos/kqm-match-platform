@@ -4,12 +4,10 @@ import com.chaos.annotation.SystemLog;
 import com.chaos.bo.WxLoginUserDetailBo;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.entity.dto.PasswordLoginDto;
-import com.chaos.exception.SystemException;
 import com.chaos.feign.WeiXinFeignClient;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,23 +67,25 @@ public class LoginController {
 
     /**
      * 用户端密码登录
+     *
      * @param passwordLoginDto
      * @return token
      */
     @PostMapping("/passwordLogin")
     @SystemLog(BusinessName = "passwordLogin")
-    public ResponseResult passwordLogin(@Valid @RequestBody PasswordLoginDto passwordLoginDto){
+    public ResponseResult passwordLogin(@Valid @RequestBody PasswordLoginDto passwordLoginDto) {
 
         return authService.passwordLogin(passwordLoginDto);
     }
 
     /**
      * 获取RSA密钥对
+     *
      * @return
      */
     @PostMapping("/getKey")
     @SystemLog(BusinessName = "createRSAKey")
-    public ResponseResult createRSAKey(){
+    public ResponseResult createRSAKey() {
         return authService.createRSAKey();
     }
 }

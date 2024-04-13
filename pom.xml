@@ -209,6 +209,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-open</artifactId>
+                <version>${weixin-java-miniapp.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>

@@ -1,46 +1,46 @@
 package com.chaos.util;
- 
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Base64Utils;
- 
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
- 
+
 /**
  * 字符串加密工具类
  */
 @Slf4j
 public class AesUtils {
- 
+
     /**
      * key 加密算法
      */
     private static final String KEY_ALGORITHM = "AES";
- 
+
     /**
      * 固定值
      */
     private static final String SECRET_RANDOM = "SHA1PRNG";
- 
+
     /**
      * 编码方式
      */
     public static final String ENCODING_TYPE = "UTF-8";
- 
+
     /**
      * 默认的加密算法
      */
     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
- 
+
     /**
      * 私钥
      */
     private static final String ASSETS_DEV_PWD_FIELD = "1234asdf";
- 
+
     /**
      * 加密
      *
@@ -49,11 +49,11 @@ public class AesUtils {
      * @return
      */
     public static String encrypt(String content, String password) {
- 
+
         try {
             // 创建密码器
             Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
- 
+
             byte[] byteContent = content.getBytes(ENCODING_TYPE);
             // 初始化为加密模式的密码器
             cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(password));
@@ -64,10 +64,10 @@ public class AesUtils {
         } catch (Exception e) {
             log.error("aesencrypt000 error ", e);
         }
- 
+
         return null;
     }
- 
+
     /**
      * AES 解密操作
      *
@@ -76,7 +76,7 @@ public class AesUtils {
      * @return
      */
     public static String decrypt(String content, String password) {
- 
+
         try {
             //实例化
             Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
@@ -88,17 +88,17 @@ public class AesUtils {
         } catch (Exception e) {
             log.error("aesdecrypt000 error ", e);
         }
- 
+
         return null;
     }
- 
+
     /**
      * 生成加密秘钥
      *
      * @return
      */
     private static SecretKeySpec getSecretKey(String password) {
- 
+
         //返回生成指定算法密钥生成器的 KeyGenerator 对象
         KeyGenerator kg;
         try {
@@ -114,7 +114,7 @@ public class AesUtils {
         } catch (NoSuchAlgorithmException e) {
             log.error("aesgetSecretKey000 error ", e);
         }
- 
+
         return null;
     }
 

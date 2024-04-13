@@ -191,11 +191,12 @@ public class PostController {
 
     /**
      * 获取推荐帖子
+     *
      * @return
      */
     @GetMapping("/recommend")
     @SystemLog(BusinessName = "getRecommendPost")
-    public ResponseResult getRecommendPost(@NotNull Integer count){
+    public ResponseResult getRecommendPost(@NotNull Integer count) {
         return postService.getRecommendPost(count);
     }
 }

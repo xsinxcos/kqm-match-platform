@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * (Tag)表服务实现类
@@ -65,7 +64,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         maps.forEach(o -> {
             Long tagId = o.get("tag_id");
             String name = idName.get(tagId);
-            if(Objects.nonNull(name)) {
+            if (Objects.nonNull(name)) {
                 vos.add(new PostTagCountVo(tagId, name, o.get("post_count")));
             }
         });

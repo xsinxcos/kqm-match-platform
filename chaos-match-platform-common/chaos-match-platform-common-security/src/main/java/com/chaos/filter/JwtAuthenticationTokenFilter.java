@@ -2,7 +2,6 @@ package com.chaos.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;
-import com.chaos.constant.LoginConstant;
 import com.chaos.entity.LoginUser;
 import com.chaos.response.ResponseResult;
 import com.chaos.util.JwtUtil;

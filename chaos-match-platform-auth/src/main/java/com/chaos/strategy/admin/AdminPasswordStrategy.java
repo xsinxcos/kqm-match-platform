@@ -45,7 +45,7 @@ public class AdminPasswordStrategy extends AbstractAuthGranter {
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
 
         //如果不是管理员则拒绝登录
-        if (!USER_ADMIN_TYPE.equals(loginUser.getUser().getType())){
+        if (!USER_ADMIN_TYPE.equals(loginUser.getUser().getType())) {
             throw new RuntimeException("非管理员账号");
         }
 

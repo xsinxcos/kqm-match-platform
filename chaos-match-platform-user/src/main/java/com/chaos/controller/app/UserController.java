@@ -21,6 +21,7 @@ public class UserController {
     private final AuthUserService authUserService;
 
     private final RedisCache redisCache;
+
     /**
      * 获取用户个人信息
      *
@@ -59,6 +60,7 @@ public class UserController {
 
     /**
      * 注册
+     *
      * @param userRegisterDto
      * @return
      */
@@ -70,7 +72,7 @@ public class UserController {
         String privateKey = redisCache.getCacheObject(publicKey);
 
         //解密
-        RSA rsa = new RSA(privateKey ,publicKey);
+        RSA rsa = new RSA(privateKey, publicKey);
         String decryptEmail = RSAUtils.getDecryptString(userRegisterDto.getEmail(), rsa);
         String decryptPassword = RSAUtils.getDecryptString(userRegisterDto.getPassword(), rsa);
         String decryptUsername = RSAUtils.getDecryptString(userRegisterDto.getUserName(), rsa);

@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Component
 public class CommonFilter implements GlobalFilter {
- 
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         HttpHeaders headers = exchange.getRequest().getHeaders();
@@ -50,5 +50,5 @@ public class CommonFilter implements GlobalFilter {
 
         return chain.filter(exchange.mutate().request(request).build());
     }
- 
+
 }

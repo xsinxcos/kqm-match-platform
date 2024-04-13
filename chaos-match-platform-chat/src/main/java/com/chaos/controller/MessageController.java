@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -35,7 +34,7 @@ public class MessageController {
      * @return
      */
     @GetMapping("/history")
-    public ResponseResult showHistoryMessage(@NotNull Integer offset,@NotNull Integer limit, @NotNull Long userId) {
+    public ResponseResult showHistoryMessage(@NotNull Integer offset, @NotNull Integer limit, @NotNull Long userId) {
         return messageService.showHistoryMessage(offset, limit, userId);
     }
 

@@ -8,7 +8,10 @@ import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -26,14 +29,15 @@ public class AdminLoginController {
 
     /**
      * 管理端UID密码登录
+     *
      * @param passwordLoginDto
      * @return token
      */
     @PostMapping("/passwordLogin")
     @SystemLog(BusinessName = "adminPasswordLogin")
-    public ResponseResult adminPasswordLogin(@Valid  @RequestBody PasswordLoginDto passwordLoginDto){
+    public ResponseResult adminPasswordLogin(@Valid @RequestBody PasswordLoginDto passwordLoginDto) {
 
-        if(!StringUtils.hasText(passwordLoginDto.getUid())){
+        if (!StringUtils.hasText(passwordLoginDto.getUid())) {
             //提示 必须要传UID
             throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
         }
@@ -68,11 +72,12 @@ public class AdminLoginController {
 
     /**
      * 获取RSA密钥对
+     *
      * @return
      */
     @PostMapping("/getKey")
     @SystemLog(BusinessName = "createRSAKey")
-    public ResponseResult adminCreateRSAKey(){
+    public ResponseResult adminCreateRSAKey() {
         return authService.createRSAKey();
     }
 }

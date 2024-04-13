@@ -2,11 +2,7 @@ package com.chaos.handler.authenticationToken;
 
 import lombok.Getter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.SpringSecurityCoreVersion;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.util.Assert;
 
 import java.util.Collection;
 
@@ -24,7 +20,7 @@ public class EmailPasswordAuthenticationToken extends AbstractAuthenticationToke
     private String email;
 
 
-    public EmailPasswordAuthenticationToken(String email ,String password) {
+    public EmailPasswordAuthenticationToken(String email, String password) {
         super(null);
         this.credentials = password;
         this.email = email;

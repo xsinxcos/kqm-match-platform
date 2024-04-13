@@ -113,7 +113,7 @@ public class WebSocketServer {
         parseMessageBo.getMessage().setSendFrom(Long.parseLong(sid));
         WebSocketServer server = null;
 
-        if (Objects.nonNull(messageInfo.getSendTo())){
+        if (Objects.nonNull(messageInfo.getSendTo())) {
             server = webSocketMap.get(messageInfo.getSendTo().toString());
         }
 

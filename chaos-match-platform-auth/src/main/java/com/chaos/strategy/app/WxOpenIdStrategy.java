@@ -1,7 +1,6 @@
 package com.chaos.strategy.app;
 
 import com.alibaba.fastjson.JSON;
-import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.constant.LoginConstant;
 import com.chaos.entity.AuthParam;
 import com.chaos.entity.LoginUser;
@@ -9,7 +8,6 @@ import com.chaos.entity.TokenInfo;
 import com.chaos.entity.User;
 import com.chaos.feign.UserFeignClient;
 import com.chaos.feign.bo.AuthUserBo;
-import com.chaos.response.ResponseResult;
 import com.chaos.strategy.AbstractAuthGranter;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.RedisCache;
@@ -49,7 +47,7 @@ public class WxOpenIdStrategy extends AbstractAuthGranter {
             authUserBo.setPassword(createRandomPassword());
             authUserBo = userFeignClient.addUserByOpenId(openid).getData();
         }
-        if(isLocked(authUserBo)){
+        if (isLocked(authUserBo)) {
             throw new RuntimeException("该账号已被冻结");
         }
         //根据openID 生成token

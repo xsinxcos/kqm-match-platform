@@ -2,12 +2,12 @@ package com.chaos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.chaos.model.dto.UserInfoDto;
-import com.chaos.model.dto.app.UserRegisterDto;
-import com.chaos.model.entity.AuthUser;
-import com.chaos.response.ResponseResult;
 import com.chaos.model.dto.admin.EditAccessRightsDto;
 import com.chaos.model.dto.admin.UserListDto;
 import com.chaos.model.dto.admin.UserStatusChangeDto;
+import com.chaos.model.dto.app.UserRegisterDto;
+import com.chaos.model.entity.AuthUser;
+import com.chaos.response.ResponseResult;
 
 
 /**
@@ -30,7 +30,7 @@ public interface AuthUserService extends IService<AuthUser> {
 
     ResponseResult ChangeUserStatus(UserStatusChangeDto userStatusChangeDto);
 
-    ResponseResult editAccessRights(EditAccessRightsDto  editAccessRightsDto);
+    ResponseResult editAccessRights(EditAccessRightsDto editAccessRightsDto);
 
     ResponseResult register(UserRegisterDto userRegisterDto);
 }

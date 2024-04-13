@@ -31,7 +31,7 @@ public abstract class AbstractAuthGranter implements AuthGranterStrategy {
                 .build();
     }
 
-    protected boolean isLocked(AuthUserBo authUser){
+    protected boolean isLocked(AuthUserBo authUser) {
         return USER_LOCK_STATUS.equals(authUser.getStatus());
     }
 

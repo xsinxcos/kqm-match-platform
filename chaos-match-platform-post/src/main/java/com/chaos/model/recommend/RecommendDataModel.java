@@ -1,7 +1,6 @@
 package com.chaos.model.recommend;
 
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.io.resource.ClassPathResource;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chaos.domain.bo.RecommendBo;
 import com.chaos.domain.entity.PostUser;
@@ -64,7 +63,7 @@ public class RecommendDataModel extends AbstractModel {
         try {
             File recommendTempFile = File.createTempFile("temp", ".csv");
             List<RecommendBo> dataInDatabase = getDataInDatabase();
-            setFileRecommendCsv(dataInDatabase ,recommendTempFile);
+            setFileRecommendCsv(dataInDatabase, recommendTempFile);
             setRecommender(recommendTempFile);
         } catch (IOException e) {
             log.error("临时文件创建失败");

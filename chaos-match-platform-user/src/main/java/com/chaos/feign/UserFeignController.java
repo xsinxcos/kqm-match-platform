@@ -1,6 +1,5 @@
 package com.chaos.feign;
 
-import com.alibaba.nacos.shaded.org.checkerframework.checker.units.qual.A;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.feign.bo.PosterBo;

@@ -1,12 +1,17 @@
 # 1. docker
+
 ## 安装
+
 ```bash
 curl -sSL https://get.daocloud.io/docker | sh
 ```
+
 或者
+
 ```bash
 curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
 ```
+
 ## 启动、停止
 
 ### systemctl 方式
@@ -48,6 +53,7 @@ chmod +x /usr/local/bin/docker-compose
 ```
 
 # 3. 安装git
+
 ```
 ubuntu系统上执行 apt install git
 ```
