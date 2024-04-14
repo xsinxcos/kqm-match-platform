@@ -1,5 +1,6 @@
 package com.chaos.service.impl;
 
+import cn.binarywang.wx.miniapp.api.WxMaOpenApiService;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.util.WxMaConfigHolder;
@@ -19,8 +20,10 @@ import org.springframework.stereotype.Service;
 public class WeiXinServiceImpl implements WeiXinService {
     private final WxMaService wxMaService;
 
+
     @Override
     public ResponseResult wxLoginUserDetail(String code) {
+
         String appid = DefaultWxConfig.WX_APPID;
         if (StringUtils.isBlank(code)) {
             return ResponseResult.errorResult(AppHttpCodeEnum.EMPTY_JSCODE);
