@@ -4,17 +4,15 @@ import com.chaos.entity.LoginUser;
 import com.chaos.entity.User;
 import com.chaos.feign.UserFeignClient;
 import com.chaos.feign.bo.AuthUserBo;
+import com.chaos.handler.RBACPermissionsHandler;
 import com.chaos.handler.authenticationToken.EmailPasswordAuthenticationToken;
 import com.chaos.response.ResponseResult;
 import com.chaos.util.BeanCopyUtils;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -28,8 +26,8 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Setter
-    private UserDetailsService userDetailsService;
+    @Autowired
+    private RBACPermissionsHandler rbacPermissionsHandler;
 
     public EmailPasswordAuthenticationProvider() {
     }
@@ -56,7 +54,8 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
         if (!matches) {
             throw new RuntimeException("密码错误");
         }
-        LoginUser loginUser = new LoginUser(BeanCopyUtils.copyBean(authUserBo, User.class));
+
+        LoginUser loginUser = (LoginUser)rbacPermissionsHandler.setRBACPermissions(BeanCopyUtils.copyBean(authUserBo, User.class));
 
         EmailPasswordAuthenticationToken authenticationToken = new EmailPasswordAuthenticationToken(loginUser, token.getCredentials(), null);
 

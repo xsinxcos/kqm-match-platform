@@ -4,6 +4,7 @@ import com.chaos.entity.LoginUser;
 import com.chaos.entity.User;
 import com.chaos.feign.UserFeignClient;
 import com.chaos.feign.bo.AuthUserBo;
+import com.chaos.handler.RBACPermissionsHandler;
 import com.chaos.util.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +17,10 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
+
     private final UserFeignClient userFeignClient;
 
+    private final RBACPermissionsHandler rbacPermissionsHandler;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //根据用户名查询用户信息
@@ -27,12 +30,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
             throw new RuntimeException("用户不存在");
         }
         //返回用户信息
-        //todo 权限封装
-//        if(user.getType().equals(SystemConstants.ADMIN)){
-//            List<String> list = menuMapper.selectPermsByUserId(user.getId());
-//            return new LoginUser(user ,list);
-//        }
-        return new LoginUser(BeanCopyUtils.copyBean(user, User.class));
+        LoginUser loginUser = (LoginUser) rbacPermissionsHandler.setRBACPermissions(BeanCopyUtils.copyBean(user, User.class));
+        return loginUser;
     }
+
 
 }

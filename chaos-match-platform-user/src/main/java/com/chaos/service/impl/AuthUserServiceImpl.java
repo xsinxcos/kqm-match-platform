@@ -137,7 +137,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
                 AuthUser::getEmail,
                 email
         ));
-        if (Objects.nonNull(email)) {
+        if (Objects.nonNull(user)) {
             throw new RuntimeException("该邮箱已注册");
         }
 

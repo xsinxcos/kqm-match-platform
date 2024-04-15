@@ -41,7 +41,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         try {
             claims = JwtUtil.parseShortToken(token);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("token解析失败");
             //token超时 token非法
             //响应告诉前端需要重新登录或者重新获取assessToken
             ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.TOKEN_EXPIRED);
