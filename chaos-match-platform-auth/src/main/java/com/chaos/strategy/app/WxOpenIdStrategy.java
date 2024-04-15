@@ -51,7 +51,7 @@ public class WxOpenIdStrategy extends AbstractAuthGranter {
             throw new RuntimeException("该账号已被冻结");
         }
         //根据openID 生成token
-        LoginUser loginUser = new LoginUser(BeanCopyUtils.copyBean(authUserBo, User.class));
+        LoginUser loginUser = new LoginUser(BeanCopyUtils.copyBean(authUserBo, User.class) ,null);
         long userid = loginUser.getUser().getId();
         //生成TokenInfo
         TokenInfo tokenInfo = createAppTokenInfoByUserId(String.valueOf(userid));
