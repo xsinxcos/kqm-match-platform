@@ -30,7 +30,6 @@ import com.chaos.feign.bo.PosterBo;
 import com.chaos.mapper.PostMapper;
 import com.chaos.mapper.PostTagMapper;
 import com.chaos.model.recommend.RecommendDataModel;
-import com.chaos.model.word.WordFilterDataModel;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.PostService;
 import com.chaos.service.PostTagService;
@@ -39,6 +38,7 @@ import com.chaos.service.TagService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.MeiliSearchUtils;
 import com.chaos.util.SecurityUtils;
+import com.github.houbb.sensitive.word.core.SensitiveWordHelper;
 import com.meilisearch.sdk.SearchRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +80,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     private final MeiliSearchUtils meiliSearchUtils;
 
-    private final WordFilterDataModel wordFilterDataModel;
 
     private final RecommendDataModel recommendDataModel;
 
@@ -91,10 +90,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult addPost(AddPostDto addPostDto) {
         Post post = BeanCopyUtils.copyBean(addPostDto, Post.class);
         post.setPosterId(SecurityUtils.getUserId());
+        //截取文章，将图片不纳入审核
+        String content = post.getContent();
+        String[] split = content.split("\\*\\*/img/\\*\\*");
         //对帖子标题和内容进行审查屏蔽
-        post.setTitle(wordFilterDataModel.replaceText(post.getTitle(), '*'));
-        post.setContent(wordFilterDataModel.replaceText(post.getContent(), '*'));
+        content = SensitiveWordHelper.replace(split[0], '*');
+        post.setContent(SensitiveWordHelper.replace(content, '*'));
+        //将屏蔽后的图片重新拼接
+        if(split.length > 1) content += split[1];
         //保存帖子内容
+        post.setContent(content);
         save(post);
         //保存标签与帖子得对应关系
         List<PostTag> postTags = new ArrayList<>();
@@ -172,36 +177,45 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     @Transactional
     public ResponseResult modifyMyPost(ModifyMyPostDto modifyMyPostDto) {
-        Post byId = getById(modifyMyPostDto.getId());
+        Post post = getById(modifyMyPostDto.getId());
         //检验帖子是否属于该用户
-        if (!byId.getPosterId().equals(SecurityUtils.getUserId())) {
+        if (!post.getPosterId().equals(SecurityUtils.getUserId())) {
             return ResponseResult.errorResult(AppHttpCodeEnum.ERROR);
         }
 
+        //截取文章，将图片不纳入审核
+        String content = post.getContent();
+        String[] split = content.split("\\*\\*/img/\\*\\*");
+        //对帖子标题和内容进行审查屏蔽
+        content = SensitiveWordHelper.replace(split[0], '*');
+
+        //将屏蔽后的图片重新拼接
+        if(split.length > 1) content += split[1];
+
         //更新帖子信息
-        byId.setTitle(modifyMyPostDto.getTitle());
-        byId.setContent(modifyMyPostDto.getContent());
-        byId.setLatitude(modifyMyPostDto.getLatitude());
-        byId.setLongitude(modifyMyPostDto.getLongitude());
-        byId.setMeetAddress(modifyMyPostDto.getMeetAddress());
-        byId.setBeginTime(modifyMyPostDto.getBeginTime());
-        byId.setEndTime(modifyMyPostDto.getEndTime());
-        updateById(byId);
+        post.setContent(SensitiveWordHelper.replace(content, '*'));
+        post.setContent(content);
+        post.setLatitude(modifyMyPostDto.getLatitude());
+        post.setLongitude(modifyMyPostDto.getLongitude());
+        post.setMeetAddress(modifyMyPostDto.getMeetAddress());
+        post.setBeginTime(modifyMyPostDto.getBeginTime());
+        post.setEndTime(modifyMyPostDto.getEndTime());
+        updateById(post);
 
         //删除原有tag与帖子的关系
         postTagService.getBaseMapper().delete(
-                new QueryWrapper<PostTag>().eq("post_id", byId.getId())
+                new QueryWrapper<PostTag>().eq("post_id", post.getId())
         );
 
         //重新添加tag与帖子的关系
         List<PostTag> postTags = new ArrayList<>();
         for (TagBo tag : modifyMyPostDto.getTags()) {
-            postTags.add(new PostTag(byId.getId(), tag.getId()));
+            postTags.add(new PostTag(post.getId(), tag.getId()));
         }
         postTagService.saveBatch(postTags);
 
         //更新meilisearch中的document
-        PostBo postBo = BeanCopyUtils.copyBean(byId, PostBo.class);
+        PostBo postBo = BeanCopyUtils.copyBean(post, PostBo.class);
         postBo.setTags(modifyMyPostDto.getTags());
         postBo.setBeginTimeStamp(postBo.getBeginTime().getTime());
         postBo.setEndTimeStamp(postBo.getEndTime().getTime());
