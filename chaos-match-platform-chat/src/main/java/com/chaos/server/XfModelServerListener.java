@@ -66,7 +66,7 @@ public class XfModelServerListener extends WebSocketListener {
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.info("大模型调用失败");
         }
     }
 
