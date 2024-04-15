@@ -1,5 +1,6 @@
 package com.chaos.controller;
 
+import com.chaos.annotation.SystemLog;
 import com.chaos.domain.dto.ChatGPTMessageDto;
 import com.chaos.domain.vo.ChatGPTMessageVo;
 import com.chaos.response.ResponseResult;
@@ -34,6 +35,7 @@ public class MessageController {
      * @return
      */
     @GetMapping("/history")
+    @SystemLog(BusinessName = "showHistoryMessage")
     public ResponseResult showHistoryMessage(@NotNull Integer offset, @NotNull Integer limit, @NotNull Long userId) {
         return messageService.showHistoryMessage(offset, limit, userId);
     }
@@ -45,6 +47,7 @@ public class MessageController {
      * @return
      */
     @GetMapping("/history/user")
+    @SystemLog(BusinessName = "showHistoryChatUser")
     public ResponseResult showHistoryChatUser() {
         return messageService.showHistoryChatUser();
     }
@@ -56,6 +59,7 @@ public class MessageController {
      * @return
      */
     @PostMapping("/gpt")
+    @SystemLog(BusinessName = "chatWithGPT")
     public ResponseResult chatWithGPT(@RequestBody @Valid ChatGPTMessageDto chatGPTMessageDto) {
         String question = chatGPTMessageDto.getQuestion();
         long timeOut = 30;

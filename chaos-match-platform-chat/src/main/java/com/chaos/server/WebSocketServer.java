@@ -5,15 +5,21 @@ import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.constants.MessageConstants;
 import com.chaos.domain.bo.MessageBo;
 import com.chaos.domain.entity.MessageInfo;
+import com.chaos.entity.LoginUser;
 import com.chaos.exception.SystemException;
+import com.chaos.response.ResponseResult;
 import com.chaos.strategy.MessageHandlerStrategy;
+import com.chaos.util.JwtUtil;
 import com.chaos.util.RedisCache;
 import com.chaos.util.SecurityUtils;
+import com.chaos.util.WebUtils;
+import io.jsonwebtoken.Claims;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,6 +32,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @description: websocket会话控制端
@@ -65,10 +73,35 @@ public class WebSocketServer {
      */
     @OnOpen
     public void onOpen(Session session) {
+        String queryString = session.getQueryString();
+
+        if(queryString.isEmpty()){
+            closeSession(session ,CloseReason.CloseCodes.CANNOT_ACCEPT ,"未登录");
+            throw new RuntimeException("未登录");
+        }
+        String token = extractParameter(queryString, "access_token");
+        Claims claims = null;
+        try {
+            claims = JwtUtil.parseShortToken(token);
+        }catch (Exception e){
+            closeSession(session ,CloseReason.CloseCodes.VIOLATED_POLICY ,"access_token过期");
+        }
         this.session = session;
 
-        Authentication authentication = (Authentication) session.getUserPrincipal();
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String userKey = claims.getSubject();
+        //从redis中获取用户信息
+        LoginUser loginUser = JSON.parseObject(redisCache.getCacheObject(
+                userKey), LoginUser.class);
+
+        if (Objects.isNull(loginUser)) {
+            //说明登录过期  提示重新登录
+            closeSession(session ,CloseReason.CloseCodes.CANNOT_ACCEPT ,"请重新登录");
+            return;
+        }
+
+        //存入SecurityContextHolder
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         this.sid = SecurityUtils.getUserId().toString();
         //将webSocket加入其中
@@ -87,6 +120,25 @@ public class WebSocketServer {
         sendBatchOffLineMessage();
     }
 
+    private String extractParameter(String queryString, String parameterName) {
+        String regex = parameterName + "=([^&]*)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(queryString);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            return null;
+        }
+    }
+
+    private void closeSession(Session session ,CloseReason.CloseCodes closeCodes ,String reason){
+        try {
+            session.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY ,"refresh_token过期"));
+        } catch (IOException e) {
+            throw new RuntimeException("websocket连接关闭失败");
+        }
+    }
     /**
      * 连接关闭调用的方法
      */
@@ -94,7 +146,6 @@ public class WebSocketServer {
     public void onClose() {
         //从map中删除
         webSocketMap.remove(sid);
-
         //断开连接情况下，更新主板占用情况为释放
         log.info("释放的sid为：" + sid);
 
@@ -107,6 +158,15 @@ public class WebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
+        if("ping".equals(message)){
+            try {
+                this.sendMessage("pong");
+            } catch (IOException e) {
+                throw new RuntimeException("pong回应失败");
+            }
+            return;
+        }
+
         MessageBo parseMessageBo = JSON.parseObject(message, MessageBo.class);
         MessageInfo messageInfo = parseMessageBo.getMessage();
 

@@ -5,14 +5,19 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chaos.config.vo.PageVo;
 import com.chaos.domain.entity.Message;
+import com.chaos.domain.vo.HistoryChatUserVo;
 import com.chaos.domain.vo.HistoryMessageVo;
+import com.chaos.feign.UserFeignClient;
+import com.chaos.feign.bo.PosterBo;
 import com.chaos.mapper.MessageMapper;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.MessageService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +31,10 @@ import java.util.stream.Stream;
  * @since 2024-01-25 21:00:20
  */
 @Service("messageService")
-
+@RequiredArgsConstructor
 public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> implements MessageService {
+
+    private final UserFeignClient userFeignClient;
 
     @Override
     public ResponseResult showHistoryMessage(Integer offset, Integer limit, Long userId) {
@@ -67,11 +74,22 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
                 .filter(id -> !id.equals(userId))
                 .collect(Collectors.toList());
 
-        //包装vo返回
-        Map<String, List<Long>> idsMap = new HashMap<>();
-        idsMap.put("userIds", ids);
+        Map<Long, PosterBo> posterBoMap = userFeignClient.getBatchUserByUserIds(ids).getData();
 
-        return ResponseResult.okResult(idsMap);
+        List<HistoryChatUserVo> vos = new ArrayList<>();
+
+        for(Map.Entry<Long ,PosterBo> entry : posterBoMap.entrySet()){
+            HistoryChatUserVo chatUserVo = HistoryChatUserVo.builder()
+                    .id(entry.getKey())
+                    .avatar(entry.getValue().getAvatar())
+                    .userName(entry.getValue().getUserName())
+                    .build();
+
+            vos.add(chatUserVo);
+        }
+
+
+        return ResponseResult.okResult(vos);
     }
 }
 
