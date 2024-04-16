@@ -31,11 +31,8 @@ public class PasswordStrategy extends AbstractAuthGranter {
     private final RedisCache redisCache;
 
     private final AuthenticationManager authenticationManager;
-
-    private final PasswordEncoder passwordEncoder;
     private final static Integer USER_ADMIN_TYPE = 1;
 
-    private final UserFeignClient userFeignClient;
 
     @Override
     public TokenInfo grant(AuthParam authParam) {

@@ -97,7 +97,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         content = SensitiveWordHelper.replace(split[0], '*');
         post.setContent(SensitiveWordHelper.replace(content, '*'));
         //将屏蔽后的图片重新拼接
-        if(split.length > 1) content += split[1];
+        if(split.length > 1) {
+            content += "**/img/**";
+            content += split[1];
+        }
         //保存帖子内容
         post.setContent(content);
         save(post);
@@ -190,7 +193,11 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         content = SensitiveWordHelper.replace(split[0], '*');
 
         //将屏蔽后的图片重新拼接
-        if(split.length > 1) content += split[1];
+        //将屏蔽后的图片重新拼接
+        if(split.length > 1) {
+            content += "**/img/**";
+            content += split[1];
+        }
 
         //更新帖子信息
         post.setContent(SensitiveWordHelper.replace(content, '*'));

@@ -1,6 +1,7 @@
 package com.chaos.service.impl;
 
 import cn.hutool.crypto.asymmetric.RSA;
+import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.constant.LoginConstant;
 import com.chaos.emtity.RSAKey;
@@ -85,7 +86,11 @@ public class AuthServiceImpl implements AuthService {
         refreshToken = JwtUtil.createLongToken(userKey);
         redisCache.expire(userKey,
                 LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
-        TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
+
+        LoginUser loginUser = JSON.parseObject(redisCache.getCacheObject(userKey) ,LoginUser.class);
+
+        TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken ,loginUser.getUser().getId());
+
         return ResponseResult.okResult(tokenInfo);
     }
 
@@ -143,7 +148,10 @@ public class AuthServiceImpl implements AuthService {
         refreshToken = JwtUtil.createLongToken(userKey);
         redisCache.expire(userKey,
                 LoginConstant.REFRESH_TOKEN_TTL, TimeUnit.SECONDS);
-        TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
+
+        LoginUser loginUser = JSON.parseObject(redisCache.getCacheObject(userKey) ,LoginUser.class);
+
+        TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken ,loginUser.getUser().getId());
         return ResponseResult.okResult(tokenInfo);
     }
 
@@ -166,30 +174,30 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseResult passwordLogin(PasswordLoginDto passwordLoginDto) {
-//        //获取私钥
-//        String publicKey = passwordLoginDto.getPublicKey();
-//        String privateKey = redisCache.getCacheObject(publicKey);
-//        //解密
-//        RSA rsa = new RSA(privateKey, publicKey);
-//
-//        //UID
-//        Long decryptUid = null;
-//        if (Objects.nonNull(passwordLoginDto.getUid())) {
-//            decryptUid = Long.valueOf(RSAUtils.getDecryptString(passwordLoginDto.getUid(), rsa));
-//        }
-//        //邮箱
-//        String decryptEmail = null;
-//        if (Objects.nonNull(passwordLoginDto.getEmail())) {
-//            decryptEmail = RSAUtils.getDecryptString(passwordLoginDto.getEmail(), rsa);
-//        }
-//
-//        String decryptPassword = RSAUtils.getDecryptString(passwordLoginDto.getPassword(), rsa);
+        //获取私钥
+        String publicKey = passwordLoginDto.getPublicKey();
+        String privateKey = redisCache.getCacheObject(publicKey);
+        //解密
+        RSA rsa = new RSA(privateKey, publicKey);
+
+        //UID
+        Long decryptUid = null;
+        if (Objects.nonNull(passwordLoginDto.getUid())) {
+            decryptUid = Long.valueOf(RSAUtils.getDecryptString(passwordLoginDto.getUid(), rsa));
+        }
+        //邮箱
+        String decryptEmail = null;
+        if (Objects.nonNull(passwordLoginDto.getEmail())) {
+            decryptEmail = RSAUtils.getDecryptString(passwordLoginDto.getEmail(), rsa);
+        }
+
+        String decryptPassword = RSAUtils.getDecryptString(passwordLoginDto.getPassword(), rsa);
 
         //包装成统一登录类型
         AuthParam authParam = AuthParam.builder()
-                .uid(Long.valueOf(passwordLoginDto.getUid()))
-                //.email(decryptEmail)
-                .password(passwordLoginDto.getPassword())
+                .uid(decryptUid)
+                .email(decryptEmail)
+                .password(decryptPassword)
                 .build();
 
         //找到相应策略的类型
@@ -199,7 +207,7 @@ public class AuthServiceImpl implements AuthService {
         TokenInfo tokenInfo = granterStrategy.grant(authParam);
 
         //登录成功，清除RSA密钥对
-        //redisCache.deleteObject(publicKey);
+        redisCache.deleteObject(publicKey);
         return ResponseResult.okResult(tokenInfo);
     }
 }

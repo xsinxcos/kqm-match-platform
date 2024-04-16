@@ -158,6 +158,7 @@ public class WebSocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
+        //最简单的PING PONG机制
         if("ping".equals(message)){
             try {
                 this.sendMessage("pong");
@@ -167,6 +168,7 @@ public class WebSocketServer {
             return;
         }
 
+        //消息检验处理
         MessageBo parseMessageBo = JSON.parseObject(message, MessageBo.class);
         MessageInfo messageInfo = parseMessageBo.getMessage();
 

@@ -20,6 +20,7 @@ public abstract class AbstractAuthGranter implements AuthGranterStrategy {
         return TokenInfo.builder()
                 .access_token(JwtUtil.createShortToken(LoginConstant.USER_REDIS_PREFIX + userid))
                 .refresh_token(JwtUtil.createLongToken(LoginConstant.USER_REDIS_PREFIX + userid))
+                .userId(Long.valueOf(userid))
                 .build();
     }
 
@@ -28,6 +29,7 @@ public abstract class AbstractAuthGranter implements AuthGranterStrategy {
         return TokenInfo.builder()
                 .access_token(JwtUtil.createShortToken(LoginConstant.ADMIN_REDIS_PREFIX + userid))
                 .refresh_token(JwtUtil.createLongToken(LoginConstant.ADMIN_REDIS_PREFIX + userid))
+                .userId(Long.valueOf(userid))
                 .build();
     }
 

@@ -14,4 +14,6 @@ public class TokenInfo {
     private String access_token;
     //refreshToken 只有用于请求accessToken,有效期长
     private String refresh_token;
+    //用户的userID
+    private Long userId;
 }
