@@ -187,7 +187,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         }
 
         //截取文章，将图片不纳入审核
-        String content = post.getContent();
+        String content = modifyMyPostDto.getContent();
         String[] split = content.split("\\*\\*/img/\\*\\*");
         //对帖子标题和内容进行审查屏蔽
         content = SensitiveWordHelper.replace(split[0], '*');
@@ -200,7 +200,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         }
 
         //更新帖子信息
-        post.setContent(SensitiveWordHelper.replace(content, '*'));
+        post.setTitle(SensitiveWordHelper.replace(modifyMyPostDto.getTitle()));
         post.setContent(content);
         post.setLatitude(modifyMyPostDto.getLatitude());
         post.setLongitude(modifyMyPostDto.getLongitude());
