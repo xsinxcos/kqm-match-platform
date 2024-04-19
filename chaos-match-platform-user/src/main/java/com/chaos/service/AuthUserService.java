@@ -5,6 +5,8 @@ import com.chaos.model.dto.UserInfoDto;
 import com.chaos.model.dto.admin.EditAccessRightsDto;
 import com.chaos.model.dto.admin.UserListDto;
 import com.chaos.model.dto.admin.UserStatusChangeDto;
+import com.chaos.model.dto.app.PasswordForgetDto;
+import com.chaos.model.dto.app.VerificationCodeDto;
 import com.chaos.model.dto.app.UserRegisterDto;
 import com.chaos.model.entity.AuthUser;
 import com.chaos.response.ResponseResult;
@@ -33,5 +35,13 @@ public interface AuthUserService extends IService<AuthUser> {
     ResponseResult editAccessRights(EditAccessRightsDto editAccessRightsDto);
 
     ResponseResult register(UserRegisterDto userRegisterDto);
+
+    ResponseResult sendRegisterCodeToEmail(VerificationCodeDto dto);
+
+    ResponseResult sendPWResetCodeToEmail(VerificationCodeDto dto);
+
+    ResponseResult forgetPassword(PasswordForgetDto dto);
+
+    ResponseResult checkEmailExist(String email);
 }
 

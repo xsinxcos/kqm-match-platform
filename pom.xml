@@ -57,6 +57,7 @@
         <javax-servlet.version>3.1.0</javax-servlet.version>
         <mahout.version>0.12.2</mahout.version>
         <toolgood-words.version>3.0.3.1</toolgood-words.version>
+        <javax.mail.version>1.6.2</javax.mail.version>
         <!--        <spring-security.version>2.6.11</spring-security.version>-->
     </properties>
     <dependencies>
@@ -238,6 +239,13 @@
                 <groupId>io.github.toolgood</groupId>
                 <artifactId>toolgood-words</artifactId>
                 <version>${toolgood-words.version}</version>
+            </dependency>
+
+            <!--邮箱类-->
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>javax.mail</artifactId>
+                <version>${javax.mail.version}</version>
             </dependency>
 
         </dependencies>

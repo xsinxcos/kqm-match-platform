@@ -225,4 +225,14 @@ public class RedisCache {
     public ZSetOperations<String, String> getCacheZSet() {
         return redisTemplate.opsForZSet();
     }
+
+    /**
+     * 获取缓存中对象的剩余时间
+     * @param key
+     * @return
+     * @param <T>
+     */
+    public <T> Long getExpire(T key){
+        return redisTemplate.opsForValue().getOperations().getExpire(key);
+    }
 }

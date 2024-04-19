@@ -1,5 +1,8 @@
 package com.chaos.service.impl;
 
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.extra.mail.MailUtil;
+import com.alibaba.cloud.commons.io.IOUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,18 +12,25 @@ import com.chaos.model.dto.UserInfoDto;
 import com.chaos.model.dto.admin.EditAccessRightsDto;
 import com.chaos.model.dto.admin.UserListDto;
 import com.chaos.model.dto.admin.UserStatusChangeDto;
+import com.chaos.model.dto.app.PasswordForgetDto;
 import com.chaos.model.dto.app.UserRegisterDto;
+import com.chaos.model.dto.app.VerificationCodeDto;
 import com.chaos.model.entity.AuthUser;
 import com.chaos.model.vo.UserInfoVo;
 import com.chaos.model.vo.admin.UserListVo;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.AuthUserService;
 import com.chaos.util.BeanCopyUtils;
+import com.chaos.util.RedisCache;
 import com.chaos.util.SecurityUtils;
+import com.chaos.utils.VerifyCodeUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -37,6 +47,12 @@ import java.util.*;
 public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> implements AuthUserService {
 
     private final PasswordEncoder passwordEncoder;
+
+    private final RedisCache redisCache;
+
+    private final String REGISTER_EMAIL_STYLE_PATH = "/static/register_mail_style.html";
+
+    private final String PW_RESET_EMAIL_STYLE_PATH = "/static/pw_forget_mail_style.html";
 
     @Override
     public ResponseResult getUserInfo() {
@@ -151,6 +167,86 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         save(newUser);
 
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult sendRegisterCodeToEmail(VerificationCodeDto dto) {
+        //获取验证码
+        String code6 = VerifyCodeUtils.generateVerificationCode();
+
+        //按照指定格式发送验证到邮箱
+        sendCodeToEmail(code6, REGISTER_EMAIL_STYLE_PATH, dto.getEmail());
+
+        //将code存入缓存
+        redisCache.setCacheObject(VerifyCodeUtils.CACHE_REGISTER_CODE_PREFIX + dto.getEmail(), code6, VerifyCodeUtils.timeOutToCode,
+                VerifyCodeUtils.timeUnit);
+
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult sendPWResetCodeToEmail(VerificationCodeDto dto) {
+        //获取验证码
+        String code6 = VerifyCodeUtils.generateVerificationCode();
+
+        //按照指定格式发送验证到邮箱
+        sendCodeToEmail(code6, PW_RESET_EMAIL_STYLE_PATH, dto.getEmail());
+
+        //将code存入缓存
+        redisCache.setCacheObject(VerifyCodeUtils.CACHE_PASSWORD_FORGET_CODE_PREFIX + dto.getEmail(), code6, VerifyCodeUtils.timeOutToCode,
+                VerifyCodeUtils.timeUnit);
+
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult forgetPassword(PasswordForgetDto dto) {
+        AuthUser user = baseMapper.selectOne(new LambdaQueryWrapper<AuthUser>().eq(AuthUser::getEmail, dto.getEmail()));
+        if (Objects.isNull(user)) {
+            throw new RuntimeException("该邮箱不存在，未注册");
+        }
+        String newPassword = passwordEncoder.encode(dto.getNewPassword());
+        user.setPassword(newPassword);
+        updateById(user);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult checkEmailExist(String email) {
+        boolean isExist = false;
+        AuthUser user = baseMapper.selectOne(new LambdaQueryWrapper<AuthUser>().eq(AuthUser::getEmail, email));
+        if (Objects.nonNull(user)) {
+            isExist = true;
+        }
+        Map<String ,Boolean> vo = new TreeMap<>();
+        vo.put("isExist" ,isExist);
+        return ResponseResult.okResult(vo);
+    }
+
+    private void sendCodeToEmail(String code6, String htmlPath, String toEmail) {
+        String emailContent = "";
+
+        //获取邮箱验证码格式
+        ClassPathResource resource = new ClassPathResource(htmlPath);
+        InputStream inputStream = null;
+        try {
+            inputStream = resource.getInputStream();
+            emailContent = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("读取模版文件失败");
+        } finally {
+            IoUtil.close(inputStream);
+        }
+
+        //格式填充
+        emailContent = emailContent.replace("{{ code }}", code6);
+
+        //发送邮件
+        try {
+            MailUtil.send(toEmail, "Meet", emailContent, true);
+        } catch (Exception r) {
+            throw new RuntimeException("邮件发送失败");
+        }
     }
 
 

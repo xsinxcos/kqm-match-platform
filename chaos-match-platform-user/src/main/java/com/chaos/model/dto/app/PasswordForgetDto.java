@@ -5,29 +5,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 /**
- * @description: 用户注册
+ * @description:
  * @author: xsinxcos
- * @create: 2024-04-13 20:11
+ * @create: 2024-04-19 20:19
  **/
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegisterDto {
-    @NotBlank(message = "用户名不能为空")
-    private String userName;
+@Data
+public class PasswordForgetDto {
 
     @NotBlank
     private String email;
 
-    @NotBlank(message = "密码不能为空")
-    private String password;
-
     @NotBlank
-    private String publicKey;
+    private String newPassword;
 
     @NotBlank
     private String code;
+
+    @NotBlank
+    private String publicKey;
 }
