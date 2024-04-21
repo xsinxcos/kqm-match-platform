@@ -19,6 +19,10 @@ import javax.validation.Valid;
  * @author: xsinxcos
  * @create: 2024-03-18 22:04
  **/
+
+/**
+ * 静态资源模块（管理端）
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/static/manage")

@@ -19,6 +19,10 @@ import javax.validation.constraints.NotNull;
  * @author: xsinxcos
  * @create: 2024-02-02 05:24
  **/
+
+/**
+ * 评论模块（APP端）
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/comment")

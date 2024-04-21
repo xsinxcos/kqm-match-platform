@@ -22,6 +22,10 @@ import java.util.concurrent.TimeoutException;
  * @author: xsinxcos
  * @create: 2024-01-26 03:00
  **/
+
+/**
+ * 聊天模块（APP端）
+ */
 @RestController
 @RequiredArgsConstructor
 @Slf4j

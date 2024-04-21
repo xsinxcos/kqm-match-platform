@@ -19,6 +19,10 @@ import java.util.List;
  * @author: xsinxcos
  * @create: 2024-02-02 05:25
  **/
+
+/**
+ * 标签模块（APP端）
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/tag")

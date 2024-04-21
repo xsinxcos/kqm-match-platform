@@ -19,6 +19,10 @@ import javax.validation.Valid;
  * @author: xsinxcos
  * @create: 2024-03-16 21:23
  **/
+
+/**
+ * 标签模块（管理端）
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/tag/manage")

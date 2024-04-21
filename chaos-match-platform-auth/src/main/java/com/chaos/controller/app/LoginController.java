@@ -15,6 +15,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
+/**
+ * 登录模块（APP端）
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")

@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 用户模块（APP端）
+ */
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor

@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author: xsinxcos
  * @create: 2024-03-07 17:11
  **/
+
+/**
+ * 用户模块（管理端）
+ */
 @RestController
 @RequestMapping("/user/manage")
 @RequiredArgsConstructor

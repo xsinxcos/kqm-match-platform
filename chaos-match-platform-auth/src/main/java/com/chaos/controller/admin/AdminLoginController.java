@@ -21,6 +21,10 @@ import javax.validation.Valid;
  * @author: xsinxcos
  * @create: 2024-03-08 11:18
  **/
+
+/**
+ * 登录模块（管理端）
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth/manage")

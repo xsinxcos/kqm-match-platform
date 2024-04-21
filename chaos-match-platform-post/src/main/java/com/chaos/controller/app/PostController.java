@@ -17,6 +17,10 @@ import java.util.Optional;
  * @author: xsinxcos
  * @create: 2024-02-02 05:23
  **/
+
+/**
+ * 帖子模块（APP端）
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/post")

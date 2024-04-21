@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author: xsinxcos
  * @create: 2024-03-18 21:41
  **/
+
+/**
+ * 静态资源模块（APP端）
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/static")
