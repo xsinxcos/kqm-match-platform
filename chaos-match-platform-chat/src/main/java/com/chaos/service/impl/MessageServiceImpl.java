@@ -74,9 +74,13 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
                 .filter(id -> !id.equals(userId))
                 .collect(Collectors.toList());
 
+        List<HistoryChatUserVo> vos = new ArrayList<>();
+
+        if(ids.isEmpty()) return ResponseResult.okResult(vos);
+
         Map<Long, PosterBo> posterBoMap = userFeignClient.getBatchUserByUserIds(ids).getData();
 
-        List<HistoryChatUserVo> vos = new ArrayList<>();
+
 
         for(Map.Entry<Long ,PosterBo> entry : posterBoMap.entrySet()){
             HistoryChatUserVo chatUserVo = HistoryChatUserVo.builder()
