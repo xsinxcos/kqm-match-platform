@@ -1,13 +1,13 @@
-package com.chaos.controller.app;
+package com.chaos.controller.user.app;
 
 import cn.hutool.crypto.asymmetric.RSA;
 import com.chaos.annotation.SystemLog;
-import com.chaos.model.dto.UserInfoDto;
-import com.chaos.model.dto.app.PasswordForgetDto;
-import com.chaos.model.dto.app.VerificationCodeDto;
-import com.chaos.model.dto.app.UserRegisterDto;
+import com.chaos.domain.user.dto.UserInfoDto;
+import com.chaos.domain.user.dto.app.PasswordForgetDto;
+import com.chaos.domain.user.dto.app.VerificationCodeDto;
+import com.chaos.domain.user.dto.app.UserRegisterDto;
 import com.chaos.response.ResponseResult;
-import com.chaos.service.AuthUserService;
+import com.chaos.service.user.AuthUserService;
 import com.chaos.util.RSAUtils;
 import com.chaos.util.RedisCache;
 import com.chaos.utils.VerifyCodeUtils;

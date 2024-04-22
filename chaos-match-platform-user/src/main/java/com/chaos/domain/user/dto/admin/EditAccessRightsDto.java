@@ -1,4 +1,4 @@
-package com.chaos.model.dto.admin;
+package com.chaos.domain.user.dto.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,21 +9,15 @@ import javax.validation.constraints.NotNull;
 /**
  * @description:
  * @author: xsinxcos
- * @create: 2024-03-16 17:03
+ * @create: 2024-03-16 17:25
  **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserListDto {
+public class EditAccessRightsDto {
     @NotNull
-    private Integer pageNum;
-
-    @NotNull
-    private Integer pageSize;
-
-    private Integer type;
-
-    private String userName;
-
     private Long uid;
+
+    @NotNull
+    private Integer type;
 }

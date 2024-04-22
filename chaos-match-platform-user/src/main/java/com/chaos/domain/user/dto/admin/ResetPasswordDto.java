@@ -1,4 +1,4 @@
-package com.chaos.model.dto.admin;
+package com.chaos.domain.user.dto.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

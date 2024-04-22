@@ -1,13 +1,13 @@
-package com.chaos.controller.admin;
+package com.chaos.controller.user.admin;
 
 import com.chaos.annotation.AuthAdminCheck;
 import com.chaos.annotation.SystemLog;
-import com.chaos.model.dto.admin.EditAccessRightsDto;
-import com.chaos.model.dto.admin.ResetPasswordDto;
-import com.chaos.model.dto.admin.UserListDto;
-import com.chaos.model.dto.admin.UserStatusChangeDto;
+import com.chaos.domain.user.dto.admin.EditAccessRightsDto;
+import com.chaos.domain.user.dto.admin.ResetPasswordDto;
+import com.chaos.domain.user.dto.admin.UserListDto;
+import com.chaos.domain.user.dto.admin.UserStatusChangeDto;
 import com.chaos.response.ResponseResult;
-import com.chaos.service.AuthUserService;
+import com.chaos.service.user.AuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

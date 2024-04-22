@@ -18,7 +18,9 @@ public enum AppHttpCodeEnum {
     ERROR(500, "操作失败"),
     CONTENT_NOT_NULL(504, "评论内容不能为空"), REQUIRE_USERNAME(506, "必需填写用户名"),
 
-    PARAM_ERROR(506 ,"参数异常");
+    PARAM_ERROR(506 ,"参数异常"),
+    MENU_PARENT_ERROR(515, "上级菜单不能修改成自己"),
+    SUBMENU_EXIST(516,"存在子菜单不允许删除");
     int code;
     String msg;
 

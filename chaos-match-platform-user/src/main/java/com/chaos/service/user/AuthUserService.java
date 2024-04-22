@@ -1,14 +1,14 @@
-package com.chaos.service;
+package com.chaos.service.user;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.chaos.model.dto.UserInfoDto;
-import com.chaos.model.dto.admin.EditAccessRightsDto;
-import com.chaos.model.dto.admin.UserListDto;
-import com.chaos.model.dto.admin.UserStatusChangeDto;
-import com.chaos.model.dto.app.PasswordForgetDto;
-import com.chaos.model.dto.app.VerificationCodeDto;
-import com.chaos.model.dto.app.UserRegisterDto;
-import com.chaos.model.entity.AuthUser;
+import com.chaos.domain.user.dto.UserInfoDto;
+import com.chaos.domain.user.dto.admin.EditAccessRightsDto;
+import com.chaos.domain.user.dto.admin.UserListDto;
+import com.chaos.domain.user.dto.admin.UserStatusChangeDto;
+import com.chaos.domain.user.dto.app.PasswordForgetDto;
+import com.chaos.domain.user.dto.app.VerificationCodeDto;
+import com.chaos.domain.user.dto.app.UserRegisterDto;
+import com.chaos.domain.user.entity.AuthUser;
 import com.chaos.response.ResponseResult;
 
 

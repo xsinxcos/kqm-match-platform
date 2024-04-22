@@ -1,4 +1,4 @@
-package com.chaos.model.entity;
+package com.chaos.domain.user.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

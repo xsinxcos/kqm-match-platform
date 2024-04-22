@@ -1,4 +1,4 @@
-package com.chaos.model.vo.admin;
+package com.chaos.domain.user.vo.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

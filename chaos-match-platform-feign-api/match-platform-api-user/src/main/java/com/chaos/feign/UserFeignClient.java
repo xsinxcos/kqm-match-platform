@@ -1,5 +1,6 @@
 package com.chaos.feign;
 
+import com.chaos.annotation.SystemLog;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.feign.bo.PosterBo;
 import com.chaos.response.ResponseResult;
@@ -23,6 +24,7 @@ public interface UserFeignClient {
      * @return
      */
     @GetMapping("/feign/getUserByOpenId")
+    @SystemLog(BusinessName = "feign/getUserByOpenId")
     ResponseResult<AuthUserBo> getUserByOpenId(@RequestParam("openid") String openid);
 
     /**
@@ -31,6 +33,7 @@ public interface UserFeignClient {
      * @return
      */
     @PostMapping("/feign/addUserByOpenId")
+    @SystemLog(BusinessName = "feign/addUserByOpenId")
     ResponseResult<AuthUserBo> addUserByOpenId(@RequestParam("openid") String openid);
 
     /**
@@ -39,6 +42,7 @@ public interface UserFeignClient {
      * @return
      */
     @GetMapping("/feign/getUserByUsername")
+    @SystemLog(BusinessName = "feign/getUserByUsername")
     ResponseResult<AuthUserBo> getUserByUsername(@RequestParam("username") String username);
 
     /**
@@ -47,6 +51,7 @@ public interface UserFeignClient {
      * @return
      */
     @GetMapping("/feign/getBatchUserByUserIds")
+    @SystemLog(BusinessName = "feign/getBatchUserByUserIds")
     ResponseResult<Map<Long, PosterBo>> getBatchUserByUserIds(@RequestParam("userIds") List<Long> ids);
 
 
@@ -56,6 +61,7 @@ public interface UserFeignClient {
      * @return
      */
     @GetMapping("/feign/getUserByUserId")
+    @SystemLog(BusinessName = "feign/getUserByUserId")
     ResponseResult<AuthUserBo> getUserById(@RequestParam("id") Long id);
 
     /**
@@ -64,5 +70,6 @@ public interface UserFeignClient {
      * @return
      */
     @GetMapping("/feign/getUserByEmail")
+    @SystemLog(BusinessName = "feign/getUserByEmail")
     ResponseResult<AuthUserBo> getUserByEmail(@RequestParam("email") String email);
 }
