@@ -12,4 +12,5 @@ public class UserInfoVo {
     private Integer sex;
     private String phoneNumber;
     private String avatar;
+    private String email;
 }
