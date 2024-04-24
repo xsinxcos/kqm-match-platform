@@ -6,6 +6,7 @@ import com.alibaba.cloud.commons.io.IOUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chaos.config.DefaultUserConfig;
 import com.chaos.config.vo.PageVo;
 import com.chaos.mapper.user.AuthUserMapper;
 import com.chaos.domain.user.dto.UserInfoDto;
@@ -162,6 +163,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
                 .userName(userRegisterDto.getUserName())
                 .email(userRegisterDto.getEmail())
                 .password(encode)
+                .avatar(DefaultUserConfig.defaultAvatar)
                 .build();
 
         save(newUser);

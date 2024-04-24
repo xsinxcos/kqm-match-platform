@@ -57,6 +57,8 @@ public class UserFeignController implements UserFeignClient {
 
     @Override
     public ResponseResult getBatchUserByUserIds(List<Long> ids) {
+        if(ids.isEmpty()) return null;
+
         List<AuthUser> authUsers = authUserMapper.selectBatchIds(ids);
         List<PosterBo> posterBos = BeanCopyUtils.copyBeanList(authUsers, PosterBo.class);
         Map<Long, PosterBo> posterBoMap = posterBos.stream()
