@@ -10,6 +10,7 @@ import com.chaos.util.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -57,7 +58,8 @@ public class UserFeignController implements UserFeignClient {
 
     @Override
     public ResponseResult getBatchUserByUserIds(List<Long> ids) {
-        if(ids.isEmpty()) return null;
+
+        if(ids.isEmpty()) return ResponseResult.okResult(new HashMap<>());
 
         List<AuthUser> authUsers = authUserMapper.selectBatchIds(ids);
         List<PosterBo> posterBos = BeanCopyUtils.copyBeanList(authUsers, PosterBo.class);
