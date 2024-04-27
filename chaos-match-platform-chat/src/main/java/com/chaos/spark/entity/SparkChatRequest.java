@@ -1,10 +1,11 @@
-package com.chaos.domain;
+package com.chaos.spark.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class XfChatRequest {
+public class SparkChatRequest {
     private Header header;
 
     private Parameter parameter;
@@ -54,9 +55,12 @@ public class XfChatRequest {
 
     @Data
     @AllArgsConstructor
-    @NoArgsConstructor
     public static class Message {
         private List<Text> text;
+
+        public Message() {
+            text = new ArrayList<>();
+        }
     }
 
     @Data

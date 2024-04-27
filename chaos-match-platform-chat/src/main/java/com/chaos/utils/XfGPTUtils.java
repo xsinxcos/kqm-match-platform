@@ -1,6 +1,6 @@
 package com.chaos.utils;
 
-import com.chaos.domain.XfChatRequest;
+import com.chaos.spark.entity.SparkChatRequest;
 import okhttp3.HttpUrl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -90,8 +90,8 @@ public class XfGPTUtils {
      *
      * @return XfChatRequest.Header
      */
-    private static XfChatRequest.Header getHeader() {
-        return new XfChatRequest.Header(appid, UUID.randomUUID().toString().substring(0, 10));
+    private static SparkChatRequest.Header getHeader() {
+        return new SparkChatRequest.Header(appid, UUID.randomUUID().toString().substring(0, 10));
     }
 
     /**
@@ -99,8 +99,8 @@ public class XfGPTUtils {
      *
      * @return XfChatRequest.Parameter
      */
-    private static XfChatRequest.Parameter getParameter() {
-        return new XfChatRequest.Parameter(new XfChatRequest.Chat());
+    private static SparkChatRequest.Parameter getParameter() {
+        return new SparkChatRequest.Parameter(new SparkChatRequest.Chat());
     }
 
     /**
@@ -110,9 +110,9 @@ public class XfGPTUtils {
      * @return XfChatRequest.Payload
      */
 
-    private static XfChatRequest.Payload getPayload(List<XfChatRequest.Text> texts) {
-        return new XfChatRequest.Payload(
-                new XfChatRequest.Message(texts)
+    private static SparkChatRequest.Payload getPayload(SparkChatRequest.Message message) {
+        return new SparkChatRequest.Payload(
+                message
         );
     }
 
@@ -122,11 +122,11 @@ public class XfGPTUtils {
      * @param texts
      * @return XfChatRequest
      */
-    public static XfChatRequest getRequest(List<XfChatRequest.Text> texts) {
-        return XfChatRequest.builder()
+    public static SparkChatRequest getRequest(SparkChatRequest.Message message) {
+        return SparkChatRequest.builder()
                 .header(getHeader())
                 .parameter(getParameter())
-                .payload(getPayload(texts))
+                .payload(getPayload(message))
                 .build();
     }
 }

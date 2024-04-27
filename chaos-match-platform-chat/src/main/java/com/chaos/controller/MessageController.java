@@ -4,8 +4,10 @@ import com.chaos.annotation.SystemLog;
 import com.chaos.domain.dto.ChatGPTMessageDto;
 import com.chaos.domain.vo.ChatGPTMessageVo;
 import com.chaos.response.ResponseResult;
-import com.chaos.server.XfModelServerListener;
+import com.chaos.spark.SparkModel;
+import com.chaos.spark.listener.SparkModelServerListener;
 import com.chaos.service.MessageService;
+import com.chaos.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeoutException;
 public class MessageController {
     private final MessageService messageService;
 
+    private final SparkModel sparkModel;
     /**
      * 展示用户之间的历史记录
      *
@@ -58,37 +61,16 @@ public class MessageController {
 
     /**
      * 与GPT对话
-     *
-     * @param question
      * @return
      */
     @PostMapping("/gpt")
     @SystemLog(BusinessName = "chatWithGPT")
     public ResponseResult chatWithGPT(@RequestBody @Valid ChatGPTMessageDto chatGPTMessageDto) {
         String question = chatGPTMessageDto.getQuestion();
-        long timeOut = 30;
-        String answer = "";
-        XfModelServerListener xfListener = new XfModelServerListener();
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
-            try {
-                XfModelServerListener websocket = xfListener.sendQuestion(question, xfListener);
-                while (!xfListener.is_finished) {
-                    Thread.sleep(200);
-                    continue;
-                }
-                return websocket.getTotalAnswer();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            } finally {
-                xfListener.onClosed();
-            }
-        });
+        Long userId = SecurityUtils.getUserId();
+        sparkModel.sendMessage(userId,question);
+        String answer = sparkModel.getAnswer(userId);
 
-        try {
-            answer = future.get(timeOut, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            throw new RuntimeException("回答失败");
-        }
         return ResponseResult.okResult(new ChatGPTMessageVo(answer));
     }
 }

@@ -1,4 +1,4 @@
-package com.chaos.domain;
+package com.chaos.spark.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class XfChatResponse {
+public class SparkChatResponse {
     Header header;
     Payload payload;
 

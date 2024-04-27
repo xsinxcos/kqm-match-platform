@@ -1,12 +1,14 @@
-package com.chaos.server;
+package com.chaos.spark.listener;
 
 import com.alibaba.fastjson.JSON;
-import com.chaos.domain.XfChatRequest;
-import com.chaos.domain.XfChatResponse;
+import com.chaos.spark.entity.SparkText;
+import com.chaos.spark.entity.SparkChatRequest;
+import com.chaos.spark.entity.SparkChatResponse;
 import com.chaos.utils.XfGPTUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,40 +16,39 @@ import java.util.List;
 
 @Slf4j
 @Getter
-public class XfModelServerListener extends WebSocketListener {
+public class SparkModelServerListener extends WebSocketListener {
 
     private String totalAnswer;
 
-    public boolean is_finished;
+    public boolean isFinished;
 
     private WebSocket nowWebSocket;
 
-    public XfModelServerListener() {
+    public SparkModelServerListener() {
         totalAnswer = "";
-        is_finished = false;
+        isFinished = false;
     }
 
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
-        ;
         super.onOpen(webSocket, response);
     }
 
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         // System.out.println(userId + "用来区分那个用户的结果" + text);
-        XfChatResponse myJsonParse = JSON.parseObject(text, XfChatResponse.class);
+        SparkChatResponse myJsonParse = JSON.parseObject(text, SparkChatResponse.class);
         if (myJsonParse.getHeader().getCode() != 0) {
             log.error("发生错误，错误码为：" + myJsonParse.getHeader().getCode());
             log.error("本次请求的sid为：" + myJsonParse.getHeader().getSid());
             webSocket.close(1000, "");
         }
-        List<XfChatResponse.Text> textList = myJsonParse.getPayload().getChoices().getText();
-        for (XfChatResponse.Text temp : textList) {
+        List<SparkChatResponse.Text> textList = myJsonParse.getPayload().getChoices().getText();
+        for (SparkChatResponse.Text temp : textList) {
             totalAnswer = totalAnswer + temp.getContent();
         }
         if (myJsonParse.getHeader().getStatus() == 2) {
-            is_finished = true;
+            isFinished = true;
         }
     }
 
@@ -70,9 +71,14 @@ public class XfModelServerListener extends WebSocketListener {
         }
     }
 
-    public XfModelServerListener sendQuestion(String question, XfModelServerListener webSocketListener) throws Exception {
+    public void sendQuestion(SparkModelServerListener webSocketListener ,List<SparkText> history) {
         //构建鉴权url
-        String authUrl = XfGPTUtils.getAuthUrl();
+        String authUrl = null;
+        try {
+            authUrl = XfGPTUtils.getAuthUrl();
+        } catch (Exception e) {
+            throw new RuntimeException("authUrl构造失败");
+        }
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         String url = authUrl.toString().replace("http://", "ws://").replace("https://", "wss://");
         //建立websocket请求
@@ -80,18 +86,25 @@ public class XfModelServerListener extends WebSocketListener {
         WebSocket webSocket = client.newWebSocket(request, webSocketListener);
         nowWebSocket = webSocket;
         //构建请求内容
-        List<XfChatRequest.Text> requestTexts = new ArrayList<>();
-        requestTexts.add(new XfChatRequest.Text("user", question));
-        XfChatRequest request1 = XfGPTUtils.getRequest(requestTexts);
+        SparkChatRequest request1 = XfGPTUtils.getRequest(refactorSparkMessages(history));
         //发送请求
         String message = JSON.toJSON(request1).toString();
-        is_finished = false;
+        isFinished = false;
         webSocket.send(message);
-        return webSocketListener;
     }
 
     public void onClosed() {
         nowWebSocket.close(1000, "");
+    }
+
+    private SparkChatRequest.Message refactorSparkMessages(List<SparkText> sparkTexts){
+        SparkChatRequest.Message messages = new SparkChatRequest.Message();
+        for (SparkText sparkText : sparkTexts) {
+            SparkChatRequest.Text text = new SparkChatRequest.Text(sparkText.getRole(), sparkText.getContent());
+            messages.getText().add(text);
+        }
+
+        return messages;
     }
 
 }
