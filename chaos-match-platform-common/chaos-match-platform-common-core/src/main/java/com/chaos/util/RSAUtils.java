@@ -4,7 +4,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import com.chaos.emtity.RSAKey;
+import com.chaos.entity.RSAKey;
 
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;

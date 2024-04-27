@@ -1,4 +1,4 @@
-package com.chaos.emtity;
+package com.chaos.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

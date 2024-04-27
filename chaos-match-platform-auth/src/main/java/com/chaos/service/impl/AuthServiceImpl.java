@@ -4,7 +4,7 @@ import cn.hutool.crypto.asymmetric.RSA;
 import com.alibaba.fastjson.JSON;
 import com.chaos.constant.AppHttpCodeEnum;
 import com.chaos.constant.LoginConstant;
-import com.chaos.emtity.RSAKey;
+import com.chaos.entity.RSAKey;
 import com.chaos.entity.AuthParam;
 import com.chaos.entity.LoginUser;
 import com.chaos.entity.TokenInfo;
