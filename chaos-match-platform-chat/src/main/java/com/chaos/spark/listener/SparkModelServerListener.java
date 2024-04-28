@@ -66,7 +66,6 @@ public class SparkModelServerListener extends WebSocketListener {
                 }
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             log.info("大模型调用失败");
         }
     }

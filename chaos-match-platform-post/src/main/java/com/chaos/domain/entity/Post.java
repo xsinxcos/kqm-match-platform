@@ -1,9 +1,6 @@
 package com.chaos.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,6 +41,7 @@ public class Post {
     //结束时间
     private Date endTime;
     //乐观锁
+    @Version
     private Integer version;
     //创建者
     @TableField(fill = FieldFill.INSERT)

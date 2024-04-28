@@ -1,8 +1,10 @@
 package com.chaos.spark;
 
+import com.chaos.async.AsyncThreadPoolConfig;
 import com.chaos.spark.entity.SparkText;
 import com.chaos.spark.entity.SparkHistoryMessage;
 import com.chaos.spark.listener.SparkModelServerListener;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -14,6 +16,7 @@ import java.util.concurrent.*;
  * @create: 2024-04-27 23:34
  **/
 @Component
+@RequiredArgsConstructor
 public class SparkModel implements ISparkModel {
     //用于并发情况下每个用户ws连接不冲突
     private static final ConcurrentHashMap<Long , SparkModelServerListener> sparkListeners = new ConcurrentHashMap<>();
@@ -26,6 +29,10 @@ public class SparkModel implements ISparkModel {
 
     private static final TimeUnit timeUnit = TimeUnit.MINUTES;
 
+    //配置CompletableFuture线程池
+    private final AsyncThreadPoolConfig threadPoolConfig;
+
+
     @Override
     public void sendMessage(Long id, String text) {
         SparkModelServerListener pastListener ;
@@ -34,10 +41,6 @@ public class SparkModel implements ISparkModel {
         }else {
             pastListener = new SparkModelServerListener();
             sparkListeners.put(id ,pastListener);
-        }
-
-        if(!pastListener.isFinished){
-
         }
 
         SparkModelServerListener curListener = new SparkModelServerListener();
@@ -88,7 +91,7 @@ public class SparkModel implements ISparkModel {
             } finally {
                 listener.onClosed();
             }
-        });
+        } ,threadPoolConfig.asyncThreadPool());
 
         try {
             res = future.get(completableFutureTimeOut, TimeUnit.SECONDS);
