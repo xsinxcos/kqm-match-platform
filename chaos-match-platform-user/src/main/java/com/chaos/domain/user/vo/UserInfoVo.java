@@ -13,4 +13,5 @@ public class UserInfoVo {
     private String phoneNumber;
     private String avatar;
     private String email;
+    private String selfLabel;
 }

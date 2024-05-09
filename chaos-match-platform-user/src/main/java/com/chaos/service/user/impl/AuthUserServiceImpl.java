@@ -71,6 +71,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         user.setAvatar(userInfoDto.getAvatar());
         user.setPhoneNumber(userInfoDto.getPhoneNumber());
         user.setSex(userInfoDto.getSex());
+        user.setSelfLabel(userInfoDto.getSelfLabel());
         updateById(user);
         return ResponseResult.okResult();
     }
@@ -123,6 +124,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
                     .type(record.getType())
                     .phoneNumber(record.getPhoneNumber())
                     .status(record.getStatus())
+                    .selfLabel(record.getSelfLabel())
                     .build();
             vos.add(vo);
         }

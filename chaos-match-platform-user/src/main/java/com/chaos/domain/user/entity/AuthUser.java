@@ -44,6 +44,8 @@ public class AuthUser {
     private Integer sex;
     //状态 0:启用 1:禁用
     private Integer status;
+    //个人标签
+    private String selfLabel;
     //创建者
     @TableField(fill = FieldFill.INSERT)
     private Long createBy;

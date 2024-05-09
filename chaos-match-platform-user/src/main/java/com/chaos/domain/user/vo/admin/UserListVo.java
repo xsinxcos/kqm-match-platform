@@ -30,4 +30,6 @@ public class UserListVo {
     private Integer sex;
     //状态 0:启用 1:禁用
     private Integer status;
+    //个人标签
+    private String selfLabel;
 }

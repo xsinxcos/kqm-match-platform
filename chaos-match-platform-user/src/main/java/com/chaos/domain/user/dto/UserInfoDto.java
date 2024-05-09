@@ -12,4 +12,5 @@ public class UserInfoDto {
     private Integer sex;
     private String phoneNumber;
     private String avatar;
+    private String selfLabel;
 }
