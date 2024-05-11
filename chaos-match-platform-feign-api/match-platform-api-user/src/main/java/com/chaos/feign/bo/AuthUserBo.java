@@ -29,6 +29,8 @@ public class AuthUserBo {
     private String phoneNumber;
     //地址
     private String address;
+    //标签
+    private String selfLabel;
     //用户头像
     private String avatar;
     //0为普通用户 1为管理员
