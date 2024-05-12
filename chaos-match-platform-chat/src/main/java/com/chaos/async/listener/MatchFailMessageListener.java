@@ -2,6 +2,7 @@ package com.chaos.async.listener;
 
 import com.chaos.async.event.MatchFailMessageEvent;
 import com.chaos.domain.bo.MessageBo;
+import com.chaos.template.RedisKeyTemplate;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class MatchFailMessageListener implements ApplicationListener<MatchFailMe
         Long matchTo = matchResultMessage.getMessage().getSendFrom();
         Long matchPost = matchResultMessage.getMessage().getPostId();
         //匹配成功，将Redis中的数据删除
-        String key = "USER:" + matchFrom + " invited USER:" + matchTo + "with " + "POST:" + matchPost;
+        String key = RedisKeyTemplate.matchKey(matchFrom ,matchTo ,matchPost);
         //删除redis中的数据
         redisCache.deleteObject(key);
     }

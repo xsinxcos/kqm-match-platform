@@ -4,6 +4,7 @@ import com.chaos.async.event.MatchSuccessMessageEvent;
 import com.chaos.domain.bo.MessageBo;
 import com.chaos.feign.PostFeignClient;
 import com.chaos.feign.bo.AddPostUserMatchRelationBo;
+import com.chaos.template.RedisKeyTemplate;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class MatchSuccessMessageListener implements ApplicationListener<MatchSuc
         Long matchTo = matchResultMessage.getMessage().getSendFrom();
         Long matchPost = matchResultMessage.getMessage().getPostId();
         //匹配成功，将Redis中的数据删除
-        String key = "USER:" + matchFrom + " invited USER:" + matchTo + "with " + "POST:" + matchPost;
+        String key = RedisKeyTemplate.matchKey(matchFrom ,matchTo ,matchPost);
         //进行feign调用持久化消息（帖子与用户匹配关系表）
         List<Long> userIDs = new ArrayList<>();
 
