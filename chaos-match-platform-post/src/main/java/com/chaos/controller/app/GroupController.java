@@ -63,4 +63,9 @@ public class GroupController {
     public ResponseResult modifyGroupDetail(@RequestBody @Valid ModifyGroupDetailDto dto) {
         return groupService.modifyGroupDetail(dto);
     }
+
+//    @GetMapping("/list")
+//    public ResponseResult listGroup(@RequestBody @Valid ){
+//
+//    }
 }

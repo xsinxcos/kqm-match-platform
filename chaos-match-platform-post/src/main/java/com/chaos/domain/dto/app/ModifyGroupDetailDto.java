@@ -28,4 +28,7 @@ public class ModifyGroupDetailDto {
     private String label;
 
     private String introduction;
+
+    @NonNull
+    private Long categoryId;
 }

@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author: xsinxcos
  * @create: 2024-02-12 01:37
  **/
+
+/**
+ * 帖子远程调用模块
+ */
 @RestController
 @RequiredArgsConstructor
 public class PostFeignController implements PostFeignClient {

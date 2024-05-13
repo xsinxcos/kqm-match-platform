@@ -1,5 +1,6 @@
 package com.chaos.domain.vo.app;
 
+import com.chaos.domain.bo.CategoryBo;
 import com.chaos.domain.bo.GroupOwnerBo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +28,6 @@ public class GroupDetailVo {
     private String introduction;
     //群主
     private GroupOwnerBo owner;
+    //类别信息
+    private CategoryBo category;
 }

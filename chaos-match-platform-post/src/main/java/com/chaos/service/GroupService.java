@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.chaos.domain.dto.app.CreateGroupDto;
 import com.chaos.domain.dto.app.ModifyGroupDetailDto;
 import com.chaos.domain.entity.Group;
+import com.chaos.feign.bo.AddPostGroupRelationBo;
 import com.chaos.response.ResponseResult;
 
 
@@ -20,5 +21,7 @@ public interface GroupService extends IService<Group> {
     ResponseResult groupDetail(Long groupId);
 
     ResponseResult modifyGroupDetail(ModifyGroupDetailDto dto);
+
+    ResponseResult addPostGroupRelation(AddPostGroupRelationBo addPostGroupRelationBo);
 }
 
