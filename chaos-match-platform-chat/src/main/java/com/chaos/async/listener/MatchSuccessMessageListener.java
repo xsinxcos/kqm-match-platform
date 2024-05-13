@@ -37,6 +37,10 @@ public class MatchSuccessMessageListener implements ApplicationListener<MatchSuc
         Long matchPost = matchResultMessage.getMessage().getPostId();
         //匹配成功，将Redis中的数据删除
         String key = RedisKeyTemplate.matchKey(matchFrom ,matchTo ,matchPost);
+
+        if(!redisCache.isExist(key)){
+            throw new RuntimeException("匹配过期或者不存在此匹配");
+        }
         //进行feign调用持久化消息（帖子与用户匹配关系表）
         List<Long> userIDs = new ArrayList<>();
 

@@ -235,4 +235,14 @@ public class RedisCache {
     public <T> Long getExpire(T key){
         return redisTemplate.opsForValue().getOperations().getExpire(key);
     }
+
+    /**
+     * 确认是否存在相应的KEY
+     * @param key
+     * @return
+     * @param <T>
+     */
+    public <T> Boolean isExist(T key){
+        return redisTemplate.hasKey(key);
+    }
 }

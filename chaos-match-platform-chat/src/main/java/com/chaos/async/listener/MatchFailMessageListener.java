@@ -29,7 +29,7 @@ public class MatchFailMessageListener implements ApplicationListener<MatchFailMe
         Long matchFrom = matchResultMessage.getMessage().getSendTo();
         Long matchTo = matchResultMessage.getMessage().getSendFrom();
         Long matchPost = matchResultMessage.getMessage().getPostId();
-        //匹配成功，将Redis中的数据删除
+        //将Redis中的数据删除
         String key = RedisKeyTemplate.matchKey(matchFrom ,matchTo ,matchPost);
         //删除redis中的数据
         redisCache.deleteObject(key);
