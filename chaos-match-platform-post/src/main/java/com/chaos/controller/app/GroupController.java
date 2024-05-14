@@ -2,6 +2,7 @@ package com.chaos.controller.app;
 
 import com.chaos.annotation.SystemLog;
 import com.chaos.domain.dto.app.CreateGroupDto;
+import com.chaos.domain.dto.app.ListGroupDto;
 import com.chaos.domain.dto.app.ModifyGroupDetailDto;
 import com.chaos.response.ResponseResult;
 import com.chaos.service.GroupService;
@@ -64,8 +65,14 @@ public class GroupController {
         return groupService.modifyGroupDetail(dto);
     }
 
-//    @GetMapping("/list")
-//    public ResponseResult listGroup(@RequestBody @Valid ){
-//
-//    }
+    /**
+     * 罗列社群
+     * @param dto
+     * @return
+     */
+    @PostMapping("/list")
+    @SystemLog(BusinessName = "listGroup")
+    public ResponseResult listGroup(@RequestBody @Valid ListGroupDto dto){
+        return groupService.listGroup(dto);
+    }
 }

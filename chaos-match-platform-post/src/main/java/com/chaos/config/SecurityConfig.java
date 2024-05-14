@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/comment/list").permitAll()
                 .antMatchers("/comment/get").permitAll()
                 .antMatchers("/category/list").permitAll()
+                .antMatchers("/group/list").permitAll()
                 // 除上面外的所有请求全部需要认证即可访问
                 .anyRequest().authenticated();
 

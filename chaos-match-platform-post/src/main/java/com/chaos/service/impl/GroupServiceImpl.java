@@ -1,21 +1,30 @@
 package com.chaos.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chaos.config.vo.PageVo;
 import com.chaos.domain.bo.CategoryBo;
 import com.chaos.domain.bo.GroupOwnerBo;
 import com.chaos.domain.dto.app.CreateGroupDto;
+import com.chaos.domain.dto.app.ListGroupDto;
 import com.chaos.domain.dto.app.ModifyGroupDetailDto;
-import com.chaos.domain.entity.*;
+import com.chaos.domain.entity.Category;
+import com.chaos.domain.entity.Group;
+import com.chaos.domain.entity.GroupUser;
+import com.chaos.domain.entity.PostUser;
 import com.chaos.domain.vo.app.GroupDetailVo;
+import com.chaos.domain.vo.app.GroupListVo;
 import com.chaos.feign.UserFeignClient;
 import com.chaos.feign.bo.AddPostGroupRelationBo;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.mapper.GroupMapper;
 import com.chaos.mapper.GroupUserMapper;
 import com.chaos.response.ResponseResult;
-import com.chaos.service.*;
+import com.chaos.service.CategoryService;
+import com.chaos.service.GroupService;
+import com.chaos.service.GroupUserService;
+import com.chaos.service.PostUserService;
 import com.chaos.util.BeanCopyUtils;
 import com.chaos.util.SecurityUtils;
 import com.chaos.util.SnowFlakeUtil;
@@ -46,8 +55,6 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
 
     private final GroupUserMapper groupUserMapper;
 
-    private final GroupCategoryService groupCategoryService;
-
     private final CategoryService categoryService;
     private final static int GROUP_USER_SUPER_ADMIN = 2;
 
@@ -66,6 +73,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
                 .label(dto.getLabel())
                 .name(dto.getName())
                 .icon(dto.getIcon())
+                .categoryId(dto.getCategoryId())
                 .build();
         save(newGroup);
         //保存用户与社群的关系
@@ -76,9 +84,6 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
                         .type(GROUP_USER_SUPER_ADMIN)
                         .build()
         );
-
-        //保存社群与类别的关系
-        groupCategoryService.save(new GroupCategory(newGroup.getId() ,dto.getCategoryId()));
         return ResponseResult.okResult();
     }
 
@@ -93,14 +98,14 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
 
         Long userId = groupUser.getUserId();
         //查询现群主详细信息
-        CompletableFuture<AuthUserBo> authUserBoCompletableFuture = CompletableFuture.supplyAsync(()-> {
-                return userFeignClient.getUserById(userId).getData();
+        CompletableFuture<AuthUserBo> authUserBoCompletableFuture = CompletableFuture.supplyAsync(() -> {
+            return userFeignClient.getUserById(userId).getData();
         });
         //查询社群的类别信息
-        CompletableFuture<GroupCategory> groupCategoryFuture = CompletableFuture.supplyAsync(()-> {
-            return groupCategoryService.getOne(new LambdaQueryWrapper<GroupCategory>().eq(GroupCategory::getGroupId ,groupId));
+        CompletableFuture<Category> groupCategoryFuture = CompletableFuture.supplyAsync(() -> {
+            return categoryService.getById(group.getCategoryId());
         });
-        GroupCategory category = null;
+        Category category = null;
         AuthUserBo authUserBo = null;
         try {
             category = groupCategoryFuture.get();
@@ -108,9 +113,6 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
-        //获取分类详细信息
-        Long categoryId = category.getCategoryId();
-        Category byId = categoryService.getById(categoryId);
         //生成VO
         GroupDetailVo vo = BeanCopyUtils.copyBean(group, GroupDetailVo.class);
         vo.setOwner(GroupOwnerBo.builder()
@@ -120,7 +122,7 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
                 .selfLabel(authUserBo.getSelfLabel())
                 .username(authUserBo.getUserName())
                 .build());
-        vo.setCategory(new CategoryBo(byId.getId() ,byId.getName()));
+        vo.setCategory(new CategoryBo(category.getId(), category.getName()));
         return ResponseResult.okResult(vo);
     }
 
@@ -134,21 +136,15 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
             throw new RuntimeException("修改失败");
         }
 
-        //删除原有类别与社群关系
-        groupCategoryService.getBaseMapper().delete(new LambdaQueryWrapper<GroupCategory>()
-                .eq(GroupCategory::getGroupId ,dto.getId()));
-
         //进行修改
         Group group = getById(dto.getId());
         group.setName(dto.getName());
         group.setIcon(dto.getIcon());
         group.setLabel(dto.getLabel());
         group.setIntroduction(dto.getIntroduction());
-
+        group.setCategoryId(dto.getCategoryId());
 
         //更新社群基本信息
-        //保存社群与类别的关系
-        groupCategoryService.save(new GroupCategory(dto.getId() ,dto.getCategoryId()));
         updateById(group);
         return ResponseResult.okResult();
     }
@@ -178,6 +174,26 @@ public class GroupServiceImpl extends ServiceImpl<GroupMapper, Group> implements
         //批量保存
         groupUserMapper.saveIgnoreBatchGroupUser(groupUserList);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult listGroup(ListGroupDto dto) {
+        LambdaQueryWrapper<Group> wrapper = new LambdaQueryWrapper<>();
+        //筛选
+        wrapper.eq(Objects.nonNull(dto.getCategoryId()), Group::getCategoryId, dto.getCategoryId());
+        //分页
+        Page<Group> page = new Page<>(dto.getPageNum(), dto.getPageSize());
+        page(page, wrapper);
+        //封装VO
+        List<GroupListVo> vos = BeanCopyUtils.copyBeanList(page.getRecords(), GroupListVo.class);
+        //获取成员数
+        for (GroupListVo record : vos) {
+            Integer count = groupUserMapper.selectCount(
+                    new LambdaQueryWrapper<GroupUser>()
+                            .eq(GroupUser::getGroupId, record.getId()));
+            record.setMembersCount(Long.valueOf(count));
+        }
+        return ResponseResult.okResult(new PageVo(vos, page.getTotal()));
     }
 }
 
