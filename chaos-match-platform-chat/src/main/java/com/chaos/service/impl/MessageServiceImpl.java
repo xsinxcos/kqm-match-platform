@@ -8,6 +8,7 @@ import com.chaos.domain.entity.Message;
 import com.chaos.domain.vo.HistoryChatUserVo;
 import com.chaos.domain.vo.HistoryMessageVo;
 import com.chaos.feign.UserFeignClient;
+import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.feign.bo.PosterBo;
 import com.chaos.mapper.MessageMapper;
 import com.chaos.response.ResponseResult;
@@ -78,11 +79,11 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
 
         if(ids.isEmpty()) return ResponseResult.okResult(vos);
 
-        Map<Long, PosterBo> posterBoMap = userFeignClient.getBatchUserByUserIds(ids).getData();
+        Map<Long, AuthUserBo> posterBoMap = userFeignClient.getBatchUserByUserIds(ids).getData();
 
 
 
-        for(Map.Entry<Long ,PosterBo> entry : posterBoMap.entrySet()){
+        for(Map.Entry<Long ,AuthUserBo> entry : posterBoMap.entrySet()){
             HistoryChatUserVo chatUserVo = HistoryChatUserVo.builder()
                     .id(entry.getKey())
                     .avatar(entry.getValue().getAvatar())

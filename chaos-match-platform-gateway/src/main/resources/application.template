@@ -1,5 +1,6 @@
 server:
   port: 10010
+
 spring:
   application:
     name: gateway
@@ -36,7 +37,7 @@ spring:
         - id: weixin-service
           uri: lb://WeiXinService
           predicates:
-            - Path=/*
+            - Path=/* ,/wechat/**
         - id: user-service
           uri: lb://UserService
           predicates:
@@ -52,4 +53,4 @@ spring:
         - id: post-service
           uri: lb://PostService
           predicates:
-            - Path=/tag/**,/post/**,/comment/**,/static/**
+            - Path=/tag/**,/post/**,/comment/**,/static/**,/group/**,/category/**

@@ -48,7 +48,7 @@ public interface UserFeignClient {
      * @return
      */
     @GetMapping("/feign/getBatchUserByUserIds")
-    ResponseResult<Map<Long, PosterBo>> getBatchUserByUserIds(@RequestParam("userIds") List<Long> ids);
+    ResponseResult<Map<Long, AuthUserBo>> getBatchUserByUserIds(@RequestParam("userIds") List<Long> ids);
 
 
     /**

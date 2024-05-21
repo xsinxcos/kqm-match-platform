@@ -40,6 +40,9 @@ mybatis-plus:
       logic-not-delete-value: 0
       id-type: auto
 
+user:
+  default:
+    avatar: http://8.146.208.139:3000/avator/orignavator.png
 
 feign:
   client:

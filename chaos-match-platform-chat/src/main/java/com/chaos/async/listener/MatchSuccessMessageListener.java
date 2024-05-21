@@ -3,7 +3,7 @@ package com.chaos.async.listener;
 import com.chaos.async.event.MatchSuccessMessageEvent;
 import com.chaos.domain.bo.MessageBo;
 import com.chaos.feign.PostFeignClient;
-import com.chaos.feign.bo.AddPostUserMatchRelationBo;
+import com.chaos.feign.bo.AddTeamUserMatchRelationBo;
 import com.chaos.template.RedisKeyTemplate;
 import com.chaos.util.RedisCache;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +36,9 @@ public class MatchSuccessMessageListener implements ApplicationListener<MatchSuc
         Long matchTo = matchResultMessage.getMessage().getSendFrom();
         Long matchPost = matchResultMessage.getMessage().getPostId();
         //匹配成功，将Redis中的数据删除
-        String key = RedisKeyTemplate.matchKey(matchFrom ,matchTo ,matchPost);
+        String key = RedisKeyTemplate.matchKey(matchFrom, matchTo, matchPost);
 
-        if(!redisCache.isExist(key)){
+        if (!redisCache.isExist(key)) {
             throw new RuntimeException("匹配过期或者不存在此匹配");
         }
         //进行feign调用持久化消息（帖子与用户匹配关系表）
@@ -47,8 +47,8 @@ public class MatchSuccessMessageListener implements ApplicationListener<MatchSuc
         userIDs.add(matchFrom);
         userIDs.add(matchTo);
 
-        postFeignClient.addPostUserMatchRelation(
-                new AddPostUserMatchRelationBo(
+        postFeignClient.addTeamUserMatchRelation(
+                new AddTeamUserMatchRelationBo(
                         matchPost,
                         userIDs
                 )

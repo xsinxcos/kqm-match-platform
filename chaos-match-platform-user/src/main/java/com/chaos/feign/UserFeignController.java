@@ -3,8 +3,8 @@ package com.chaos.feign;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chaos.feign.bo.AuthUserBo;
 import com.chaos.feign.bo.PosterBo;
-import com.chaos.mapper.user.AuthUserMapper;
-import com.chaos.domain.user.entity.AuthUser;
+import com.chaos.user.mapper.AuthUserMapper;
+import com.chaos.user.domain.entity.AuthUser;
 import com.chaos.response.ResponseResult;
 import com.chaos.util.BeanCopyUtils;
 import lombok.RequiredArgsConstructor;
@@ -62,9 +62,9 @@ public class UserFeignController implements UserFeignClient {
         if(ids.isEmpty()) return ResponseResult.okResult(new HashMap<>());
 
         List<AuthUser> authUsers = authUserMapper.selectBatchIds(ids);
-        List<PosterBo> posterBos = BeanCopyUtils.copyBeanList(authUsers, PosterBo.class);
-        Map<Long, PosterBo> posterBoMap = posterBos.stream()
-                .collect(Collectors.toMap(PosterBo::getId, t -> t, (oldValue, newValue) -> oldValue));
+        List<AuthUserBo> AuthUserBos = BeanCopyUtils.copyBeanList(authUsers, AuthUserBo.class);
+        Map<Long, AuthUserBo> posterBoMap = AuthUserBos.stream()
+                .collect(Collectors.toMap(AuthUserBo::getId, t -> t, (oldValue, newValue) -> oldValue));
 
         return ResponseResult.okResult(posterBoMap);
     }

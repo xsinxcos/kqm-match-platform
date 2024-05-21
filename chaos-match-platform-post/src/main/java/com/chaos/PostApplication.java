@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@MapperScan("com.chaos.mapper")
+@MapperScan("com.chaos.*.mapper")
 @EnableFeignClients
 @EnableScheduling
 @EnableDiscoveryClient

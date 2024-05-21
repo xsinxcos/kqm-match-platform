@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-@MapperScan("com.chaos.mapper")
+@MapperScan("com.chaos.**.mapper")
 public class UserApplication {
     public static void main(String[] args) {
 
